@@ -2,12 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>ultre - Coming Soon</title>
+    <title>Ultre</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+      /* Base styles for the entire page */
       * {
         margin: 0;
         padding: 0;
@@ -15,18 +16,19 @@
       }
 
       body {
-        background: #0f0f0f;
-        color: #f2f2f2;
+        background: #0f0f0f; /* Dark background */
+        color: #f2f2f2; /* Light text color */
         font-family: 'Quicksand', sans-serif;
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
-        overflow-x: hidden;
-        overflow-y: auto;
-        scroll-behavior: smooth;
+        min-height: 100vh; /* Full viewport height */
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+        overflow-y: auto; /* Allow vertical scrolling */
+        scroll-behavior: smooth; /* Smooth scrolling for anchor links */
         text-align: center;
       }
 
+      /* Utility classes for content visibility */
       .hidden-content {
         display: none;
       }
@@ -34,9 +36,10 @@
       .active-content {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
+        flex-grow: 1; /* Allows content wrapper to take available space */
       }
 
+      /* Overlay for page transitions */
       .transition-overlay {
         position: fixed;
         top: 0;
@@ -44,7 +47,7 @@
         width: 100%;
         height: 100%;
         background-color: #0f0f0f;
-        z-index: 9999;
+        z-index: 9999; /* On top of everything */
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
@@ -55,15 +58,19 @@
         visibility: visible;
       }
 
+      /* Navigation bar styles */
       nav {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        background: rgba(15, 15, 15, 0.9);
+        /* Liquid glass effect: translucent background with blur */
+        background: rgba(15, 15, 15, 0.7); /* Slightly more transparent dark background */
+        backdrop-filter: blur(8px); /* Frosted glass effect */
+        -webkit-backdrop-filter: blur(8px); /* For Safari compatibility */
         padding: 10px 20px;
         z-index: 1000;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); /* Shadow at the top */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -73,10 +80,16 @@
         list-style: none;
         display: flex;
         gap: 30px;
+        position: relative; /* Needed for positioning the indicator */
+      }
+
+      nav ul li {
+          position: relative;
+          z-index: 1; /* Ensure links are above the indicator */
       }
 
       nav ul li a {
-        color: #f2f2f2;
+        color: #f2f2f2; /* Light color for links */
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: 700;
@@ -87,16 +100,28 @@
         align-items: center;
       }
 
-      nav ul li a i {
-        font-size: 1.3rem;
-        margin-bottom: 5px;
+      /* Style for the active navigation link text/icon (inverted color) */
+      nav ul li a.active-nav-link {
+          color: #f2f2f2; /* Keep light color for inverted text/icon on dark indicator */
       }
 
-      nav ul li a:hover {
-        color: #a0a0a0;
-        transform: translateY(-2px);
+      /* Navigation Indicator Styles */
+      #nav-indicator {
+          position: absolute;
+          background-color: rgba(50, 50, 50, 0.7); /* Dark translucent for liquid glass effect */
+          /* Explicit transitions for smooth bending and movement */
+          transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      top 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      border-radius 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          z-index: 0; /* Behind the actual links */
+          /* Removed initial opacity: 0; it will be set by JS on load */
+          border-radius: 9999px; /* Always a pill shape, very rounded */
+          box-sizing: border-box; /* Include padding in width/height calculation */
       }
 
+      /* Section base styles */
       section {
         display: flex;
         flex-direction: column;
@@ -108,32 +133,35 @@
       }
 
       #intro-section {
-          min-height: 100vh;
+          min-height: 100vh; /* Full height for intro */
       }
 
+      /* Styles for main content sections */
       #main-website-content-wrapper > section {
-          display: none;
+          display: none; /* Hidden by default */
           padding-top: 80px;
           padding-bottom: 80px;
-          min-height: calc(100vh - 100px);
+          min-height: calc(100vh - 100px); /* Adjust for nav bar */
           overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
+          -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       }
 
       #main-website-content-wrapper > section.active-page {
-          display: flex;
+          display: flex; /* Show active page */
       }
 
+      /* Background colors for different sections */
       #intro-section {
         background: #0f0f0f;
       }
-      #shop-page, #contact-main, #about-us-main {
+      #shop-page, #contact-main, #about-us-main, #item-detail-page, #sign-in-main, #sign-up-main, #onboarding-main, #support-main, #chat-interface, #settings-main { /* Added new pages */
         background: #1a1a1a;
       }
       #home-main, #cart-main {
         background: #0f0f0f;
       }
 
+      /* Logo animation */
       .logo {
         width: 120px;
         height: 120px;
@@ -171,6 +199,7 @@
         }
       }
 
+      /* Tagline and info content styles */
       .tagline, .info-content {
         font-size: 3.5rem;
         letter-spacing: 2px;
@@ -188,6 +217,7 @@
         color: #d0d0d0;
       }
 
+      /* Animated letter effect */
       .animated-letter {
         opacity: 0;
         transform: translateY(20px);
@@ -196,7 +226,7 @@
       }
 
       .animated-letter.space {
-          width: 0.25em;
+          width: 0.25em; /* Space for animated letters */
       }
 
       @keyframes letterFadeIn {
@@ -206,6 +236,7 @@
         }
       }
 
+      /* Scroll hint animation (now removed from HTML, but keeping style for reference if needed) */
       .scroll-hint {
         font-size: 1.1rem;
         opacity: 0;
@@ -219,6 +250,7 @@
         100% { opacity: 1; transform: translateY(0); }
       }
 
+      /* Info title styles */
       .info-title {
         font-size: 2.5rem;
         font-weight: 700;
@@ -228,6 +260,7 @@
         animation: fadeInBlock 0.8s ease-out forwards;
       }
 
+      /* Shop button styles */
       .shop-button {
         background-color: #f2f2f2;
         color: #0f0f0f;
@@ -251,94 +284,723 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       }
 
+      /* Footer styles */
       footer {
         background: #0a0a0a;
         color: #888;
         text-align: center;
         padding: 25px 20px;
         font-size: 0.9rem;
-        margin-top: auto;
+        margin-top: auto; /* Pushes footer to the bottom */
       }
 
-      @media (max-width: 768px) {
-        nav ul {
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 15px;
-        }
+      /* Checkout Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+      }
 
-        nav ul li a {
-          font-size: 0.8rem;
-        }
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
 
-        nav ul li a i {
-          font-size: 1.1rem;
-        }
+      .modal-content {
+        background-color: #1a1a1a;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        max-width: 500px;
+        width: 90%;
+        color: #f2f2f2;
+        position: relative;
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      }
 
-        .logo {
-          width: 90px;
-          height: 90px;
-          margin-bottom: 20px;
-        }
+      .modal-overlay.show .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+      }
 
-        .tagline {
+      .modal-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        color: #f2f2f2;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+
+      .modal-close-btn:hover {
+        color: #d0d0d0;
+      }
+
+      .modal-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #f2f2f2;
+      }
+
+      .modal-total {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #f2f2f2;
+      }
+
+      .payment-methods label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      .payment-methods input[type="radio"] {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f2f2f2;
+        border-radius: 50%;
+        display: grid;
+        place-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .payment-methods input[type="radio"]::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: transform 0.2s ease;
+        background-color: #f2f2f2;
+      }
+
+      .payment-methods input[type="radio"]:checked {
+        background-color: #f2f2f2;
+        border-color: #f2f2f2;
+      }
+
+      .payment-methods input[type="radio"]:checked::before {
+        transform: scale(1);
+      }
+
+      .place-order-btn {
+        background-color: #f2f2f2;
+        color: #0f0f0f;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+      }
+
+      .place-order-btn:hover {
+        background-color: #d0d0d0;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Item Detail Page Styles */
+      #item-detail-page-content {
+          display: flex;
+          flex-direction: column; /* Default to column for small screens */
+          gap: 40px;
+          width: 100%;
+          max-width: 900px;
+          margin: 0 auto;
+          align-items: center;
+          text-align: left;
+      }
+
+      @media (min-width: 768px) {
+          #item-detail-page-content {
+              flex-direction: row; /* Row for larger screens */
+              text-align: left;
+              align-items: flex-start;
+          }
+      }
+
+      .item-detail-left {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          padding: 20px;
+          background-color: #2a2a2a;
+          border-radius: 12px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+          min-width: 300px; /* Ensure it's not too small */
+      }
+
+      .item-detail-right {
+          flex: 2;
+          padding: 20px;
+          background-color: #2a2a2a;
+          border-radius: 12px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .item-detail-image {
+          width: 100%;
+          max-width: 300px;
+          height: auto;
+          border-radius: 8px;
+          object-fit: cover;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          transform: translateX(-50px); /* Initial state for animation (comes from left) */
+          opacity: 0;
+          transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth transition */
+      }
+
+      /* When the detail page is active, animate the image */
+      #item-detail-page.active-page .item-detail-image {
+          transform: translateX(0);
+          opacity: 1;
+      }
+
+      .item-detail-name {
           font-size: 2.5rem;
-        }
-
-        .info-title {
-          font-size: 2rem;
-        }
-
-        .info-content, .scroll-hint {
-          font-size: 1.1rem;
-        }
-
-        .shop-button {
-          padding: 12px 25px;
-          font-size: 1rem;
-        }
+          font-weight: 700;
+          color: #f2f2f2;
+          margin-bottom: 10px;
       }
 
-      @media (max-width: 480px) {
-        nav {
-          padding: 8px 10px;
-        }
-        nav ul {
-          gap: 10px;
-        }
-        nav ul li a {
-          font-size: 0.7rem;
-        }
-        nav ul li a i {
+      .item-detail-price {
+          font-size: 1.8rem;
+          font-weight: 600;
+          color: #d0d0d0;
+          margin-bottom: 20px;
+      }
+
+      .item-detail-description {
+          font-size: 1.1rem;
+          line-height: 1.6;
+          color: #c0c0c0;
+      }
+
+      .back-to-shop-btn {
+          background-color: #555;
+          color: #f2f2f2;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-family: 'Quicksand', sans-serif;
           font-size: 1rem;
+          font-weight: 700;
+          cursor: pointer;
+          margin-top: 20px;
+          transition: background-color 0.3s ease;
+      }
+
+      .back-to-shop-btn:hover {
+          background-color: #777;
+      }
+
+      /* Custom Message Box Styles */
+      #message-box {
+          position: fixed;
+          top: 0; /* Start from the very top */
+          left: 50%;
+          transform: translateX(-50%) translateY(-100%); /* Hidden above the viewport */
+          background-color: #28a745; /* Green for success */
+          color: white;
+          padding: 12px 25px;
+          border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          z-index: 3000; /* Above modals */
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+      }
+
+      #message-box.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateX(-50%) translateY(0); /* Slide down to original position */
+          animation: subtleShake 0.4s ease-in-out 0.5s 1; /* Apply shake after slide-down */
+      }
+
+      /* Subtle Shake Animation */
+      @keyframes subtleShake {
+          0% { transform: translateX(-50%) translateY(0); }
+          25% { transform: translateX(-50%) translateY(0) translateX(-3px); }
+          50% { transform: translateX(-50%) translateY(0) translateX(3px); }
+          75% { transform: translateX(-50%) translateY(0) translateX(-2px); }
+          100% { transform: translateX(-50%) translateY(0); }
+      }
+
+      /* Profile Menu Container */
+      .profile-menu-container {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 1100; /* Above nav, below modal */
+          cursor: pointer;
+      }
+
+      /* Profile Icon */
+      .profile-icon {
+          font-size: 2.5rem; /* Adjust size as needed */
+          color: #f2f2f2; /* Light color */
+          transition: color 0.3s ease;
+      }
+
+      .profile-icon:hover {
+          color: #d0d0d0;
+      }
+
+      /* Dropdown Menu */
+      .profile-dropdown {
+          position: absolute;
+          top: calc(100% + 10px); /* Position below the icon */
+          right: 0;
+          background-color: rgba(26, 26, 26, 0.9); /* Dark translucent background */
+          backdrop-filter: blur(5px);
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+          min-width: 150px;
+          display: flex;
+          flex-direction: column;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px); /* Start slightly above for fade-in effect */
+          transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+      }
+
+      /* Show dropdown on hover */
+      .profile-menu-container:hover .profile-dropdown {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+      }
+
+      .dropdown-item {
+          padding: 12px 15px;
+          color: #f2f2f2;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: 500;
+          transition: background-color 0.2s ease, color 0.2s ease;
+          border-radius: 8px; /* For individual item hover */
+      }
+
+      .dropdown-item:hover {
+          background-color: #3a3a3a; /* Slightly lighter dark on hover */
+          color: #f2f2f2;
+      }
+
+      /* Ensure border-radius for first/last item in dropdown */
+      .profile-dropdown .dropdown-item:first-child {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+      }
+
+      .profile-dropdown .dropdown-item:last-child {
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+      }
+
+      /* Form styling for Sign In/Sign Up pages */
+      .auth-form-container {
+          background-color: #2a2a2a;
+          padding: 40px;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+          max-width: 450px;
+          width: 90%;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          text-align: left;
+      }
+
+      .auth-form-container label {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #f2f2f2;
+          margin-bottom: 5px;
+          display: block;
+      }
+
+      .auth-form-container input[type="email"],
+      .auth-form-container input[type="password"],
+      .auth-form-container input[type="text"] { /* Added text input for onboarding */
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #555;
+          border-radius: 8px;
+          background-color: #3a3a3a;
+          color: #f2f2f2;
+          font-size: 1rem;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .auth-form-container input[type="email"]:focus,
+      .auth-form-container input[type="password"]:focus,
+      .auth-form-container input[type="text"]:focus { /* Added text input for onboarding */
+          border-color: #f2f2f2;
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(242, 242, 242, 0.2);
+      }
+
+      .auth-form-container .form-link {
+          color: #d0d0d0;
+          text-decoration: none;
+          font-size: 0.95rem;
+          transition: color 0.2s ease;
+      }
+
+      .auth-form-container .form-link:hover {
+          color: #f2f2f2;
+      }
+
+      .auth-form-container .shop-button { /* Reusing shop-button for consistency */
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px 25px;
+          font-size: 1.1rem;
+      }
+
+      .error-message {
+          color: #ff6b6b;
+          font-size: 0.9rem;
+          margin-top: -10px;
+          margin-bottom: 10px;
+          text-align: center;
+      }
+
+      /* New Animations */
+      @keyframes slideInUpFadeIn {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .animate-slide-in-up {
+          animation: slideInUpFadeIn 0.6s ease-out forwards;
+      }
+
+      .product-card {
+          opacity: 0; /* Hidden by default for animation */
+          transform: translateY(20px); /* Start slightly below */
+          animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      /* Support Page Specific Styles */
+      #support-main .support-option-button {
+          padding: 15px 30px;
+          border-radius: 8px;
+          font-family: 'Quicksand', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 70;
+          cursor: pointer;
+          margin: 15px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+          transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+          opacity: 0;
+          animation: fadeInBlock 0.8s ease-out forwards;
+          width: 90%;
+          max-width: 300px;
+      }
+
+      #support-main .quick-easy-btn {
+          background-color: #f2f2f2;
+          color: #0f0f0f;
+      }
+
+      #support-main .quick-easy-btn:hover {
+          background-color: #d0d0d0;
+          transform: translateY(-3px);
+          box-shadow: 0 0 25px 5px rgba(242, 242, 242, 0.7); /* Glow effect */
+      }
+
+      #support-main .advanced-support-btn {
+          background-color: #3a3a3a;
+          color: #f2f2f2;
+          border: 1px solid #555;
+      }
+
+      #support-main .advanced-support-btn:hover {
+          background-color: #555;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Chat Interface Styles */
+      #chat-interface {
+          display: flex;
+          flex-direction: column;
+          height: calc(100vh - 100px); /* Adjust for nav bar */
+          padding-bottom: 80px; /* Space for input bar */
+          position: relative;
+      }
+
+      #chat-messages {
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          -webkit-overflow-scrolling: touch;
+      }
+
+      .chat-message-bubble {
+          max-width: 70%;
+          padding: 12px 18px;
+          border-radius: 20px;
+          line-height: 1.5;
+          word-wrap: break-word;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideInUpFadeIn 0.4s ease-out forwards;
+      }
+
+      .user-message {
+          background-color: #007bff; /* Blue for user */
+          color: white;
+          align-self: flex-end; /* Align to right */
+          border-bottom-right-radius: 5px;
+      }
+
+      .bot-message {
+          background-color: #2a2a2a; /* Darker grey for bot */
+          color: #f2f2f2;
+          align-self: flex-start; /* Align to left */
+          border-bottom-left-radius: 5px;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+      }
+
+      .bot-avatar {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background-color: #f2f2f2; /* Light background for avatar */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.2rem;
+          color: #0f0f0f;
+          flex-shrink: 0; /* Prevent avatar from shrinking */
+      }
+
+      #chat-input-container {
+          position: fixed;
+          bottom: 60px; /* Above the nav bar */
+          left: 0;
+          width: 100%;
+          background: rgba(15, 15, 15, 0.9);
+          backdrop-filter: blur(8px);
+          padding: 15px 20px;
+          display: flex;
+          gap: 10px;
+          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+      }
+
+      #chat-input {
+          flex-grow: 1;
+          padding: 12px 15px;
+          border-radius: 25px;
+          border: 1px solid #555;
+          background-color: #3a3a3a;
+          color: #f2f2f2;
+          font-size: 1rem;
+          outline: none;
+          transition: border-color 0.3s ease;
+      }
+
+      #chat-input:focus {
+          border-color: #f2f2f2;
+      }
+
+      #send-chat-btn {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 25px;
+          padding: 12px 20px;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+
+      #send-chat-btn:hover {
+          background-color: #0056b3;
+      }
+
+      #typing-indicator {
+          align-self: flex-start;
+          padding: 10px 15px;
+          background-color: #2a2a2a;
+          color: #f2f2f2;
+          border-radius: 20px;
+          font-style: italic;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideInUpFadeIn 0.4s ease-out forwards;
+      }
+
+      .dot-pulse {
+          width: 8px;
+          height: 8px;
+          background-color: #f2f2f2;
+          border-radius: 50%;
+          animation: dotPulse 1.2s infinite ease-in-out;
+      }
+      .dot-pulse:nth-child(2) { animation-delay: 0.2s; }
+      .dot-pulse:nth-child(3) { animation-delay: 0.4s; }
+
+      @keyframes dotPulse {
+          0%, 100% { transform: scale(0.8); opacity: 0.5; }
+          50% { transform: scale(1.2); opacity: 1; }
+      }
+
+
+      /* Responsive Adjustments for Modal and overall layout */
+      @media (max-width: 600px) {
+        .modal-content {
+          padding: 20px;
+          width: 95%;
         }
-        .logo {
-          width: 70px;
-          height: 70px;
-        }
-        .tagline {
+        .modal-title {
           font-size: 1.8rem;
         }
-        .info-title {
-          font-size: 1.6rem;
+        .modal-total {
+          font-size: 1.5rem;
         }
-        .info-content, .scroll-hint {
+        .payment-methods label {
           font-size: 1rem;
         }
-        .shop-button {
-          padding: 10px 20px;
-          font-size: 0.9rem;
+        .place-order-btn {
+          font-size: 1.1rem;
+          padding: 12px 25px;
+        }
+        .tagline {
+            font-size: 2.5rem;
+        }
+        .info-title {
+            font-size: 2rem;
+        }
+        .info-content {
+            font-size: 1rem;
+        }
+        #item-detail-page-content {
+            flex-direction: column; /* Stack elements vertically */
+        }
+        .item-detail-left, .item-detail-right {
+            width: 100%; /* Full width for stacked elements */
+        }
+        .item-detail-name {
+            font-size: 2rem;
+        }
+        .item-detail-price {
+            font-size: 1.5rem;
+        }
+        .profile-menu-container {
+            top: 10px;
+            right: 10px;
+        }
+        .profile-icon {
+            font-size: 2rem;
+        }
+        .profile-dropdown {
+            min-width: 120px;
+        }
+        .dropdown-item {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+        .auth-form-container {
+            padding: 25px;
+            gap: 15px;
+        }
+        .auth-form-container label {
+            font-size: 1rem;
+        }
+        .auth-form-container input {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+        .auth-form-container .shop-button {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        #chat-input-container {
+            padding: 10px;
+        }
+        #chat-input, #send-chat-btn {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+        .chat-message-bubble {
+            max-width: 90%; /* More width on small screens */
         }
       }
     </style>
   </head>
   <body>
     <div id="transitionOverlay" class="transition-overlay"></div>
+    <div id="message-box" role="alert">
+        <i class="fas fa-check-circle"></i>
+        <span id="message-text"></span>
+    </div>
+
+    <!-- Profile Menu Container -->
+    <div class="profile-menu-container">
+        <div class="profile-icon">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-dropdown">
+            <a href="#sign-in-main" class="dropdown-item">Sign In</a>
+            <a href="#sign-up-main" class="dropdown-item">Sign Up</a>
+        </div>
+    </div>
 
     <section id="intro-section">
       <div class="logo"></div>
       <div class="tagline" id="mainTagline">Ultre is coming.</div>
-      <div class="scroll-hint" style="animation-delay: 2.2s;">Scroll Down to Explore.</div>
       <button class="shop-button" id="shopButton" style="animation-delay: 2.8s;">Head to the shop.</button>
     </section>
 
@@ -355,6 +1017,7 @@
           <div class="info-title">Welcome to the Shop!</div>
           <div id="shop-content" class="w-full max-w-4xl mx-auto p-4">
               <div id="loading-indicator" class="text-gray-400 text-lg">Loading items...</div>
+              <div id="status-message" class="text-yellow-400 text-lg my-4"></div>
               <div id="no-stock-message" class="hidden text-gray-400 text-lg flex flex-col items-center justify-center py-10">
                   <span class="text-6xl mb-4">😔</span>
                   There isn't anything in stock right now, check again soon!
@@ -364,17 +1027,46 @@
           </div>
       </section>
 
+      <section id="item-detail-page">
+          <div class="info-title">Product Details</div>
+          <div id="item-detail-page-content">
+              <div class="item-detail-left">
+                  <img id="detail-item-image" src="" alt="Product Image" class="item-detail-image">
+                  <h3 id="detail-item-name" class="item-detail-name"></h3>
+                  <p id="detail-item-price" class="item-detail-price"></p>
+                  <div class="size-selector w-full max-w-[300px] text-left">
+                      <label for="item-size" class="block text-gray-300 font-semibold mb-2">Select Size:</label>
+                      <select id="item-size" class="w-full p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-white">
+                          <option value="S">Small</option>
+                          <option value="M">Medium</option>
+                          <option value="L">Large</option>
+                          <option value="XL">X-Large</option>
+                          <option value="XXL">XX-Large</option>
+                      </select>
+                  </div>
+                  <button id="detail-add-to-cart-btn" class="shop-button w-full">Add to Cart</button>
+              </div>
+              <div class="item-detail-right">
+                  <p id="detail-item-description" class="item-detail-description"></p>
+              </div>
+          </div>
+          <button id="back-to-shop-btn" class="back-to-shop-btn">← Back to Shop</button>
+      </section>
+
       <section id="about-us-main">
         <div class="info-title">About Us</div>
         <div class="info-content" id="aboutUsContent">
           Ultre isn’t just a brand — it’s a mindset. Rooted in simplicity, built for the bold.
           We believe in creating essential pieces that resonate with those who value authenticity and understated strength.
           <br><br>
-          No loud flex, no trend chasing. Just timeless energy and lowkey fire.
+          No loud flex, no trend chasing. Just timeless energy and pieces that bring the "you" out of you.
           Our designs are inspired by a minimalist aesthetic, focusing on clean lines and versatile pieces that fit seamlessly into any lifestyle.
           <br><br>
           Crafted for the ones who move different. Designed to last, not just be seen.
           We prioritize quality materials and meticulous attention to detail, ensuring every Ultre item stands the test of time.
+          <br><br>
+          We take many minutes and hours out of our days to bring you all the clothing and quality you deserve with a price that can put a smile on your face.
+          Join us on our journey to make a new era of affordable and stylish clothing.
         </div>
       </section>
 
@@ -390,6 +1082,7 @@
             <div id="cart-total" class="mt-8 text-right text-2xl font-bold text-white hidden">
                 Total: $<span id="total-amount">0.00</span>
             </div>
+            <button id="checkout-btn" class="shop-button hidden w-full mt-8">Proceed to Checkout</button>
         </div>
       </section>
 
@@ -405,22 +1098,176 @@
         </div>
       </section>
 
+      <!-- Sign In Page -->
+      <section id="sign-in-main">
+          <div class="info-title">Sign In</div>
+          <div class="auth-form-container">
+              <div id="signin-error-message" class="error-message hidden"></div>
+              <div>
+                  <label for="signin-email">Email:</label>
+                  <input type="email" id="signin-email" placeholder="your@example.com" required>
+              </div>
+              <div>
+                  <label for="signin-password">Password:</label>
+                  <input type="password" id="signin-password" placeholder="********" required>
+              </div>
+              <a href="#" class="form-link text-right">Forgot Password?</a>
+              <button id="signin-btn" class="shop-button">Sign In</button>
+              <p class="text-center text-gray-400 text-sm">
+                  Don't have an account? <a href="#sign-up-main" class="form-link">Sign Up</a>
+              </p>
+          </div>
+      </section>
+
+      <!-- Sign Up Page -->
+      <section id="sign-up-main">
+          <div class="info-title">Sign Up</div>
+          <div class="auth-form-container">
+              <div id="signup-error-message" class="error-message hidden"></div>
+              <div>
+                  <label for="signup-email">Email:</label>
+                  <input type="email" id="signup-email" placeholder="your@example.com" required>
+              </div>
+              <div>
+                  <label for="signup-password">Password:</label>
+                  <input type="password" id="signup-password" placeholder="********" required>
+              </div>
+              <div>
+                  <label for="signup-confirm-password">Confirm Password:</label>
+                  <input type="password" id="signup-confirm-password" placeholder="********" required>
+              </div>
+              <button id="signup-btn" class="shop-button">Sign Up</button>
+              <p class="text-center text-gray-400 text-sm">
+                  Already have an account? <a href="#sign-in-main" class="form-link">Sign In</a>
+              </p>
+          </div>
+      </section>
+
+      <!-- Onboarding Page (New) -->
+      <section id="onboarding-main">
+          <div class="info-title" id="onboarding-title"></div>
+          <div class="auth-form-container">
+              <div id="onboarding-error-message" class="error-message hidden"></div>
+              <div>
+                  <label for="onboarding-first-name">First Name:</label>
+                  <input type="text" id="onboarding-first-name" placeholder="Your First Name" required>
+              </div>
+              <div>
+                  <label for="onboarding-last-name">Last Name:</label>
+                  <input type="text" id="onboarding-last-name" placeholder="Your Last Name" required>
+              </div>
+              <button id="onboarding-save-btn" class="shop-button">Save My Name</button>
+          </div>
+      </section>
+
+      <!-- Support Page (New) -->
+      <section id="support-main">
+          <div class="info-title" id="supportQuestion"></div>
+          <button id="quickEasyBtn" class="support-option-button quick-easy-btn">Quick and Easy (AI)</button>
+          <button id="advancedSupportBtn" class="support-option-button advanced-support-btn">Advanced Support (Mail)</button>
+          <button id="backToMainSiteBtn" class="shop-button mt-10">Head to the Shop</button>
+      </section>
+
+      <!-- Chat Interface (New) -->
+      <section id="chat-interface">
+          <div class="info-title">Chat with UltreBot!</div>
+          <div id="chat-messages">
+              <!-- Chat messages will be appended here -->
+          </div>
+          <div id="chat-input-container">
+              <input type="text" id="chat-input" placeholder="Type your message...">
+              <button id="send-chat-btn">Send</button>
+          </div>
+      </section>
+
+      <!-- Settings Page (New) -->
+      <section id="settings-main">
+          <div class="info-title">Settings</div>
+          <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row h-full">
+
+              <!-- Left Side: Settings Navigation -->
+              <div class="w-full lg:w-1/4 bg-gray-900 border-r border-gray-700 p-6 space-y-2 flex-shrink-0">
+                  <h2 class="text-xl font-semibold text-white mb-4">Categories</h2>
+                  <nav class="space-y-1">
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="general">General</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="accessibility">Accessibility</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="privacy">Privacy</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="visuals">Visuals</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="payment-method">Payment Method</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="notifications">Notifications</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="security">Security</a>
+                      <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition duration-200 ease-in-out font-medium settings-nav-link" data-setting-category="integrations">Integrations</a>
+                  </nav>
+              </div>
+
+              <!-- Right Side: Settings Content -->
+              <div class="w-full lg:w-3/4 p-6 flex flex-col">
+                  <h2 class="text-2xl font-bold text-white mb-6" id="settings-content-title">Select a Category</h2>
+                  <div id="settings-content-area" class="space-y-6">
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Welcome to your settings!</p>
+                          <p>Please select a category from the left to view and adjust your preferences.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+
       <footer>
         &copy; 2025 Ultre. All rights reserved.
       </footer>
 
       <nav>
+        <div id="nav-indicator"></div> <!-- Navigation indicator -->
         <ul>
-          <li><a href="#home-main"><i class="fas fa-home"></i> Home</a></li>
-          <li><a href="#shop-page"><i class="fas fa-store"></i> Shop</a></li>
-          <li><a href="#about-us-main"><i class="fas fa-info-circle"></i> About Us</a></li>
-          <li><a href="#cart-main"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-          <li><a href="#contact-main"><i class="fas fa-envelope"></i> Contact</a></li>
+          <li data-page-id="home-main" class="main-nav-item"><a href="#home-main"><i class="fas fa-home"></i> Home</a></li>
+          <li data-page-id="shop-page" class="main-nav-item"><a href="#shop-page"><i class="fas fa-store"></i> Shop</a></li>
+          <li data-page-id="about-us-main" class="main-nav-item"><a href="#about-us-main"><i class="fas fa-info-circle"></i> About Us</a></li>
+          <li data-page-id="cart-main" class="main-nav-item"><a href="#cart-main"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+          <li data-page-id="contact-main" class="main-nav-item"><a href="#contact-main"><i class="fas fa-envelope"></i> Contact</a></li>
+          <li data-page-id="support-main" id="support-nav-item"><a href="#support-main"><i class="fas fa-life-ring"></i> Support</a></li>
+          <li data-page-id="settings-main" class="main-nav-item"><a href="#settings-main"><i class="fas fa-cog"></i> Settings</a></li> <!-- New Settings Link -->
         </ul>
       </nav>
     </div>
 
+    <!-- Checkout Modal -->
+    <div id="checkout-modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        <div class="modal-title">Checkout</div>
+        <div class="modal-body">
+          <p class="modal-total">Your Total: $<span id="modal-total-amount">0.00</span></p>
+          <div class="payment-methods text-left">
+            <p class="text-lg font-semibold mb-3">Select Payment Method:</p>
+            <label>
+              <input type="radio" name="payment-method" value="credit-card" checked>
+              <i class="fas fa-credit-card"></i> Credit Card (Simulated)
+            </label>
+            <label>
+              <input type="radio" name="payment-method" value="paypal">
+              <i class="fab fa-paypal"></i> PayPal (Simulated)
+            </label>
+            <label>
+              <input type="radio" name="payment-method" value="apple-pay">
+              <i class="fab fa-apple-pay"></i> Apple Pay (Simulated)
+            </label>
+          </div>
+          <button class="place-order-btn" id="place-order-btn">Place Order</button>
+          <p id="order-confirmation-message" class="text-green-400 text-lg mt-4 hidden">Thank You for your order!</p>
+        </div>
+      </div>
+    </div>
+
     <script>
+      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwiY2F0YWxvZy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO7TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
+      const PRINTIFY_API_BASE_URL = 'https://api.printify.com/v1';
+
+      // DeepSeek API Configuration (Note: In a real application, API keys should be handled server-side for security)
+      const DEEPSEEK_API_KEY = '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';
+      const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+
+
       const introSection = document.getElementById('intro-section');
       const mainWebsiteContentWrapper = document.getElementById('main-website-content-wrapper');
       const shopButton = document.getElementById('shopButton');
@@ -428,29 +1275,111 @@
 
       const loadingIndicator = document.getElementById('loading-indicator');
       const noStockMessage = document.getElementById('no-stock-message');
+      const statusMessageElement = document.getElementById('status-message');
       const itemsGrid = document.getElementById('items-grid');
 
       const emptyCartMessage = document.getElementById('empty-cart-message');
       const cartItemsList = document.getElementById('cart-items-list');
       const cartTotalElement = document.getElementById('cart-total');
       const totalAmountElement = document.getElementById('total-amount');
+      const checkoutButton = document.getElementById('checkout-btn');
 
-      const clothingItems = [
-        { id: 'tee', name: "Minimalist Tee", price: 35.00, imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee" },
-        { id: 'hoodie', name: "Essential Hoodie", price: 65.00, imageUrl: "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie" },
-        { id: 'joggers', name: "Core Joggers", price: 50.00, imageUrl: "https://placehold.co/300x300/777777/FFFFFF?text=Joggers" },
-        { id: 'cap', name: "Urban Cap", price: 25.00, imageUrl: "https://placehold.co/300x300/999999/FFFFFF?text=Cap" },
-        { id: 'socks', name: "Signature Socks", price: 15.00, imageUrl: "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks" },
-      ];
+      const checkoutModalOverlay = document.getElementById('checkout-modal-overlay');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const modalTotalAmount = document.getElementById('modal-total-amount');
+      const placeOrderBtn = document.getElementById('place-order-btn');
+      const orderConfirmationMessage = document.getElementById('order-confirmation-message');
+
+      // New elements for Item Detail Page
+      const itemDetailPage = document.getElementById('item-detail-page');
+      const detailItemImage = document.getElementById('detail-item-image');
+      const detailItemName = document.getElementById('detail-item-name');
+      const detailItemPrice = document.getElementById('detail-item-price');
+      const detailItemDescription = document.getElementById('detail-item-description');
+      const detailAddToCartBtn = document.getElementById('detail-add-to-cart-btn');
+      const backToShopBtn = document.getElementById('back-to-shop-btn');
+      const itemSizeSelect = document.getElementById('item-size'); // New: Size selector
+
+      // New elements for Navigation Indicator
+      const navIndicator = document.getElementById('nav-indicator');
+      const navLinks = document.querySelectorAll('nav ul li'); // Get all list items in nav
+      const mainNavItems = document.querySelectorAll('nav ul li.main-nav-item'); // Get all main nav items
+      const supportNavItem = document.getElementById('support-nav-item'); // Support nav item
+
+      // Message Box elements
+      const messageBox = document.getElementById('message-box');
+      const messageText = document.getElementById('message-text');
+
+      // New Auth Page Elements
+      const signInPage = document.getElementById('sign-in-main');
+      const signUpPage = document.getElementById('sign-up-main');
+      const signInEmailInput = document.getElementById('signin-email');
+      const signInPasswordInput = document.getElementById('signin-password');
+      const signInBtn = document.getElementById('signin-btn');
+      const signInErrorMessage = document.getElementById('signin-error-message');
+      const signUpEmailInput = document.getElementById('signup-email');
+      const signUpPasswordInput = document.getElementById('signup-password');
+      const signUpConfirmPasswordInput = document.getElementById('signup-confirm-password');
+      const signUpBtn = document.getElementById('signup-btn');
+      const signUpErrorMessage = document.getElementById('signup-error-message');
+
+      // New Onboarding Page Elements
+      const onboardingPage = document.getElementById('onboarding-main');
+      const onboardingTitle = document.getElementById('onboarding-title');
+      const onboardingFirstNameInput = document.getElementById('onboarding-first-name');
+      const onboardingLastNameInput = document.getElementById('onboarding-last-name');
+      const onboardingSaveBtn = document.getElementById('onboarding-save-btn');
+      const onboardingErrorMessage = document.getElementById('onboarding-error-message');
+
+      // New Support Page Elements
+      const supportMain = document.getElementById('support-main');
+      const supportQuestion = document.getElementById('supportQuestion');
+      const quickEasyBtn = document.getElementById('quickEasyBtn');
+      const advancedSupportBtn = document.getElementById('advancedSupportBtn');
+      const backToMainSiteBtn = document.getElementById('backToMainSiteBtn');
+
+      // New Chat Interface Elements
+      const chatInterface = document.getElementById('chat-interface');
+      const chatMessages = document.getElementById('chat-messages');
+      const chatInput = document.getElementById('chat-input');
+      const sendChatBtn = document.getElementById('send-chat-btn');
+      let isBotTyping = false; // Flag to indicate if bot is currently typing
+
+      // New Settings Page Elements
+      const settingsMain = document.getElementById('settings-main');
+      const settingsContentTitle = document.getElementById('settings-content-title');
+      const settingsContentArea = document.getElementById('settings-content-area');
+      const settingsNavLinks = document.querySelectorAll('.settings-nav-link');
+
 
       let cart = {};
+      let currentActiveNavLinkLi = null; // Keep track of the currently active <li>
+      let isNavigating = false; // Flag to prevent multiple simultaneous navigation transitions
+      let supportMode = false; // New: Global state for support mode
+      let chatHistory = [{ role: "system", content: "You are UltreBot, a helpful assistant for the Ultre clothing brand. You answer questions about products, orders, and general inquiries. Keep responses concise and friendly." }];
 
+
+      // Added descriptions to local items
+      const localClothingItems = [
+        { id: 'tee', name: "Minimalist Tee", price: 35.00, imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee", description: "Our classic minimalist tee, designed for comfort and style. Made from 100% organic cotton, it's perfect for everyday wear. Available in various sizes." },
+        { id: 'hoodie', name: "Essential Hoodie", price: 65.00, imageUrl: "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie", description: "Stay warm and stylish with our essential hoodie. Crafted from a soft fleece blend, featuring a subtle Ultre logo. Ideal for cooler days." },
+        { id: 'joggers', name: "Core Joggers", price: 50.00, imageUrl: "https://placehold.co/300x300/777777/FFFFFF?text=Joggers", description: "Comfortable and versatile core joggers, perfect for lounging or light activity. Designed with a modern tapered fit and elastic waistband." },
+        { id: 'cap', name: "Urban Cap", price: 25.00, imageUrl: "https://placehold.co/300x300/999999/FFFFFF?text=Cap", description: "Complete your look with our urban cap. A classic design with an adjustable strap for the perfect fit. Features a discreet embroidered detail." },
+        { id: 'socks', name: "Signature Socks", price: 15.00, imageUrl: "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks", description: "Step up your sock game with our signature socks. Soft, breathable, and designed for all-day comfort. Comes in a pack of three." },
+      ];
+
+      /**
+       * Animates letters of a given element by splitting them into individual spans
+       * and applying a staggered fade-in and translateY animation.
+       * @param {string} elementId - The ID of the HTML element to animate.
+       * @param {number} baseDelay - The base delay before the animation starts for the first letter.
+       */
       function splitAndAnimateLetters(elementId, baseDelay = 0) {
         const element = document.getElementById(elementId);
         if (!element) return;
 
         const text = element.textContent;
-        element.textContent = '';
+        element.textContent = ''; // Clear original text
 
         const fragment = document.createDocumentFragment();
 
@@ -460,14 +1389,19 @@
           span.textContent = char;
           span.classList.add('animated-letter');
           if (char === ' ') {
-            span.classList.add('space');
+            span.classList.add('space'); // Add a class for spaces to control width
           }
-          span.style.animationDelay = `${baseDelay + (i * 0.02)}s`;
+          span.style.animationDelay = `${baseDelay + (i * 0.02)}s`; // Staggered delay
           fragment.appendChild(span);
         }
         element.appendChild(fragment);
       }
 
+      /**
+       * Applies an animation delay to a block element.
+       * @param {string|HTMLElement} elementId - The ID of the HTML element or the element itself.
+       * @param {number} delay - The delay in seconds.
+       */
       function animateBlock(elementId, delay) {
         const element = typeof elementId === 'string' ? document.getElementById(elementId) : elementId;
         if (element) {
@@ -475,77 +1409,238 @@
         }
       }
 
-      function renderShopItems() {
-        loadingIndicator.classList.remove('hidden');
-        itemsGrid.innerHTML = '';
-        noStockMessage.classList.add('hidden');
-
-        setTimeout(() => {
-          loadingIndicator.classList.add('hidden');
-
-          if (clothingItems.length === 0) {
-            noStockMessage.classList.remove('hidden');
+      /**
+       * Types out a message character by character into an HTML element.
+       * @param {HTMLElement} element - The HTML element to type into.
+       * @param {string} message - The message to type.
+       * @param {function} callback - Function to call after typing is complete.
+       * @param {number} delay - Delay between each character in milliseconds.
+       */
+      function typeMessage(element, message, callback, delay = 70) {
+        let i = 0;
+        element.textContent = '';
+        element.classList.remove('animate-slide-in-up'); // Remove class before starting
+        const interval = setInterval(() => {
+          if (i < message.length) {
+            element.textContent += message.charAt(i);
+            i++;
           } else {
-            clothingItems.forEach(item => {
-              const itemCard = document.createElement('div');
-              itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col';
-              itemCard.innerHTML = `
-                <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
-                <div class="p-4 flex flex-col justify-between flex-grow">
-                  <h3 class="text-xl font-semibold text-white mb-2">${item.name}</h3>
-                  <p class="text-gray-300 text-lg mb-4">$${item.price.toFixed(2)}</p>
-                  <button class="add-to-cart-btn mt-auto bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}">Add to Cart</button>
-                </div>
-              `;
-              itemsGrid.appendChild(itemCard);
-            });
+            clearInterval(interval);
+            element.classList.add('animate-slide-in-up'); // Add class after content is set
+            if (callback) setTimeout(callback, 500); // Call callback after a short pause
+          }
+        }, delay);
+      }
 
-            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-              button.addEventListener('click', (event) => {
-                const itemId = event.target.dataset.itemId;
-                const itemToAdd = clothingItems.find(item => item.id === itemId);
-                if (itemToAdd) {
-                  addToCart(itemToAdd);
-                }
+      /**
+       * Displays a custom message box at the top of the screen.
+       * @param {string} message - The message to display.
+       * @param {number} duration - How long the message should be visible in milliseconds.
+       * @param {boolean} isError - If true, displays as an error message (red background).
+       */
+      function showMessageBox(message, duration = 3000, isError = false) {
+          messageText.textContent = message;
+          messageBox.classList.remove('bg-red-600', 'bg-green-600'); // Clean up previous colors
+          messageBox.classList.add(isError ? 'bg-red-600' : 'bg-green-600');
+          messageBox.querySelector('i').className = isError ? 'fas fa-times-circle' : 'fas fa-check-circle'; // Icon change
+
+          messageBox.classList.add('show');
+
+          setTimeout(() => {
+              messageBox.classList.remove('show');
+          }, duration);
+      }
+
+      /**
+       * Fetches the first available shop ID from Printify API.
+       * @returns {Promise<string|null>} The shop ID or null if no shops are found.
+       */
+      async function fetchPrintifyShops() {
+          try {
+              const response = await fetch(`${PRINTIFY_API_BASE_URL}/shops.json`, {
+                  headers: {
+                      'Authorization': `Bearer ${PRINTIFY_API_KEY}`
+                  }
               });
+              if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              const data = await response.json();
+              if (data.length > 0) {
+                  return data[0].id; // Return the ID of the first shop
+              }
+              return null;
+          } catch (error) {
+              console.error("Error fetching Printify shops:", error);
+              throw error; // Re-throw to be caught by the caller
+          }
+      }
+
+      /**
+       * Renders shop items, attempting to fetch from Printify first, then falling back to local data.
+       */
+      async function renderShopItems() {
+        loadingIndicator.classList.remove('hidden');
+        loadingIndicator.classList.add('animate-slide-in-up'); // Animate loading text
+        itemsGrid.innerHTML = ''; // Clear previous items
+        noStockMessage.classList.add('hidden');
+        statusMessageElement.classList.add('hidden');
+
+        let productsToRender = [];
+
+        try {
+            const shopId = await fetchPrintifyShops();
+            if (shopId) {
+                const response = await fetch(`${PRINTIFY_API_BASE_URL}/shops/${shopId}/products.json`, {
+                    headers: {
+                        'Authorization': `Bearer ${PRINTIFY_API_KEY}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                productsToRender = data.data; // Printify products are in data.data
+            } else {
+                throw new Error("No Printify shop found.");
+            }
+        } catch (error) {
+            console.error("Failed to fetch from Printify, falling back to local data:", error);
+            loadingIndicator.classList.remove('animate-slide-in-up'); // Remove animation class if error occurs
+            loadingIndicator.classList.add('hidden');
+            statusMessageElement.classList.remove('hidden');
+            // Display a message about falling back to local data
+            await new Promise(resolve => {
+                typeMessage(statusMessageElement, "Couldn't connect, fetching local data...", () => {
+                    statusMessageElement.textContent = '';
+                    statusMessageElement.classList.add('hidden');
+                    statusMessageElement.classList.remove('animate-slide-in-up'); // Remove animation class after typing
+                    resolve();
+                });
             });
-          }
-        }, 1000);
+            productsToRender = localClothingItems; // Fallback to local data
+        } finally {
+            loadingIndicator.classList.add('hidden'); // Hide loading indicator
+            loadingIndicator.classList.remove('animate-slide-in-up'); // Remove animation class
+
+            if (!productsToRender || productsToRender.length === 0) {
+              noStockMessage.classList.remove('hidden'); // Show no stock message
+              noStockMessage.classList.add('animate-slide-in-up'); // Animate no stock message
+            } else {
+              // Iterate and create item cards for display
+              productsToRender.forEach((item, index) => {
+                const imageUrl = item.images && item.images.length > 0 ? item.images[0].src : item.imageUrl || 'https://placehold.co/300x300/CCCCCC/000000?text=No+Image';
+                // Printify prices are in cents, convert to dollars
+                const price = item.price ? (item.price / 100).toFixed(2) : item.price.toFixed(2);
+                // Use a default description if not available from API or local data
+                const description = item.description || "A high-quality item from Ultre. Designed for comfort and durability.";
+
+                const itemCard = document.createElement('div');
+                itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col cursor-pointer product-card'; // Added product-card class and cursor-pointer
+                itemCard.style.animationDelay = `${0.1 * index}s`; // Staggered animation delay
+                // Store item data as data attributes for easy retrieval
+                itemCard.dataset.itemId = item.id;
+                itemCard.dataset.itemName = item.title || item.name;
+                itemCard.dataset.itemPrice = item.price;
+                itemCard.dataset.itemImage = imageUrl;
+                itemCard.dataset.itemDescription = description; // Store description
+
+                itemCard.innerHTML = `
+                  <img src="${imageUrl}" alt="${item.title || item.name}" class="w-full h-48 object-cover">
+                  <div class="p-4 flex flex-col justify-between flex-grow">
+                    <h3 class="text-xl font-semibold text-white mb-2">${item.title || item.name}</h3>
+                    <p class="text-gray-300 text-lg mb-4">$${price}</p>
+                    <button class="add-to-cart-btn mt-auto bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}" data-item-name="${item.title || item.name}" data-item-price="${item.price}" data-item-image="${imageUrl}">Add to Cart</button>
+                  </div>
+                `;
+                itemsGrid.appendChild(itemCard);
+              });
+
+              // Add event listeners for "Add to Cart" buttons
+              document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                  event.stopPropagation(); // Prevent card click from firing when button is clicked
+                  const itemId = event.target.dataset.itemId;
+                  const itemName = event.target.dataset.itemName;
+                  const itemPrice = parseFloat(event.target.dataset.itemPrice);
+                  const itemImage = event.target.dataset.itemImage;
+                  // For simplicity, when adding from the grid, default size to 'M' or first option
+                  addToCart({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, size: 'M' });
+                  showMessageBox(`${itemName} (Size: M) has successfully been added to cart!`); // Show custom message
+                });
+              });
+
+              // Add click listener to the entire product card for detail view
+              document.querySelectorAll('.product-card').forEach(card => {
+                  card.addEventListener('click', (event) => {
+                      const itemId = card.dataset.itemId;
+                      const itemName = card.dataset.itemName;
+                      const itemPrice = parseFloat(card.dataset.itemPrice);
+                      const itemImage = card.dataset.itemImage;
+                      const itemDescription = card.dataset.itemDescription;
+                      showItemDetail({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, description: itemDescription });
+                  });
+              });
+            }
+        }
       }
 
+      /**
+       * Adds an item to the shopping cart or increments its quantity if already present.
+       * Now includes size.
+       * @param {object} item - The item object to add, including id, name, price, imageUrl, and size.
+       */
       function addToCart(item) {
-        if (cart[item.id]) {
-          cart[item.id].quantity++;
+        // Use a combined key for item + size to differentiate items of different sizes
+        const cartKey = `${item.id}-${item.size}`;
+        if (cart[cartKey]) {
+          cart[cartKey].quantity++;
         } else {
-          cart[item.id] = { ...item, quantity: 1 };
+          cart[cartKey] = { ...item, quantity: 1 };
         }
-        renderCart();
+        renderCart(); // Re-render cart after modification
       }
 
-      function updateCartQuantity(itemId, change) {
-        if (cart[itemId]) {
-          cart[itemId].quantity += change;
-          if (cart[itemId].quantity <= 0) {
-            delete cart[itemId];
+      /**
+       * Updates the quantity of a specific item in the cart.
+       * @param {string} cartKey - The combined ID and size of the item to update (e.g., 'tee-M').
+       * @param {number} change - The amount to change the quantity by (e.g., 1 for increment, -1 for decrement).
+       */
+      function updateCartQuantity(cartKey, change) {
+        if (cart[cartKey]) {
+          cart[cartKey].quantity += change;
+          if (cart[cartKey].quantity <= 0) {
+            delete cart[cartKey]; // Remove item if quantity drops to 0 or below
           }
         }
-        renderCart();
+        renderCart(); // Re-render cart after modification
       }
 
+      /**
+       * Renders the current state of the shopping cart.
+       */
       function renderCart() {
-        cartItemsList.innerHTML = '';
+        cartItemsList.innerHTML = ''; // Clear current cart display
         let total = 0;
-        const itemIdsInCart = Object.keys(cart);
+        const itemKeysInCart = Object.keys(cart);
 
-        if (itemIdsInCart.length === 0) {
+        if (itemKeysInCart.length === 0) {
           emptyCartMessage.classList.remove('hidden');
           cartTotalElement.classList.add('hidden');
+          checkoutButton.classList.add('hidden'); // Hide checkout button if cart is empty
         } else {
           emptyCartMessage.classList.add('hidden');
           cartTotalElement.classList.remove('hidden');
+          checkoutButton.classList.remove('hidden'); // Show checkout button if cart has items
 
-          itemIdsInCart.forEach(itemId => {
-            const item = cart[itemId];
+          itemKeysInCart.forEach(cartKey => {
+            const item = cart[cartKey];
+            // Adjust price display for Printify (cents to dollars)
+            const itemPriceDisplay = (item.price / (item.price > 1000 ? 100 : 1)).toFixed(2);
+            const itemTotal = ((item.price / (item.price > 1000 ? 100 : 1)) * item.quantity).toFixed(2);
+
             const itemElement = document.createElement('div');
             itemElement.className = 'flex items-center justify-between bg-gray-800 p-4 rounded-lg shadow-md';
             itemElement.innerHTML = `
@@ -553,40 +1648,168 @@
                 <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
                 <div>
                   <h4 class="text-lg font-semibold text-white">${item.name}</h4>
-                  <p class="text-gray-400">$${item.price.toFixed(2)} x ${item.quantity}</p>
+                  <p class="text-gray-400">$${itemPriceDisplay} x ${item.quantity} ${item.size ? `(Size: ${item.size})` : ''} = $${itemTotal}</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
-                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-item-id="${item.id}" data-change="-1">-</button>
+                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-cart-key="${cartKey}" data-change="-1">-</button>
                 <span class="text-white">${item.quantity}</span>
-                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-item-id="${item.id}" data-change="1">+</button>
-                <button class="remove-from-cart-btn bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" data-item-id="${item.id}">Remove</button>
+                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-cart-key="${cartKey}" data-change="1">+</button>
+                <button class="remove-from-cart-btn bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" data-cart-key="${cartKey}">Remove</button>
               </div>
             `;
             cartItemsList.appendChild(itemElement);
-            total += item.price * item.quantity;
+            total += (item.price / (item.price > 1000 ? 100 : 1)) * item.quantity;
           });
 
+          // Add event listeners for quantity and remove buttons in the cart
           document.querySelectorAll('#cart-items-list .quantity-btn').forEach(button => {
             button.addEventListener('click', (event) => {
-              const itemId = event.target.dataset.itemId;
+              const cartKey = event.target.dataset.cartKey;
               const change = parseInt(event.target.dataset.change);
-              updateCartQuantity(itemId, change);
+              updateCartQuantity(cartKey, change);
             });
           });
 
           document.querySelectorAll('#cart-items-list .remove-from-cart-btn').forEach(button => {
             button.addEventListener('click', (event) => {
-              const itemId = event.target.dataset.itemId;
-              delete cart[itemId];
+              const cartKey = event.target.dataset.cartKey;
+              delete cart[cartKey];
               renderCart();
             });
           });
         }
         totalAmountElement.textContent = total.toFixed(2);
+        modalTotalAmount.textContent = total.toFixed(2); // Update modal total as well
       }
 
-      function showPage(pageId) {
+      /**
+       * Updates the navigation indicator's position and shape based on the active page.
+       * @param {string} activePageId - The ID of the currently active page section.
+       */
+      function updateNavIndicator(activePageId) {
+          const newActiveNavLinkLi = document.querySelector(`nav ul li[data-page-id="${activePageId}"]`);
+
+          // If the new active link is the same as the current, or no new link, or already navigating, do nothing
+          if (newActiveNavLinkLi === currentActiveNavLinkLi || !newActiveNavLinkLi || isNavigating) {
+              // If it's the initial load and indicator is not yet positioned, force update
+              if (!currentActiveNavLinkLi && newActiveNavLinkLi) {
+                  // Proceed with initial positioning
+              } else {
+                  return;
+              }
+          }
+
+          isNavigating = true; // Set navigation flag to prevent overlapping transitions
+
+          // Remove active-nav-link from all links first
+          document.querySelectorAll('nav ul li a').forEach(link => {
+              link.classList.remove('active-nav-link');
+          });
+
+          const navRect = newActiveNavLinkLi.closest('nav').getBoundingClientRect();
+          const liRect = newActiveNavLinkLi.getBoundingClientRect();
+          const activeAnchor = newActiveNavLinkLi.querySelector('a');
+
+          // Add active-nav-link class to the active anchor for color inversion
+          if (activeAnchor) {
+              activeAnchor.classList.add('active-nav-link');
+          }
+
+          // Define the target pill's dimensions
+          const paddingX = 8; // Horizontal padding for the pill (slightly smaller)
+          const paddingY = 4;  // Vertical padding for the pill (slightly smaller)
+          const targetWidth = liRect.width + paddingX * 2; // Width of the pill
+          const targetHeight = liRect.height + paddingY * 2; // Height of the pill (should be constant)
+          const targetLeft = liRect.left - navRect.left - paddingX; // Left position of the pill
+          const targetTop = liRect.top - navRect.top - paddingY; // Top position of the pill
+
+          // Get current indicator's properties for smooth transition
+          const currentLeft = navIndicator.offsetLeft;
+          const currentWidth = navIndicator.offsetWidth;
+          const currentTop = navIndicator.offsetTop;
+          const currentHeight = navIndicator.offsetHeight;
+
+          // If there was a previous active link, we need to animate the "stretch and move" transition
+          if (currentActiveNavLinkLi) {
+              // Phase 1: Stretch horizontally and move
+              // Set initial position of indicator to its current position
+              navIndicator.style.left = `${currentLeft}px`;
+              navIndicator.style.top = `${currentTop}px`;
+              navIndicator.style.width = `${currentWidth}px`;
+              navIndicator.style.height = `${currentHeight}px`;
+              navIndicator.style.opacity = '1'; // Ensure it's visible during transition
+
+              // Force reflow to ensure initial styles are applied before the transition starts
+              void navIndicator.offsetWidth;
+
+              // Calculate the combined span for the stretch phase
+              const currentRight = currentLeft + currentWidth;
+              const targetRight = targetLeft + targetWidth;
+
+              const minLeft = Math.min(currentLeft, targetLeft);
+              const maxRight = Math.max(currentRight, targetRight);
+              const stretchedWidth = maxRight - minLeft;
+
+              // Apply stretched properties and start moving
+              navIndicator.style.left = `${minLeft}px`;
+              navIndicator.style.width = `${stretchedWidth}px`;
+              navIndicator.style.top = `${targetTop}px`; // Move vertically during stretch
+              navIndicator.style.height = `${targetHeight}px`; // Maintain height during stretch
+
+              // Listen for the end of the first transition (stretch and move)
+              navIndicator.ontransitionend = () => {
+                  navIndicator.ontransitionend = null; // Remove listener
+
+                  // Phase 2: Shrink to target width at the destination
+                  navIndicator.style.left = `${targetLeft}px`;
+                  navIndicator.style.width = `${targetWidth}px`;
+                  navIndicator.style.height = `${targetHeight}px`; // Ensure height is correct
+
+                  // Reset navigation flag after the final snap
+                  isNavigating = false;
+              };
+
+          } else {
+              // Initial load, no previous active link, just set as pill
+              navIndicator.style.left = `${targetLeft}px`;
+              navIndicator.style.top = `${targetTop}px`;
+              navIndicator.style.width = `${targetWidth}px`;
+              navIndicator.style.height = `${targetHeight}px`;
+              navIndicator.style.opacity = '1'; // Ensure it's visible on initial load
+              isNavigating = false; // Reset navigation flag
+          }
+          currentActiveNavLinkLi = newActiveNavLinkLi; // Update the currently active link
+      }
+
+      /**
+       * Updates the visibility of navigation bar items based on support mode.
+       * @param {boolean} inSupportMode - True if in support mode, false otherwise.
+       */
+      function updateNavBarVisibility(inSupportMode) {
+          mainNavItems.forEach(item => {
+              if (inSupportMode) {
+                  item.classList.add('hidden');
+              } else {
+                  item.classList.remove('hidden');
+              }
+          });
+          // Ensure support nav item is always visible or only visible in support mode
+          // Based on requirement: "nav bar should only show the Support button"
+          if (inSupportMode) {
+              supportNavItem.classList.remove('hidden');
+          } else {
+              // If not in support mode, support button should also be visible alongside others
+              supportNavItem.classList.remove('hidden');
+          }
+      }
+
+      /**
+       * Shows a specific page section and hides others.
+       * @param {string} pageId - The ID of the section to show.
+       * @param {function} [callback] - Optional callback function to run after the page is shown.
+       */
+      function showPage(pageId, callback = null) {
         const allMainSections = document.querySelectorAll('#main-website-content-wrapper > section');
         allMainSections.forEach(section => {
           section.classList.remove('active-page');
@@ -595,35 +1818,549 @@
         const targetPage = document.getElementById(pageId);
         if (targetPage) {
           targetPage.classList.add('active-page');
-          window.scrollTo(0, 0);
+          window.scrollTo(0, 0); // Scroll to top of the page
 
+          // Determine if we are entering or exiting support mode
+          const newSupportMode = (pageId === 'support-main' || pageId === 'chat-interface');
+          if (newSupportMode !== supportMode) {
+              supportMode = newSupportMode;
+              updateNavBarVisibility(supportMode);
+          }
+
+          // Perform specific actions for certain pages
           if (pageId === 'shop-page') {
             renderShopItems();
           } else if (pageId === 'cart-main') {
             renderCart();
+          } else if (pageId === 'onboarding-main') {
+              typeMessage(onboardingTitle, "What should we call you?", callback);
+          } else if (pageId === 'support-main') {
+              typeMessage(supportQuestion, "What type of support do you need?", callback);
+          } else if (pageId === 'chat-interface') {
+              displayChatMessage("Hey, I’m UltreBot — what do you need help with today?", 'bot');
+              chatInput.focus(); // Focus on input when chat opens
+          } else if (pageId === 'settings-main') { // Added for settings page
+              updateSettingsContent('general'); // Default to showing General settings content
           }
+
+          // Update the navigation indicator for the new active page
+          updateNavIndicator(pageId);
         }
       }
 
+      /**
+       * Displays the detailed view of a selected item.
+       * @param {object} item - The item object containing details to display.
+       */
+      function showItemDetail(item) {
+          detailItemImage.src = item.imageUrl;
+          detailItemName.textContent = item.name;
+          detailItemPrice.textContent = `$${(item.price / (item.price > 1000 ? 100 : 1)).toFixed(2)}`;
+          detailItemDescription.textContent = item.description;
+
+          // Set data attributes for the "Add to Cart" button on the detail page
+          detailAddToCartBtn.dataset.itemId = item.id;
+          detailAddToCartBtn.dataset.itemName = item.name;
+          detailAddToCartBtn.dataset.itemPrice = item.price;
+          detailAddToCartBtn.dataset.itemImage = item.imageUrl;
+
+          // Reset size selection to default (e.g., 'M') when opening detail page
+          itemSizeSelect.value = 'M';
+
+          // Transition to the item detail page
+          showPage('item-detail-page');
+      }
+
+      /**
+       * Displays a chat message in the chat interface.
+       * @param {string} message - The message content.
+       * @param {'user'|'bot'} sender - The sender of the message.
+       * @param {boolean} [isTypingIndicator=false] - True if this is a typing indicator.
+       */
+      function displayChatMessage(message, sender, isTypingIndicator = false) {
+          const messageElement = document.createElement('div');
+          messageElement.classList.add('chat-message-bubble');
+
+          if (sender === 'user') {
+              messageElement.classList.add('user-message');
+              messageElement.textContent = message;
+          } else {
+              messageElement.classList.add('bot-message');
+              const avatar = document.createElement('div');
+              avatar.classList.add('bot-avatar');
+              avatar.innerHTML = '<i class="fas fa-robot"></i>'; // Robot icon for bot
+              messageElement.appendChild(avatar);
+
+              const textContent = document.createElement('span');
+              textContent.textContent = message;
+              messageElement.appendChild(textContent);
+
+              if (isTypingIndicator) {
+                  messageElement.id = 'typing-indicator';
+                  textContent.textContent = ''; // Clear text for dots
+                  textContent.classList.add('dot-pulse-container');
+                  textContent.innerHTML = '<div class="dot-pulse"></div><div class="dot-pulse"></div><div class="dot-pulse"></div>';
+              }
+          }
+          chatMessages.appendChild(messageElement);
+          chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+      }
+
+      /**
+       * Sends a message to the DeepSeek API and displays the response.
+       * @param {string} userMessage - The user's message.
+       */
+      async function sendChatToBot(userMessage) {
+          if (isBotTyping) return; // Prevent sending if bot is already typing
+
+          displayChatMessage(userMessage, 'user');
+          chatHistory.push({ role: "user", content: userMessage });
+          chatInput.value = ''; // Clear input
+
+          isBotTyping = true;
+          displayChatMessage('', 'bot', true); // Show typing indicator
+
+          try {
+              const response = await fetch(DEEPSEEK_API_URL, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                  },
+                  body: JSON.stringify({
+                      model: 'deepseek-chat',
+                      messages: chatHistory,
+                      stream: false // DeepSeek API supports streaming, but for simplicity of this example, we'll fetch full response then type it out.
+                  })
+              });
+
+              if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(`API error: ${response.status} - ${errorData.message || response.statusText}`);
+              }
+
+              const data = await response.json();
+              const botResponse = data.choices[0].message.content;
+              chatHistory.push({ role: "assistant", content: botResponse });
+
+              // Remove typing indicator
+              const typingIndicatorElement = document.getElementById('typing-indicator');
+              if (typingIndicatorElement) {
+                  typingIndicatorElement.remove();
+              }
+
+              // Simulate typing out the bot's response
+              let i = 0;
+              const botMessageElement = document.createElement('div');
+              botMessageElement.classList.add('chat-message-bubble', 'bot-message');
+              const avatar = document.createElement('div');
+              avatar.classList.add('bot-avatar');
+              avatar.innerHTML = '<i class="fas fa-robot"></i>';
+              botMessageElement.appendChild(avatar);
+              const textContent = document.createElement('span');
+              botMessageElement.appendChild(textContent);
+              chatMessages.appendChild(botMessageElement);
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+
+              const typingInterval = setInterval(() => {
+                  if (i < botResponse.length) {
+                      textContent.textContent += botResponse.charAt(i);
+                      i++;
+                      chatMessages.scrollTop = chatMessages.scrollHeight; // Keep scrolling down
+                  } else {
+                      clearInterval(typingInterval);
+                      isBotTyping = false;
+                  }
+              }, 30); // Typing speed
+          } catch (error) {
+              console.error("Error communicating with UltreBot:", error);
+              // Remove typing indicator on error
+              const typingIndicatorElement = document.getElementById('typing-indicator');
+              if (typingIndicatorElement) {
+                  typingIndicatorElement.remove();
+              }
+              displayChatMessage("Oops! I'm having trouble connecting right now. Please try again later.", 'bot');
+              isBotTyping = false;
+          }
+      }
+
+      /**
+       * Updates the content in the right-hand side of the settings page based on category.
+       * @param {string} category - The selected settings category (e.g., 'general', 'privacy').
+       */
+      function updateSettingsContent(category) {
+          settingsContentTitle.textContent = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
+          settingsContentArea.innerHTML = ''; // Clear previous content
+
+          let contentHtml = '';
+
+          switch (category) {
+              case 'general':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Basic settings for your account and site experience.</p>
+                          <div class="mt-4 space-y-4">
+                              <div>
+                                  <label for="language-select" class="block text-sm font-medium text-gray-300 mb-1">Language</label>
+                                  <select id="language-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
+                                      <option value="en">English</option>
+                                      <option value="es">Español</option>
+                                      <option value="fr">Français</option>
+                                  </select>
+                              </div>
+                              <div>
+                                  <label for="timezone-select" class="block text-sm font-medium text-gray-300 mb-1">Time Zone</label>
+                                  <select id="timezone-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
+                                      <option value="utc">UTC</option>
+                                      <option value="est">Eastern Standard Time</option>
+                                      <option value="pst">Pacific Standard Time</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <button class="shop-button mt-6 w-full">Save General Settings</button>
+                      </div>
+                  `;
+                  break;
+              case 'accessibility':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Adjust settings for better accessibility.</p>
+                          <div class="mt-4 space-y-4">
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">High Contrast Mode</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Enable Screen Reader Support</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                          </div>
+                          <button class="shop-button mt-6 w-full">Save Accessibility Settings</button>
+                      </div>
+                  `;
+                  break;
+              case 'privacy':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Manage your data and privacy preferences.</p>
+                          <div class="mt-4 space-y-4">
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Allow Personalized Ads</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Share Anonymous Usage Data</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                          </div>
+                          <button class="shop-button mt-6 w-full">Save Privacy Settings</button>
+                      </div>
+                  `;
+                  break;
+              case 'visuals':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Customize the look and feel of the site.</p>
+                          <div class="mt-4 space-y-4">
+                              <div>
+                                  <label for="theme-select" class="block text-sm font-medium text-gray-300 mb-1">Theme</label>
+                                  <select id="theme-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
+                                      <option value="dark">Dark (Default)</option>
+                                      <option value="light">Light</option>
+                                      <option value="system">System Preference</option>
+                                  </select>
+                              </div>
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Enable Animations</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                          </div>
+                          <button class="shop-button mt-6 w-full">Save Visual Settings</button>
+                      </div>
+                  `;
+                  break;
+              case 'payment-method':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Manage your saved payment methods.</p>
+                          <p class="text-sm text-gray-400 mt-2">No payment methods are currently saved for your account. You can add one during checkout.</p>
+                          <button class="shop-button mt-6 w-full bg-blue-600 hover:bg-blue-700">Add New Payment Method</button>
+                      </div>
+                  `;
+                  break;
+              case 'notifications':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Control how you receive notifications.</p>
+                          <div class="mt-4 space-y-4">
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Email Notifications</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Promotional Offers</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                          </div>
+                          <button class="shop-button mt-6 w-full">Save Notification Settings</button>
+                      </div>
+                  `;
+                  break;
+              case 'security':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Manage your account security settings.</p>
+                          <div class="mt-4 space-y-4">
+                              <button class="shop-button w-full bg-red-600 hover:bg-red-700">Change Password</button>
+                              <button class="shop-button w-full bg-yellow-600 hover:bg-yellow-700">Enable Two-Factor Authentication</button>
+                          </div>
+                      </div>
+                  `;
+                  break;
+              case 'integrations':
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Connect or disconnect third-party services.</p>
+                          <p class="text-sm text-gray-400 mt-2">No integrations are currently available.</p>
+                      </div>
+                  `;
+                  break;
+              default:
+                  contentHtml = `
+                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                          <p class="font-semibold mb-2">Welcome to your settings!</p>
+                          <p>Please select a category from the left to view and adjust your preferences.</p>
+                      </div>
+                  `;
+                  break;
+          }
+          settingsContentArea.innerHTML = contentHtml;
+      }
+
+
+      // Event Listeners for Checkout Modal
+      checkoutButton.addEventListener('click', () => {
+        checkoutModalOverlay.classList.add('show');
+        orderConfirmationMessage.classList.add('hidden'); // Reset confirmation message
+        placeOrderBtn.style.display = 'block'; // Show place order button
+      });
+
+      modalCloseBtn.addEventListener('click', () => {
+        checkoutModalOverlay.classList.remove('show');
+      });
+
+      placeOrderBtn.addEventListener('click', () => {
+        // Simulate order placement
+        cart = {}; // Clear the cart
+        renderCart(); // Update cart display
+        placeOrderBtn.style.display = 'none'; // Hide place order button
+        orderConfirmationMessage.classList.remove('hidden'); // Show thank you message
+
+        // Close modal after a short delay and redirect to home page
+        setTimeout(() => {
+          checkoutModalOverlay.classList.remove('show');
+          showPage('home-main');
+        }, 2000);
+      });
+
+      // Event listener for the "Add to Cart" button on the detail page
+      detailAddToCartBtn.addEventListener('click', (event) => {
+          const itemId = event.target.dataset.itemId;
+          const itemName = event.target.dataset.itemName;
+          const itemPrice = parseFloat(event.target.dataset.itemPrice);
+          const itemImage = event.target.dataset.itemImage;
+          const selectedSize = itemSizeSelect.value; // Get selected size
+          addToCart({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, size: selectedSize });
+          showMessageBox(`${itemName} (Size: ${selectedSize}) has successfully been added to cart!`); // Show custom message
+      });
+
+      // Event listener for "Back to Shop" button
+      backToShopBtn.addEventListener('click', () => {
+          showPage('shop-page');
+      });
+
+      // --- Sign In/Sign Up Logic ---
+      signInBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const email = signInEmailInput.value.trim();
+          const password = signInPasswordInput.value.trim();
+
+          signInErrorMessage.classList.add('hidden'); // Hide previous error
+
+          if (!email || !password) {
+              signInErrorMessage.textContent = 'Please enter both email and password.';
+              signInErrorMessage.classList.remove('hidden');
+              showMessageBox('Please fill in all fields!', 3000, true);
+              return;
+          }
+
+          // Simulate sign-in success
+          showMessageBox('Signed in successfully! Welcome back!', 3000);
+          // In a real app, you'd send data to a server and handle response
+          setTimeout(() => {
+              showPage('home-main'); // Redirect to home after successful sign-in
+              signInEmailInput.value = ''; // Clear form
+              signInPasswordInput.value = '';
+          }, 1000);
+      });
+
+      signUpBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const email = signUpEmailInput.value.trim();
+          const password = signUpPasswordInput.value.trim();
+          const confirmPassword = signUpConfirmPasswordInput.value.trim();
+
+          signUpErrorMessage.classList.add('hidden'); // Hide previous error
+
+          if (!email || !password || !confirmPassword) {
+              signUpErrorMessage.textContent = 'Please fill in all fields.';
+              signUpErrorMessage.classList.remove('hidden');
+              showMessageBox('Please fill in all fields!', 3000, true);
+              return;
+          }
+
+          if (password !== confirmPassword) {
+              signUpErrorMessage.textContent = 'Passwords do not match.';
+              signUpErrorMessage.classList.remove('hidden');
+              showMessageBox('Passwords do not match!', 3000, true);
+              return;
+          }
+
+          // Simulate sign-up success
+          showMessageBox('Account created successfully! Please tell us your name!', 3000);
+          // In a real app, you'd send data to a server and handle response
+          setTimeout(() => {
+              showPage('onboarding-main'); // Redirect to onboarding page
+              signUpEmailInput.value = ''; // Clear form
+              signUpPasswordInput.value = '';
+              signUpConfirmPasswordInput.value = '';
+          }, 1000);
+      });
+
+      // Event listener for onboarding save button (New)
+      onboardingSaveBtn.addEventListener('click', () => {
+          const firstName = onboardingFirstNameInput.value.trim();
+          const lastName = onboardingLastNameInput.value.trim();
+
+          onboardingErrorMessage.classList.add('hidden'); // Hide previous error
+
+          if (!firstName || !lastName) {
+              onboardingErrorMessage.textContent = 'Please enter both your first and last name.';
+              onboardingErrorMessage.classList.remove('hidden');
+              showMessageBox('Please fill in all fields!', 3000, true);
+              return;
+          }
+
+          // Save to localStorage
+          localStorage.setItem('userFirstName', firstName);
+          localStorage.setItem('userLastName', lastName);
+
+          showMessageBox(`Welcome, ${firstName}! Enjoy shopping!`, 3000);
+          setTimeout(() => {
+              showPage('home-main'); // Redirect to home after saving
+              onboardingFirstNameInput.value = ''; // Clear form
+              onboardingLastNameInput.value = '';
+          }, 1000);
+      });
+
+
+      // Event listeners for switching between sign-in/sign-up forms
+      document.querySelectorAll('.auth-form-container .form-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+              e.preventDefault();
+              const targetId = this.getAttribute('href').substring(1);
+              showPage(targetId);
+          });
+      });
+
+      // --- Support Page Event Listeners (New) ---
+      quickEasyBtn.addEventListener('click', () => {
+          showPage('chat-interface');
+      });
+
+      advancedSupportBtn.addEventListener('click', () => {
+          window.location.href = 'mailto:support@ultre.com?subject=Support%20Request&body=Hello%20Ultre%20Support%2C%0A%0AI%20need%20help%20with%3A%0A%0A[Please%20describe%20your%20issue%20here]';
+      });
+
+      backToMainSiteBtn.addEventListener('click', () => {
+          showPage('home-main'); // Go back to home page
+      });
+
+      // --- Chat Interface Event Listeners (New) ---
+      sendChatBtn.addEventListener('click', () => {
+          const message = chatInput.value.trim();
+          if (message) {
+              sendChatToBot(message);
+          }
+      });
+
+      chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+              sendChatBtn.click();
+          }
+      });
+
+      // --- Settings Page Event Listeners (New) ---
+      settingsNavLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+              e.preventDefault();
+              // Remove active class from all settings nav links
+              settingsNavLinks.forEach(navLink => navLink.classList.remove('bg-gray-700', 'text-white'));
+              // Add active class to the clicked link
+              e.target.classList.add('bg-gray-700', 'text-white');
+
+              const category = e.target.dataset.settingCategory;
+              updateSettingsContent(category);
+          });
+      });
+
+
+      // Initialize animations and event listeners when the window loads
       window.onload = function() {
-        splitAndAnimateLetters('mainTagline', 1.5);
+        splitAndAnimateLetters('mainTagline', 1.5); // Animate the intro tagline
 
+        // Event listener for the "Head to the shop" button
         shopButton.addEventListener('click', () => {
-          transitionOverlay.classList.add('active');
+          transitionOverlay.classList.add('active'); // Activate the transition overlay
 
+          // Listen for the end of the transition overlay's animation
           transitionOverlay.addEventListener('transitionend', function handler() {
-            transitionOverlay.removeEventListener('transitionend', handler);
+            transitionOverlay.removeEventListener('transitionend', handler); // Remove listener to prevent multiple calls
 
-            introSection.classList.add('hidden-content');
+            introSection.classList.add('hidden-content'); // Hide the intro section
+            mainWebsiteContentWrapper.classList.add('active-content'); // Show the main content wrapper
 
-            mainWebsiteContentWrapper.classList.add('active-content');
+            // Now that main content is visible, set the initial page and nav state
+            supportMode = false; // We are going to the main site (home), not support mode
+            updateNavBarVisibility(supportMode); // Show all main nav items
+            showPage('home-main'); // Direct to home page
 
-            showPage('home-main');
-
-            transitionOverlay.classList.remove('active');
+            transitionOverlay.classList.remove('active'); // Deactivate the transition overlay
           });
         });
 
+        // Add event listeners for navigation links within the main content
         document.querySelectorAll('#main-website-content-wrapper nav ul li a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -631,6 +2368,30 @@
                 showPage(targetId);
             });
         });
+
+        // Add event listeners for profile dropdown items
+        document.querySelectorAll('.profile-dropdown .dropdown-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                showPage(targetId);
+            });
+        });
+
+        // Handle window resize to update nav indicator position
+        window.addEventListener('resize', () => {
+            const currentPage = document.querySelector('#main-website-content-wrapper > section.active-page');
+            if (currentPage) {
+                updateNavIndicator(currentPage.id);
+            }
+        });
+
+        // Initially highlight the 'General' setting link and display its content when settings page is loaded
+        const initialSettingLink = document.querySelector('.settings-nav-link[data-setting-category="general"]');
+        if (initialSettingLink) {
+            initialSettingLink.classList.add('bg-gray-700', 'text-white');
+            updateSettingsContent('general');
+        }
       };
     </script>
   </body>
