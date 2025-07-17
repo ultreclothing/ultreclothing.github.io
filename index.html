@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ultre - Coming Soon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #0f0f0f;
+        color: #f2f2f2;
+        font-family: 'Quicksand', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        text-align: center;
+      }
+
+      .hidden-content {
+        display: none;
+      }
+
+      .active-content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .transition-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #0f0f0f;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+      }
+
+      .transition-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(15, 15, 15, 0.9);
+        padding: 10px 20px;
+        z-index: 1000;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+      }
+
+      nav ul li a {
+        color: #f2f2f2;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 5px 10px;
+        transition: color 0.3s ease, transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav ul li a i {
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+      }
+
+      nav ul li a:hover {
+        color: #a0a0a0;
+        transform: translateY(-2px);
+      }
+
+      section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        position: relative;
+        width: 100%;
+      }
+
+      #intro-section {
+          min-height: 100vh;
+      }
+
+      #main-website-content-wrapper > section {
+          display: none;
+          padding-top: 80px;
+          padding-bottom: 80px;
+          min-height: calc(100vh - 100px);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+      }
+
+      #main-website-content-wrapper > section.active-page {
+          display: flex;
+      }
+
+      #intro-section {
+        background: #0f0f0f;
+      }
+      #shop-page, #contact-main, #about-us-main {
+        background: #1a1a1a;
+      }
+      #home-main, #cart-main {
+        background: #0f0f0f;
+      }
+
+      .logo {
+        width: 120px;
+        height: 120px;
+        background-color: #f2f2f2;
+        border-radius: 50%;
+        margin-bottom: 30px;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: fadeInScale 1.2s ease-out forwards, pulseGlow 2s infinite alternate 1.2s;
+      }
+
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0px rgba(242, 242, 242, 0.7);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 25px 10px rgba(242, 242, 242, 0.7);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0px rgba(242, 242, 242, 0.7);
+        }
+      }
+
+      .tagline, .info-content {
+        font-size: 3.5rem;
+        letter-spacing: 2px;
+        line-height: 1.2;
+        max-width: 90%;
+        margin-bottom: 15px;
+        font-weight: 700;
+      }
+
+      .info-content {
+        font-size: 1.3rem;
+        font-weight: 400;
+        max-width: 700px;
+        line-height: 1.6;
+        color: #d0d0d0;
+      }
+
+      .animated-letter {
+        opacity: 0;
+        transform: translateY(20px);
+        display: inline-block;
+        animation: letterFadeIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      .animated-letter.space {
+          width: 0.25em;
+      }
+
+      @keyframes letterFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .scroll-hint {
+        font-size: 1.1rem;
+        opacity: 0;
+        margin-top: 20px;
+        color: #a0a0a0;
+        animation: fadeInBlock 0.8s ease-out forwards;
+      }
+
+      @keyframes fadeInBlock {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .info-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #f2f2f2;
+        opacity: 0;
+        animation: fadeInBlock 0.8s ease-out forwards;
+      }
+
+      .shop-button {
+        background-color: #f2f2f2;
+        color: #0f0f0f;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        animation: fadeInBlock 0.8s ease-out forwards;
+      }
+
+      .shop-button:hover {
+        background-color: #d0d0d0;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      footer {
+        background: #0a0a0a;
+        color: #888;
+        text-align: center;
+        padding: 25px 20px;
+        font-size: 0.9rem;
+        margin-top: auto;
+      }
+
+      @media (max-width: 768px) {
+        nav ul {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 15px;
+        }
+
+        nav ul li a {
+          font-size: 0.8rem;
+        }
+
+        nav ul li a i {
+          font-size: 1.1rem;
+        }
+
+        .logo {
+          width: 90px;
+          height: 90px;
+          margin-bottom: 20px;
+        }
+
+        .tagline {
+          font-size: 2.5rem;
+        }
+
+        .info-title {
+          font-size: 2rem;
+        }
+
+        .info-content, .scroll-hint {
+          font-size: 1.1rem;
+        }
+
+        .shop-button {
+          padding: 12px 25px;
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        nav {
+          padding: 8px 10px;
+        }
+        nav ul {
+          gap: 10px;
+        }
+        nav ul li a {
+          font-size: 0.7rem;
+        }
+        nav ul li a i {
+          font-size: 1rem;
+        }
+        .logo {
+          width: 70px;
+          height: 70px;
+        }
+        .tagline {
+          font-size: 1.8rem;
+        }
+        .info-title {
+          font-size: 1.6rem;
+        }
+        .info-content, .scroll-hint {
+          font-size: 1rem;
+        }
+        .shop-button {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="transitionOverlay" class="transition-overlay"></div>
+
+    <section id="intro-section">
+      <div class="logo"></div>
+      <div class="tagline" id="mainTagline">Ultre is coming.</div>
+      <div class="scroll-hint" style="animation-delay: 2.2s;">Scroll Down to Explore.</div>
+      <button class="shop-button" id="shopButton" style="animation-delay: 2.8s;">Head to the shop.</button>
+    </section>
+
+    <div id="main-website-content-wrapper" class="hidden-content">
+      <section id="home-main" class="active-page">
+        <div class="info-title">Welcome to Ultre!</div>
+        <div class="info-content">
+          Your journey into minimalist style and timeless energy starts here.
+          Explore our collections and discover pieces designed for those who move different.
+        </div>
+      </section>
+
+      <section id="shop-page">
+          <div class="info-title">Welcome to the Shop!</div>
+          <div id="shop-content" class="w-full max-w-4xl mx-auto p-4">
+              <div id="loading-indicator" class="text-gray-400 text-lg">Loading items...</div>
+              <div id="no-stock-message" class="hidden text-gray-400 text-lg flex flex-col items-center justify-center py-10">
+                  <span class="text-6xl mb-4">😔</span>
+                  There isn't anything in stock right now, check again soon!
+              </div>
+              <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+              </div>
+          </div>
+      </section>
+
+      <section id="about-us-main">
+        <div class="info-title">About Us</div>
+        <div class="info-content" id="aboutUsContent">
+          Ultre isn’t just a brand — it’s a mindset. Rooted in simplicity, built for the bold.
+          We believe in creating essential pieces that resonate with those who value authenticity and understated strength.
+          <br><br>
+          No loud flex, no trend chasing. Just timeless energy and lowkey fire.
+          Our designs are inspired by a minimalist aesthetic, focusing on clean lines and versatile pieces that fit seamlessly into any lifestyle.
+          <br><br>
+          Crafted for the ones who move different. Designed to last, not just be seen.
+          We prioritize quality materials and meticulous attention to detail, ensuring every Ultre item stands the test of time.
+        </div>
+      </section>
+
+      <section id="cart-main">
+        <div class="info-title">Your Cart</div>
+        <div id="cart-content" class="w-full max-w-4xl mx-auto p-4">
+            <div id="empty-cart-message" class="text-gray-400 text-lg hidden flex flex-col items-center justify-center py-10">
+                <span class="text-6xl mb-4">🛒</span>
+                Your cart is currently empty. Start shopping to add some Ultre essentials!
+            </div>
+            <div id="cart-items-list" class="space-y-4 text-left">
+            </div>
+            <div id="cart-total" class="mt-8 text-right text-2xl font-bold text-white hidden">
+                Total: $<span id="total-amount">0.00</span>
+            </div>
+        </div>
+      </section>
+
+      <section id="contact-main">
+        <div class="info-title">Get in Touch</div>
+        <div class="info-content">
+          We make essentials. Not extras. Wear it like you mean it.
+          For inquiries or collaborations, feel free to reach out to us.
+          <div class="contact-details">
+            Email: <a href="mailto:info@ultre.com">info@ultre.com</a><br>
+            Follow us on social media! (Links coming soon)
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        &copy; 2025 Ultre. All rights reserved.
+      </footer>
+
+      <nav>
+        <ul>
+          <li><a href="#home-main"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="#shop-page"><i class="fas fa-store"></i> Shop</a></li>
+          <li><a href="#about-us-main"><i class="fas fa-info-circle"></i> About Us</a></li>
+          <li><a href="#cart-main"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+          <li><a href="#contact-main"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <script>
+      const introSection = document.getElementById('intro-section');
+      const mainWebsiteContentWrapper = document.getElementById('main-website-content-wrapper');
+      const shopButton = document.getElementById('shopButton');
+      const transitionOverlay = document.getElementById('transitionOverlay');
+
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const noStockMessage = document.getElementById('no-stock-message');
+      const itemsGrid = document.getElementById('items-grid');
+
+      const emptyCartMessage = document.getElementById('empty-cart-message');
+      const cartItemsList = document.getElementById('cart-items-list');
+      const cartTotalElement = document.getElementById('cart-total');
+      const totalAmountElement = document.getElementById('total-amount');
+
+      const clothingItems = [
+        { id: 'tee', name: "Minimalist Tee", price: 35.00, imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee" },
+        { id: 'hoodie', name: "Essential Hoodie", price: 65.00, imageUrl: "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie" },
+        { id: 'joggers', name: "Core Joggers", price: 50.00, imageUrl: "https://placehold.co/300x300/777777/FFFFFF?text=Joggers" },
+        { id: 'cap', name: "Urban Cap", price: 25.00, imageUrl: "https://placehold.co/300x300/999999/FFFFFF?text=Cap" },
+        { id: 'socks', name: "Signature Socks", price: 15.00, imageUrl: "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks" },
+      ];
+
+      let cart = {};
+
+      function splitAndAnimateLetters(elementId, baseDelay = 0) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const text = element.textContent;
+        element.textContent = '';
+
+        const fragment = document.createDocumentFragment();
+
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.classList.add('animated-letter');
+          if (char === ' ') {
+            span.classList.add('space');
+          }
+          span.style.animationDelay = `${baseDelay + (i * 0.02)}s`;
+          fragment.appendChild(span);
+        }
+        element.appendChild(fragment);
+      }
+
+      function animateBlock(elementId, delay) {
+        const element = typeof elementId === 'string' ? document.getElementById(elementId) : elementId;
+        if (element) {
+          element.style.animationDelay = `${delay}s`;
+        }
+      }
+
+      function renderShopItems() {
+        loadingIndicator.classList.remove('hidden');
+        itemsGrid.innerHTML = '';
+        noStockMessage.classList.add('hidden');
+
+        setTimeout(() => {
+          loadingIndicator.classList.add('hidden');
+
+          if (clothingItems.length === 0) {
+            noStockMessage.classList.remove('hidden');
+          } else {
+            clothingItems.forEach(item => {
+              const itemCard = document.createElement('div');
+              itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col';
+              itemCard.innerHTML = `
+                <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
+                <div class="p-4 flex flex-col justify-between flex-grow">
+                  <h3 class="text-xl font-semibold text-white mb-2">${item.name}</h3>
+                  <p class="text-gray-300 text-lg mb-4">$${item.price.toFixed(2)}</p>
+                  <button class="add-to-cart-btn mt-auto bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}">Add to Cart</button>
+                </div>
+              `;
+              itemsGrid.appendChild(itemCard);
+            });
+
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+              button.addEventListener('click', (event) => {
+                const itemId = event.target.dataset.itemId;
+                const itemToAdd = clothingItems.find(item => item.id === itemId);
+                if (itemToAdd) {
+                  addToCart(itemToAdd);
+                }
+              });
+            });
+          }
+        }, 1000);
+      }
+
+      function addToCart(item) {
+        if (cart[item.id]) {
+          cart[item.id].quantity++;
+        } else {
+          cart[item.id] = { ...item, quantity: 1 };
+        }
+        renderCart();
+      }
+
+      function updateCartQuantity(itemId, change) {
+        if (cart[itemId]) {
+          cart[itemId].quantity += change;
+          if (cart[itemId].quantity <= 0) {
+            delete cart[itemId];
+          }
+        }
+        renderCart();
+      }
+
+      function renderCart() {
+        cartItemsList.innerHTML = '';
+        let total = 0;
+        const itemIdsInCart = Object.keys(cart);
+
+        if (itemIdsInCart.length === 0) {
+          emptyCartMessage.classList.remove('hidden');
+          cartTotalElement.classList.add('hidden');
+        } else {
+          emptyCartMessage.classList.add('hidden');
+          cartTotalElement.classList.remove('hidden');
+
+          itemIdsInCart.forEach(itemId => {
+            const item = cart[itemId];
+            const itemElement = document.createElement('div');
+            itemElement.className = 'flex items-center justify-between bg-gray-800 p-4 rounded-lg shadow-md';
+            itemElement.innerHTML = `
+              <div class="flex items-center space-x-4">
+                <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
+                <div>
+                  <h4 class="text-lg font-semibold text-white">${item.name}</h4>
+                  <p class="text-gray-400">$${item.price.toFixed(2)} x ${item.quantity}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-item-id="${item.id}" data-change="-1">-</button>
+                <span class="text-white">${item.quantity}</span>
+                <button class="quantity-btn bg-gray-700 text-white px-3 py-1 rounded-md hover:bg-gray-600" data-item-id="${item.id}" data-change="1">+</button>
+                <button class="remove-from-cart-btn bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" data-item-id="${item.id}">Remove</button>
+              </div>
+            `;
+            cartItemsList.appendChild(itemElement);
+            total += item.price * item.quantity;
+          });
+
+          document.querySelectorAll('#cart-items-list .quantity-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+              const itemId = event.target.dataset.itemId;
+              const change = parseInt(event.target.dataset.change);
+              updateCartQuantity(itemId, change);
+            });
+          });
+
+          document.querySelectorAll('#cart-items-list .remove-from-cart-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+              const itemId = event.target.dataset.itemId;
+              delete cart[itemId];
+              renderCart();
+            });
+          });
+        }
+        totalAmountElement.textContent = total.toFixed(2);
+      }
+
+      function showPage(pageId) {
+        const allMainSections = document.querySelectorAll('#main-website-content-wrapper > section');
+        allMainSections.forEach(section => {
+          section.classList.remove('active-page');
+        });
+
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+          targetPage.classList.add('active-page');
+          window.scrollTo(0, 0);
+
+          if (pageId === 'shop-page') {
+            renderShopItems();
+          } else if (pageId === 'cart-main') {
+            renderCart();
+          }
+        }
+      }
+
+      window.onload = function() {
+        splitAndAnimateLetters('mainTagline', 1.5);
+
+        shopButton.addEventListener('click', () => {
+          transitionOverlay.classList.add('active');
+
+          transitionOverlay.addEventListener('transitionend', function handler() {
+            transitionOverlay.removeEventListener('transitionend', handler);
+
+            introSection.classList.add('hidden-content');
+
+            mainWebsiteContentWrapper.classList.add('active-content');
+
+            showPage('home-main');
+
+            transitionOverlay.classList.remove('active');
+          });
+        });
+
+        document.querySelectorAll('#main-website-content-wrapper nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                showPage(targetId);
+            });
+        });
+      };
+    </script>
+  </body>
+</html>
