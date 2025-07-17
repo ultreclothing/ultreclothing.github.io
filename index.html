@@ -227,22 +227,16 @@
 
       /* Updated .logo for image integration */
       .logo {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
         margin-bottom: 30px;
         opacity: 0;
         transform: scale(0.5);
-        animation: fadeInScale 1.2s ease-out forwards, pulseGlow 2s infinite alternate 1.2s;
-        display: flex; /* Use flexbox to center the image */
-        justify-content: center;
-        align-items: center;
-        background-color: #2b6cb0; /* Blue-700 for the circle background */
+        animation: fadeInScale 1.2s ease-out forwards, logoPulseGlow 2s infinite alternate 1.2s; /* Renamed animation */
+        display: inline-block; /* Essential for transform and margin to work correctly on an element that wraps an image */
       }
 
       .logo img {
-          max-width: 70%; /* Adjust logo size within the circle */
-          max-height: 70%;
+          max-width: 120px; /* Set a max width for the logo image */
+          height: auto; /* Maintain aspect ratio */
           object-fit: contain; /* Ensure the entire logo is visible */
           filter: invert(100%); /* Invert colors if logo is black on transparent/white */
           /* If your logo is already white on transparent, remove the filter above */
@@ -259,18 +253,19 @@
         }
       }
 
-      @keyframes pulseGlow {
+      /* New keyframes for logo specific glow */
+      @keyframes logoPulseGlow {
         0% {
           transform: scale(1);
-          box-shadow: 0 0 0px rgba(66, 153, 225, 0.7); /* Blue-500 with opacity */
+          filter: invert(100%) drop-shadow(0 0 0px rgba(66, 153, 225, 0.7)); /* Initial state, no glow */
         }
         50% {
           transform: scale(1.05);
-          box-shadow: 0 0 25px 10px rgba(66, 153, 225, 0.7); /* Fading out */
+          filter: invert(100%) drop-shadow(0 0 15px rgba(66, 153, 225, 0.9)); /* Pulsing and glowing */
         }
         100% {
           transform: scale(1);
-          box-shadow: 0 0 0px rgba(66, 153, 225, 0.7);
+          filter: invert(100%) drop-shadow(0 0 0px rgba(66, 153, 225, 0.7)); /* Back to initial */
         }
       }
 
@@ -1088,7 +1083,7 @@
     </div>
 
     <section id="intro-section">
-      <!-- Replaced the empty div with an img tag inside the logo container -->
+      <!-- The logo container now directly animates the image within -->
       <div class="logo">
           <img src="logo.png" alt="Ultre Logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/000000/FFFFFF?text=Logo';">
       </div>
