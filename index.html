@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-      /* Base styles for the entire page */
       * {
         margin: 0;
         padding: 0;
@@ -16,19 +15,18 @@
       }
 
       body {
-        background: #0f0f0f; /* Dark background */
-        color: #f2f2f2; /* Light text color */
+        background: #0f0f0f;
+        color: #f2f2f2;
         font-family: 'Quicksand', sans-serif;
         display: flex;
         flex-direction: column;
-        min-height: 100vh; /* Full viewport height */
-        overflow-x: hidden; /* Prevent horizontal scrolling */
-        overflow-y: auto; /* Allow vertical scrolling */
-        scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: smooth;
         text-align: center;
       }
 
-      /* Utility classes for content visibility */
       .hidden-content {
         display: none;
       }
@@ -36,10 +34,9 @@
       .active-content {
         display: flex;
         flex-direction: column;
-        flex-grow: 1; /* Allows content wrapper to take available space */
+        flex-grow: 1;
       }
 
-      /* Overlay for page transitions */
       .transition-overlay {
         position: fixed;
         top: 0;
@@ -47,7 +44,7 @@
         width: 100%;
         height: 100%;
         background-color: #0f0f0f;
-        z-index: 9999; /* On top of everything */
+        z-index: 9999;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
@@ -58,19 +55,18 @@
         visibility: visible;
       }
 
-      /* Navigation bar styles */
+      /* Desktop Navigation (Bottom Bar) */
       nav {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        /* Liquid glass effect: translucent background with blur */
-        background: rgba(15, 15, 15, 0.7); /* Slightly more transparent dark background */
-        backdrop-filter: blur(8px); /* Frosted glass effect */
-        -webkit-backdrop-filter: blur(8px); /* For Safari compatibility */
+        background: rgba(15, 15, 15, 0.7);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         padding: 10px 20px;
         z-index: 1000;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); /* Shadow at the top */
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -80,16 +76,16 @@
         list-style: none;
         display: flex;
         gap: 30px;
-        position: relative; /* Needed for positioning the indicator */
+        position: relative;
       }
 
       nav ul li {
           position: relative;
-          z-index: 1; /* Ensure links are above the indicator */
+          z-index: 1;
       }
 
       nav ul li a {
-        color: #f2f2f2; /* Light color for links */
+        color: #f2f2f2;
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: 700;
@@ -100,28 +96,98 @@
         align-items: center;
       }
 
-      /* Style for the active navigation link text/icon (inverted color) */
       nav ul li a.active-nav-link {
-          color: #f2f2f2; /* Keep light color for inverted text/icon on dark indicator */
+          color: #f2f2f2;
       }
 
-      /* Navigation Indicator Styles */
       #nav-indicator {
           position: absolute;
-          background-color: rgba(50, 50, 50, 0.7); /* Dark translucent for liquid glass effect */
-          /* Explicit transitions for smooth bending and movement */
+          background-color: rgba(50, 50, 50, 0.7);
           transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                       width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                       height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                       top 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                       border-radius 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-          z-index: 0; /* Behind the actual links */
-          /* Removed initial opacity: 0; it will be set by JS on load */
-          border-radius: 9999px; /* Always a pill shape, very rounded */
-          box-sizing: border-box; /* Include padding in width/height calculation */
+          z-index: 0;
+          border-radius: 9999px;
+          box-sizing: border-box;
       }
 
-      /* Section base styles */
+      /* Mobile Hamburger Icon */
+      .hamburger-menu-icon {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          font-size: 2.5rem;
+          color: #f2f2f2;
+          cursor: pointer;
+          z-index: 1100;
+          transition: color 0.3s ease;
+          display: none;
+      }
+
+      .hamburger-menu-icon:hover {
+          color: #d0d0d0;
+      }
+
+      /* Mobile Navigation Overlay */
+      #mobile-nav-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(15, 15, 15, 0.95);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          z-index: 1500;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          transform: translateX(-100%);
+          transition: transform 0.4s ease-in-out;
+      }
+
+      #mobile-nav-overlay.open {
+          transform: translateX(0);
+      }
+
+      #mobile-nav-overlay .close-btn {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-size: 3rem;
+          color: #f2f2f2;
+          cursor: pointer;
+          transition: color 0.2s ease;
+      }
+
+      #mobile-nav-overlay .close-btn:hover {
+          color: #d0d0d0;
+      }
+
+      #mobile-nav-overlay ul {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 25px;
+          font-size: 1.8rem;
+          font-weight: 700;
+      }
+
+      #mobile-nav-overlay ul li a {
+          color: #f2f2f2;
+          text-decoration: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      #mobile-nav-overlay ul li a:hover {
+          background-color: rgba(242, 242, 242, 0.1);
+      }
+
       section {
         display: flex;
         flex-direction: column;
@@ -133,44 +199,53 @@
       }
 
       #intro-section {
-          min-height: 100vh; /* Full height for intro */
+          min-height: 100vh;
       }
 
-      /* Styles for main content sections */
       #main-website-content-wrapper > section {
-          display: none; /* Hidden by default */
+          display: none;
           padding-top: 80px;
           padding-bottom: 80px;
-          min-height: calc(100vh - 100px); /* Adjust for nav bar */
+          min-height: calc(100vh - 100px);
           overflow-y: auto;
-          -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+          -webkit-overflow-scrolling: touch;
       }
 
       #main-website-content-wrapper > section.active-page {
-          display: flex; /* Show active page */
+          display: flex;
       }
 
-      /* Background colors for different sections */
       #intro-section {
         background: #0f0f0f;
       }
-      #shop-page, #contact-main, #about-us-main, #item-detail-page, #sign-in-main, #sign-up-main, #onboarding-main, #support-main, #chat-interface, #settings-main { /* Added new pages */
+      #shop-page, #contact-main, #about-us-main, #item-detail-page, #sign-in-main, #sign-up-main, #onboarding-main, #support-main, #chat-interface, #settings-main {
         background: #1a1a1a;
       }
       #home-main, #cart-main {
         background: #0f0f0f;
       }
 
-      /* Logo animation */
+      /* Updated .logo for image integration */
       .logo {
         width: 120px;
         height: 120px;
-        background-color: #f2f2f2;
         border-radius: 50%;
         margin-bottom: 30px;
         opacity: 0;
         transform: scale(0.5);
         animation: fadeInScale 1.2s ease-out forwards, pulseGlow 2s infinite alternate 1.2s;
+        display: flex; /* Use flexbox to center the image */
+        justify-content: center;
+        align-items: center;
+        background-color: #2b6cb0; /* Blue-700 for the circle background */
+      }
+
+      .logo img {
+          max-width: 70%; /* Adjust logo size within the circle */
+          max-height: 70%;
+          object-fit: contain; /* Ensure the entire logo is visible */
+          filter: invert(100%); /* Invert colors if logo is black on transparent/white */
+          /* If your logo is already white on transparent, remove the filter above */
       }
 
       @keyframes fadeInScale {
@@ -187,19 +262,18 @@
       @keyframes pulseGlow {
         0% {
           transform: scale(1);
-          box-shadow: 0 0 0px rgba(242, 242, 242, 0.7);
+          box-shadow: 0 0 0px rgba(66, 153, 225, 0.7); /* Blue-500 with opacity */
         }
         50% {
           transform: scale(1.05);
-          box-shadow: 0 0 25px 10px rgba(242, 242, 242, 0.7);
+          box-shadow: 0 0 25px 10px rgba(66, 153, 225, 0.7); /* Fading out */
         }
         100% {
           transform: scale(1);
-          box-shadow: 0 0 0px rgba(242, 242, 242, 0.7);
+          box-shadow: 0 0 0px rgba(66, 153, 225, 0.7);
         }
       }
 
-      /* Tagline and info content styles */
       .tagline, .info-content {
         font-size: 3.5rem;
         letter-spacing: 2px;
@@ -217,7 +291,6 @@
         color: #d0d0d0;
       }
 
-      /* Animated letter effect */
       .animated-letter {
         opacity: 0;
         transform: translateY(20px);
@@ -226,7 +299,7 @@
       }
 
       .animated-letter.space {
-          width: 0.25em; /* Space for animated letters */
+          width: 0.25em;
       }
 
       @keyframes letterFadeIn {
@@ -236,7 +309,6 @@
         }
       }
 
-      /* Scroll hint animation (now removed from HTML, but keeping style for reference if needed) */
       .scroll-hint {
         font-size: 1.1rem;
         opacity: 0;
@@ -250,7 +322,6 @@
         100% { opacity: 1; transform: translateY(0); }
       }
 
-      /* Info title styles */
       .info-title {
         font-size: 2.5rem;
         font-weight: 700;
@@ -260,7 +331,6 @@
         animation: fadeInBlock 0.8s ease-out forwards;
       }
 
-      /* Shop button styles */
       .shop-button {
         background-color: #f2f2f2;
         color: #0f0f0f;
@@ -284,17 +354,15 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       }
 
-      /* Footer styles */
       footer {
         background: #0a0a0a;
         color: #888;
         text-align: center;
         padding: 25px 20px;
         font-size: 0.9rem;
-        margin-top: auto; /* Pushes footer to the bottom */
+        margin-top: auto;
       }
 
-      /* Checkout Modal Styles */
       .modal-overlay {
         position: fixed;
         top: 0;
@@ -427,10 +495,9 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       }
 
-      /* Item Detail Page Styles */
       #item-detail-page-content {
           display: flex;
-          flex-direction: column; /* Default to column for small screens */
+          flex-direction: column;
           gap: 40px;
           width: 100%;
           max-width: 900px;
@@ -441,7 +508,7 @@
 
       @media (min-width: 768px) {
           #item-detail-page-content {
-              flex-direction: row; /* Row for larger screens */
+              flex-direction: row;
               text-align: left;
               align-items: flex-start;
           }
@@ -457,7 +524,7 @@
           background-color: #2a2a2a;
           border-radius: 12px;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-          min-width: 300px; /* Ensure it's not too small */
+          min-width: 300px;
       }
 
       .item-detail-right {
@@ -475,12 +542,11 @@
           border-radius: 8px;
           object-fit: cover;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-          transform: translateX(-50px); /* Initial state for animation (comes from left) */
+          transform: translateX(-50px);
           opacity: 0;
-          transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth transition */
+          transition: transform 0.5s ease-out, opacity 0.5s ease-out;
       }
 
-      /* When the detail page is active, animate the image */
       #item-detail-page.active-page .item-detail-image {
           transform: translateX(0);
           opacity: 1;
@@ -524,18 +590,17 @@
           background-color: #777;
       }
 
-      /* Custom Message Box Styles */
       #message-box {
           position: fixed;
-          top: 0; /* Start from the very top */
+          top: 0;
           left: 50%;
-          transform: translateX(-50%) translateY(-100%); /* Hidden above the viewport */
-          background-color: #28a745; /* Green for success */
+          transform: translateX(-50%) translateY(-100%);
+          background-color: #28a745;
           color: white;
           padding: 12px 25px;
-          border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
+          border-radius: 0 0 8px 8px;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-          z-index: 3000; /* Above modals */
+          z-index: 3000;
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
@@ -548,11 +613,10 @@
       #message-box.show {
           opacity: 1;
           visibility: visible;
-          transform: translateX(-50%) translateY(0); /* Slide down to original position */
-          animation: subtleShake 0.4s ease-in-out 0.5s 1; /* Apply shake after slide-down */
+          transform: translateX(-50%) translateY(0);
+          animation: subtleShake 0.4s ease-in-out 0.5s 1;
       }
 
-      /* Subtle Shake Animation */
       @keyframes subtleShake {
           0% { transform: translateX(-50%) translateY(0); }
           25% { transform: translateX(-50%) translateY(0) translateX(-3px); }
@@ -561,19 +625,17 @@
           100% { transform: translateX(-50%) translateY(0); }
       }
 
-      /* Profile Menu Container */
       .profile-menu-container {
           position: fixed;
           top: 20px;
           right: 20px;
-          z-index: 1100; /* Above nav, below modal */
+          z-index: 1100;
           cursor: pointer;
       }
 
-      /* Profile Icon */
       .profile-icon {
-          font-size: 2.5rem; /* Adjust size as needed */
-          color: #f2f2f2; /* Light color */
+          font-size: 2.5rem;
+          color: #f2f2f2;
           transition: color 0.3s ease;
       }
 
@@ -581,12 +643,11 @@
           color: #d0d0d0;
       }
 
-      /* Dropdown Menu */
       .profile-dropdown {
           position: absolute;
-          top: calc(100% + 10px); /* Position below the icon */
+          top: calc(100% + 10px);
           right: 0;
-          background-color: rgba(26, 26, 26, 0.9); /* Dark translucent background */
+          background-color: rgba(26, 26, 26, 0.9);
           backdrop-filter: blur(5px);
           border-radius: 8px;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
@@ -595,11 +656,10 @@
           flex-direction: column;
           opacity: 0;
           visibility: hidden;
-          transform: translateY(-10px); /* Start slightly above for fade-in effect */
+          transform: translateY(-10px);
           transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
       }
 
-      /* Show dropdown on hover */
       .profile-menu-container:hover .profile-dropdown {
           opacity: 1;
           visibility: visible;
@@ -613,15 +673,14 @@
           font-size: 1rem;
           font-weight: 500;
           transition: background-color 0.2s ease, color 0.2s ease;
-          border-radius: 8px; /* For individual item hover */
+          border-radius: 8px;
       }
 
       .dropdown-item:hover {
-          background-color: #3a3a3a; /* Slightly lighter dark on hover */
+          background-color: #3a3a3a;
           color: #f2f2f2;
       }
 
-      /* Ensure border-radius for first/last item in dropdown */
       .profile-dropdown .dropdown-item:first-child {
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
@@ -632,7 +691,6 @@
           border-bottom-right-radius: 8px;
       }
 
-      /* Form styling for Sign In/Sign Up pages */
       .auth-form-container {
           background-color: #2a2a2a;
           padding: 40px;
@@ -656,7 +714,7 @@
 
       .auth-form-container input[type="email"],
       .auth-form-container input[type="password"],
-      .auth-form-container input[type="text"] { /* Added text input for onboarding */
+      .auth-form-container input[type="text"] {
           width: 100%;
           padding: 12px 15px;
           border: 1px solid #555;
@@ -669,7 +727,7 @@
 
       .auth-form-container input[type="email"]:focus,
       .auth-form-container input[type="password"]:focus,
-      .auth-form-container input[type="text"]:focus { /* Added text input for onboarding */
+      .auth-form-container input[type="text"]:focus {
           border-color: #f2f2f2;
           outline: none;
           box-shadow: 0 0 0 3px rgba(242, 242, 242, 0.2);
@@ -686,7 +744,7 @@
           color: #f2f2f2;
       }
 
-      .auth-form-container .shop-button { /* Reusing shop-button for consistency */
+      .auth-form-container .shop-button {
           width: 100%;
           margin-top: 10px;
           padding: 12px 25px;
@@ -701,7 +759,6 @@
           text-align: center;
       }
 
-      /* New Animations */
       @keyframes slideInUpFadeIn {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -717,12 +774,11 @@
       }
 
       .product-card {
-          opacity: 0; /* Hidden by default for animation */
-          transform: translateY(20px); /* Start slightly below */
+          opacity: 0;
+          transform: translateY(20px);
           animation: fadeInUp 0.6s ease-out forwards;
       }
 
-      /* Support Page Specific Styles */
       #support-main .support-option-button {
           padding: 15px 30px;
           border-radius: 8px;
@@ -747,7 +803,7 @@
       #support-main .quick-easy-btn:hover {
           background-color: #d0d0d0;
           transform: translateY(-3px);
-          box-shadow: 0 0 25px 5px rgba(242, 242, 242, 0.7); /* Glow effect */
+          box-shadow: 0 0 25px 5px rgba(242, 242, 242, 0.7);
       }
 
       #support-main .advanced-support-btn {
@@ -762,12 +818,11 @@
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       }
 
-      /* Chat Interface Styles */
       #chat-interface {
           display: flex;
           flex-direction: column;
-          height: calc(100vh - 100px); /* Adjust for nav bar */
-          padding-bottom: 80px; /* Space for input bar */
+          height: calc(100vh - 100px);
+          padding-bottom: 80px;
           position: relative;
       }
 
@@ -793,16 +848,16 @@
       }
 
       .user-message {
-          background-color: #007bff; /* Blue for user */
+          background-color: #007bff;
           color: white;
-          align-self: flex-end; /* Align to right */
+          align-self: flex-end;
           border-bottom-right-radius: 5px;
       }
 
       .bot-message {
-          background-color: #2a2a2a; /* Darker grey for bot */
+          background-color: #2a2a2a;
           color: #f2f2f2;
-          align-self: flex-start; /* Align to left */
+          align-self: flex-start;
           border-bottom-left-radius: 5px;
           display: flex;
           align-items: flex-start;
@@ -813,18 +868,18 @@
           width: 30px;
           height: 30px;
           border-radius: 50%;
-          background-color: #f2f2f2; /* Light background for avatar */
+          background-color: #f2f2f2;
           display: flex;
           justify-content: center;
           align-items: center;
           font-size: 1.2rem;
           color: #0f0f0f;
-          flex-shrink: 0; /* Prevent avatar from shrinking */
+          flex-shrink: 0;
       }
 
       #chat-input-container {
           position: fixed;
-          bottom: 60px; /* Above the nav bar */
+          bottom: 60px;
           left: 0;
           width: 100%;
           background: rgba(15, 15, 15, 0.9);
@@ -898,8 +953,23 @@
       }
 
 
-      /* Responsive Adjustments for Modal and overall layout */
-      @media (max-width: 600px) {
+      @media (max-width: 767px) {
+        /* Hide desktop navigation on mobile */
+        nav {
+            display: none;
+        }
+
+        /* Show hamburger icon on mobile */
+        .hamburger-menu-icon {
+            display: block;
+        }
+
+        /* Adjust profile menu for mobile if needed, currently it's fine */
+        .profile-menu-container {
+            top: 20px;
+            right: 20px;
+        }
+
         .modal-content {
           padding: 20px;
           width: 95%;
@@ -927,20 +997,16 @@
             font-size: 1rem;
         }
         #item-detail-page-content {
-            flex-direction: column; /* Stack elements vertically */
+            flex-direction: column;
         }
         .item-detail-left, .item-detail-right {
-            width: 100%; /* Full width for stacked elements */
+            width: 100%;
         }
         .item-detail-name {
             font-size: 2rem;
         }
         .item-detail-price {
             font-size: 1.5rem;
-        }
-        .profile-menu-container {
-            top: 10px;
-            right: 10px;
         }
         .profile-icon {
             font-size: 2rem;
@@ -968,6 +1034,7 @@
             padding: 10px 20px;
         }
         #chat-input-container {
+            bottom: 0;
             padding: 10px;
         }
         #chat-input, #send-chat-btn {
@@ -975,7 +1042,10 @@
             font-size: 0.9rem;
         }
         .chat-message-bubble {
-            max-width: 90%; /* More width on small screens */
+            max-width: 90%;
+        }
+        #chat-interface {
+            padding-bottom: 60px;
         }
       }
     </style>
@@ -985,6 +1055,11 @@
     <div id="message-box" role="alert">
         <i class="fas fa-check-circle"></i>
         <span id="message-text"></span>
+    </div>
+
+    <!-- Hamburger Menu Icon (Mobile Only) -->
+    <div class="hamburger-menu-icon" id="hamburgerIcon">
+        <i class="fas fa-bars"></i>
     </div>
 
     <!-- Profile Menu Container -->
@@ -998,8 +1073,25 @@
         </div>
     </div>
 
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay">
+        <button class="close-btn" id="mobileNavCloseBtn">&times;</button>
+        <ul>
+            <li data-page-id="home-main" class="mobile-nav-item"><a href="#home-main">Home</a></li>
+            <li data-page-id="shop-page" class="mobile-nav-item"><a href="#shop-page">Shop</a></li>
+            <li data-page-id="about-us-main" class="mobile-nav-item"><a href="#about-us-main">About Us</a></li>
+            <li data-page-id="cart-main" class="mobile-nav-item"><a href="#cart-main">Cart</a></li>
+            <li data-page-id="contact-main" class="mobile-nav-item"><a href="#contact-main">Contact</a></li>
+            <li data-page-id="support-main" id="mobile-support-nav-item" class="mobile-nav-item"><a href="#support-main">Support</a></li>
+            <li data-page-id="settings-main" class="mobile-nav-item"><a href="#settings-main">Settings</a></li>
+        </ul>
+    </div>
+
     <section id="intro-section">
-      <div class="logo"></div>
+      <!-- Replaced the empty div with an img tag inside the logo container -->
+      <div class="logo">
+          <img src="logo.png" alt="Ultre Logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/000000/FFFFFF?text=Logo';">
+      </div>
       <div class="tagline" id="mainTagline">Ultre is coming.</div>
       <button class="shop-button" id="shopButton" style="animation-delay: 2.8s;">Head to the shop.</button>
     </section>
@@ -1098,7 +1190,6 @@
         </div>
       </section>
 
-      <!-- Sign In Page -->
       <section id="sign-in-main">
           <div class="info-title">Sign In</div>
           <div class="auth-form-container">
@@ -1119,7 +1210,6 @@
           </div>
       </section>
 
-      <!-- Sign Up Page -->
       <section id="sign-up-main">
           <div class="info-title">Sign Up</div>
           <div class="auth-form-container">
@@ -1143,7 +1233,6 @@
           </div>
       </section>
 
-      <!-- Onboarding Page (New) -->
       <section id="onboarding-main">
           <div class="info-title" id="onboarding-title"></div>
           <div class="auth-form-container">
@@ -1160,7 +1249,6 @@
           </div>
       </section>
 
-      <!-- Support Page (New) -->
       <section id="support-main">
           <div class="info-title" id="supportQuestion"></div>
           <button id="quickEasyBtn" class="support-option-button quick-easy-btn">Quick and Easy (AI)</button>
@@ -1168,11 +1256,10 @@
           <button id="backToMainSiteBtn" class="shop-button mt-10">Head to the Shop</button>
       </section>
 
-      <!-- Chat Interface (New) -->
       <section id="chat-interface">
           <div class="info-title">Chat with UltreBot!</div>
           <div id="chat-messages">
-              <!-- Chat messages will be appended here -->
+              
           </div>
           <div id="chat-input-container">
               <input type="text" id="chat-input" placeholder="Type your message...">
@@ -1180,12 +1267,10 @@
           </div>
       </section>
 
-      <!-- Settings Page (New) -->
       <section id="settings-main">
           <div class="info-title">Settings</div>
-          <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row h-full">
+          <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row flex-grow">
 
-              <!-- Left Side: Settings Navigation -->
               <div class="w-full lg:w-1/4 bg-gray-900 border-r border-gray-700 p-6 space-y-2 flex-shrink-0">
                   <h2 class="text-xl font-semibold text-white mb-4">Categories</h2>
                   <nav class="space-y-1">
@@ -1200,10 +1285,9 @@
                   </nav>
               </div>
 
-              <!-- Right Side: Settings Content -->
-              <div class="w-full lg:w-3/4 p-6 flex flex-col">
+              <div class="w-full lg:w-3/4 p-6 flex flex-col flex-grow">
                   <h2 class="text-2xl font-bold text-white mb-6" id="settings-content-title">Select a Category</h2>
-                  <div id="settings-content-area" class="space-y-6">
+                  <div id="settings-content-area" class="space-y-6 flex-grow">
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-2">Welcome to your settings!</p>
                           <p>Please select a category from the left to view and adjust your preferences.</p>
@@ -1218,7 +1302,7 @@
       </footer>
 
       <nav>
-        <div id="nav-indicator"></div> <!-- Navigation indicator -->
+        <div id="nav-indicator"></div>
         <ul>
           <li data-page-id="home-main" class="main-nav-item"><a href="#home-main"><i class="fas fa-home"></i> Home</a></li>
           <li data-page-id="shop-page" class="main-nav-item"><a href="#shop-page"><i class="fas fa-store"></i> Shop</a></li>
@@ -1226,12 +1310,11 @@
           <li data-page-id="cart-main" class="main-nav-item"><a href="#cart-main"><i class="fas fa-shopping-cart"></i> Cart</a></li>
           <li data-page-id="contact-main" class="main-nav-item"><a href="#contact-main"><i class="fas fa-envelope"></i> Contact</a></li>
           <li data-page-id="support-main" id="support-nav-item"><a href="#support-main"><i class="fas fa-life-ring"></i> Support</a></li>
-          <li data-page-id="settings-main" class="main-nav-item"><a href="#settings-main"><i class="fas fa-cog"></i> Settings</a></li> <!-- New Settings Link -->
+          <li data-page-id="settings-main" class="main-nav-item"><a href="#settings-main"><i class="fas fa-cog"></i> Settings</a></li>
         </ul>
       </nav>
     </div>
 
-    <!-- Checkout Modal -->
     <div id="checkout-modal-overlay" class="modal-overlay">
       <div class="modal-content">
         <button class="modal-close-btn" id="modal-close-btn">&times;</button>
@@ -1260,10 +1343,9 @@
     </div>
 
     <script>
-      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwiY2F0YWxvZy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO7TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
+      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwiY2F0YWxvZy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO3TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
       const PRINTIFY_API_BASE_URL = 'https://api.printify.com/v1';
 
-      // DeepSeek API Configuration (Note: In a real application, API keys should be handled server-side for security)
       const DEEPSEEK_API_KEY = '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';
       const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 
@@ -1290,7 +1372,6 @@
       const placeOrderBtn = document.getElementById('place-order-btn');
       const orderConfirmationMessage = document.getElementById('order-confirmation-message');
 
-      // New elements for Item Detail Page
       const itemDetailPage = document.getElementById('item-detail-page');
       const detailItemImage = document.getElementById('detail-item-image');
       const detailItemName = document.getElementById('detail-item-name');
@@ -1298,19 +1379,16 @@
       const detailItemDescription = document.getElementById('detail-item-description');
       const detailAddToCartBtn = document.getElementById('detail-add-to-cart-btn');
       const backToShopBtn = document.getElementById('back-to-shop-btn');
-      const itemSizeSelect = document.getElementById('item-size'); // New: Size selector
+      const itemSizeSelect = document.getElementById('item-size');
 
-      // New elements for Navigation Indicator
       const navIndicator = document.getElementById('nav-indicator');
-      const navLinks = document.querySelectorAll('nav ul li'); // Get all list items in nav
-      const mainNavItems = document.querySelectorAll('nav ul li.main-nav-item'); // Get all main nav items
-      const supportNavItem = document.getElementById('support-nav-item'); // Support nav item
+      const navLinks = document.querySelectorAll('nav ul li');
+      const mainNavItems = document.querySelectorAll('nav ul li.main-nav-item');
+      const supportNavItem = document.getElementById('support-nav-item');
 
-      // Message Box elements
       const messageBox = document.getElementById('message-box');
       const messageText = document.getElementById('message-text');
 
-      // New Auth Page Elements
       const signInPage = document.getElementById('sign-in-main');
       const signUpPage = document.getElementById('sign-up-main');
       const signInEmailInput = document.getElementById('signin-email');
@@ -1323,7 +1401,6 @@
       const signUpBtn = document.getElementById('signup-btn');
       const signUpErrorMessage = document.getElementById('signup-error-message');
 
-      // New Onboarding Page Elements
       const onboardingPage = document.getElementById('onboarding-main');
       const onboardingTitle = document.getElementById('onboarding-title');
       const onboardingFirstNameInput = document.getElementById('onboarding-first-name');
@@ -1331,35 +1408,35 @@
       const onboardingSaveBtn = document.getElementById('onboarding-save-btn');
       const onboardingErrorMessage = document.getElementById('onboarding-error-message');
 
-      // New Support Page Elements
       const supportMain = document.getElementById('support-main');
       const supportQuestion = document.getElementById('supportQuestion');
       const quickEasyBtn = document.getElementById('quickEasyBtn');
       const advancedSupportBtn = document.getElementById('advancedSupportBtn');
       const backToMainSiteBtn = document.getElementById('backToMainSiteBtn');
 
-      // New Chat Interface Elements
       const chatInterface = document.getElementById('chat-interface');
       const chatMessages = document.getElementById('chat-messages');
       const chatInput = document.getElementById('chat-input');
       const sendChatBtn = document.getElementById('send-chat-btn');
-      let isBotTyping = false; // Flag to indicate if bot is currently typing
+      let isBotTyping = false;
+      let chatHistory = [{ role: "system", content: "You are UltreBot, a helpful assistant for the Ultre clothing brand. You answer questions about products, orders, and general inquiries. Keep responses concise and friendly." }];
 
-      // New Settings Page Elements
       const settingsMain = document.getElementById('settings-main');
       const settingsContentTitle = document.getElementById('settings-content-title');
       const settingsContentArea = document.getElementById('settings-content-area');
       const settingsNavLinks = document.querySelectorAll('.settings-nav-link');
 
+      const hamburgerIcon = document.getElementById('hamburgerIcon');
+      const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+      const mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
+      const mobileNavItems = document.querySelectorAll('#mobile-nav-overlay .mobile-nav-item');
+
 
       let cart = {};
-      let currentActiveNavLinkLi = null; // Keep track of the currently active <li>
-      let isNavigating = false; // Flag to prevent multiple simultaneous navigation transitions
-      let supportMode = false; // New: Global state for support mode
-      let chatHistory = [{ role: "system", content: "You are UltreBot, a helpful assistant for the Ultre clothing brand. You answer questions about products, orders, and general inquiries. Keep responses concise and friendly." }];
+      let currentActiveNavLinkLi = null;
+      let isNavigating = false;
+      let supportMode = false;
 
-
-      // Added descriptions to local items
       const localClothingItems = [
         { id: 'tee', name: "Minimalist Tee", price: 35.00, imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee", description: "Our classic minimalist tee, designed for comfort and style. Made from 100% organic cotton, it's perfect for everyday wear. Available in various sizes." },
         { id: 'hoodie', name: "Essential Hoodie", price: 65.00, imageUrl: "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie", description: "Stay warm and stylish with our essential hoodie. Crafted from a soft fleece blend, featuring a subtle Ultre logo. Ideal for cooler days." },
@@ -1368,18 +1445,12 @@
         { id: 'socks', name: "Signature Socks", price: 15.00, imageUrl: "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks", description: "Step up your sock game with our signature socks. Soft, breathable, and designed for all-day comfort. Comes in a pack of three." },
       ];
 
-      /**
-       * Animates letters of a given element by splitting them into individual spans
-       * and applying a staggered fade-in and translateY animation.
-       * @param {string} elementId - The ID of the HTML element to animate.
-       * @param {number} baseDelay - The base delay before the animation starts for the first letter.
-       */
       function splitAndAnimateLetters(elementId, baseDelay = 0) {
         const element = document.getElementById(elementId);
         if (!element) return;
 
         const text = element.textContent;
-        element.textContent = ''; // Clear original text
+        element.textContent = '';
 
         const fragment = document.createDocumentFragment();
 
@@ -1389,19 +1460,14 @@
           span.textContent = char;
           span.classList.add('animated-letter');
           if (char === ' ') {
-            span.classList.add('space'); // Add a class for spaces to control width
+            span.classList.add('space');
           }
-          span.style.animationDelay = `${baseDelay + (i * 0.02)}s`; // Staggered delay
+          span.style.animationDelay = `${baseDelay + (i * 0.02)}s`;
           fragment.appendChild(span);
         }
         element.appendChild(fragment);
       }
 
-      /**
-       * Applies an animation delay to a block element.
-       * @param {string|HTMLElement} elementId - The ID of the HTML element or the element itself.
-       * @param {number} delay - The delay in seconds.
-       */
       function animateBlock(elementId, delay) {
         const element = typeof elementId === 'string' ? document.getElementById(elementId) : elementId;
         if (element) {
@@ -1409,40 +1475,27 @@
         }
       }
 
-      /**
-       * Types out a message character by character into an HTML element.
-       * @param {HTMLElement} element - The HTML element to type into.
-       * @param {string} message - The message to type.
-       * @param {function} callback - Function to call after typing is complete.
-       * @param {number} delay - Delay between each character in milliseconds.
-       */
       function typeMessage(element, message, callback, delay = 70) {
         let i = 0;
         element.textContent = '';
-        element.classList.remove('animate-slide-in-up'); // Remove class before starting
+        element.classList.remove('animate-slide-in-up');
         const interval = setInterval(() => {
           if (i < message.length) {
             element.textContent += message.charAt(i);
             i++;
           } else {
             clearInterval(interval);
-            element.classList.add('animate-slide-in-up'); // Add class after content is set
-            if (callback) setTimeout(callback, 500); // Call callback after a short pause
+            element.classList.add('animate-slide-in-up');
+            if (callback) setTimeout(callback, 500);
           }
         }, delay);
       }
 
-      /**
-       * Displays a custom message box at the top of the screen.
-       * @param {string} message - The message to display.
-       * @param {number} duration - How long the message should be visible in milliseconds.
-       * @param {boolean} isError - If true, displays as an error message (red background).
-       */
       function showMessageBox(message, duration = 3000, isError = false) {
           messageText.textContent = message;
-          messageBox.classList.remove('bg-red-600', 'bg-green-600'); // Clean up previous colors
+          messageBox.classList.remove('bg-red-600', 'bg-green-600');
           messageBox.classList.add(isError ? 'bg-red-600' : 'bg-green-600');
-          messageBox.querySelector('i').className = isError ? 'fas fa-times-circle' : 'fas fa-check-circle'; // Icon change
+          messageBox.querySelector('i').className = isError ? 'fas fa-times-circle' : 'fas fa-check-circle';
 
           messageBox.classList.add('show');
 
@@ -1451,10 +1504,6 @@
           }, duration);
       }
 
-      /**
-       * Fetches the first available shop ID from Printify API.
-       * @returns {Promise<string|null>} The shop ID or null if no shops are found.
-       */
       async function fetchPrintifyShops() {
           try {
               const response = await fetch(`${PRINTIFY_API_BASE_URL}/shops.json`, {
@@ -1467,22 +1516,19 @@
               }
               const data = await response.json();
               if (data.length > 0) {
-                  return data[0].id; // Return the ID of the first shop
+                  return data[0].id;
               }
               return null;
           } catch (error) {
               console.error("Error fetching Printify shops:", error);
-              throw error; // Re-throw to be caught by the caller
+              throw error;
           }
       }
 
-      /**
-       * Renders shop items, attempting to fetch from Printify first, then falling back to local data.
-       */
       async function renderShopItems() {
         loadingIndicator.classList.remove('hidden');
-        loadingIndicator.classList.add('animate-slide-in-up'); // Animate loading text
-        itemsGrid.innerHTML = ''; // Clear previous items
+        loadingIndicator.classList.add('animate-slide-in-up');
+        itemsGrid.innerHTML = '';
         noStockMessage.classList.add('hidden');
         statusMessageElement.classList.add('hidden');
 
@@ -1502,50 +1548,45 @@
                 }
 
                 const data = await response.json();
-                productsToRender = data.data; // Printify products are in data.data
+                productsToRender = data.data;
             } else {
                 throw new Error("No Printify shop found.");
             }
         } catch (error) {
             console.error("Failed to fetch from Printify, falling back to local data:", error);
-            loadingIndicator.classList.remove('animate-slide-in-up'); // Remove animation class if error occurs
+            loadingIndicator.classList.remove('animate-slide-in-up');
             loadingIndicator.classList.add('hidden');
             statusMessageElement.classList.remove('hidden');
-            // Display a message about falling back to local data
             await new Promise(resolve => {
                 typeMessage(statusMessageElement, "Couldn't connect, fetching local data...", () => {
                     statusMessageElement.textContent = '';
                     statusMessageElement.classList.add('hidden');
-                    statusMessageElement.classList.remove('animate-slide-in-up'); // Remove animation class after typing
+                    statusMessageElement.classList.remove('animate-slide-in-up');
                     resolve();
                 });
             });
-            productsToRender = localClothingItems; // Fallback to local data
+            productsToRender = localClothingItems;
         } finally {
-            loadingIndicator.classList.add('hidden'); // Hide loading indicator
-            loadingIndicator.classList.remove('animate-slide-in-up'); // Remove animation class
+            loadingIndicator.classList.add('hidden');
+            loadingIndicator.classList.remove('animate-slide-in-up');
 
             if (!productsToRender || productsToRender.length === 0) {
-              noStockMessage.classList.remove('hidden'); // Show no stock message
-              noStockMessage.classList.add('animate-slide-in-up'); // Animate no stock message
+              noStockMessage.classList.remove('hidden');
+              noStockMessage.classList.add('animate-slide-in-up');
             } else {
-              // Iterate and create item cards for display
               productsToRender.forEach((item, index) => {
                 const imageUrl = item.images && item.images.length > 0 ? item.images[0].src : item.imageUrl || 'https://placehold.co/300x300/CCCCCC/000000?text=No+Image';
-                // Printify prices are in cents, convert to dollars
                 const price = item.price ? (item.price / 100).toFixed(2) : item.price.toFixed(2);
-                // Use a default description if not available from API or local data
                 const description = item.description || "A high-quality item from Ultre. Designed for comfort and durability.";
 
                 const itemCard = document.createElement('div');
-                itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col cursor-pointer product-card'; // Added product-card class and cursor-pointer
-                itemCard.style.animationDelay = `${0.1 * index}s`; // Staggered animation delay
-                // Store item data as data attributes for easy retrieval
+                itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col cursor-pointer product-card';
+                itemCard.style.animationDelay = `${0.1 * index}s`;
                 itemCard.dataset.itemId = item.id;
                 itemCard.dataset.itemName = item.title || item.name;
                 itemCard.dataset.itemPrice = item.price;
                 itemCard.dataset.itemImage = imageUrl;
-                itemCard.dataset.itemDescription = description; // Store description
+                itemCard.dataset.itemDescription = description;
 
                 itemCard.innerHTML = `
                   <img src="${imageUrl}" alt="${item.title || item.name}" class="w-full h-48 object-cover">
@@ -1558,21 +1599,18 @@
                 itemsGrid.appendChild(itemCard);
               });
 
-              // Add event listeners for "Add to Cart" buttons
               document.querySelectorAll('.add-to-cart-btn').forEach(button => {
                 button.addEventListener('click', (event) => {
-                  event.stopPropagation(); // Prevent card click from firing when button is clicked
+                  event.stopPropagation();
                   const itemId = event.target.dataset.itemId;
                   const itemName = event.target.dataset.itemName;
                   const itemPrice = parseFloat(event.target.dataset.itemPrice);
                   const itemImage = event.target.dataset.itemImage;
-                  // For simplicity, when adding from the grid, default size to 'M' or first option
                   addToCart({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, size: 'M' });
-                  showMessageBox(`${itemName} (Size: M) has successfully been added to cart!`); // Show custom message
+                  showMessageBox(`${itemName} (Size: M) has successfully been added to cart!`);
                 });
               });
 
-              // Add click listener to the entire product card for detail view
               document.querySelectorAll('.product-card').forEach(card => {
                   card.addEventListener('click', (event) => {
                       const itemId = card.dataset.itemId;
@@ -1587,57 +1625,42 @@
         }
       }
 
-      /**
-       * Adds an item to the shopping cart or increments its quantity if already present.
-       * Now includes size.
-       * @param {object} item - The item object to add, including id, name, price, imageUrl, and size.
-       */
       function addToCart(item) {
-        // Use a combined key for item + size to differentiate items of different sizes
         const cartKey = `${item.id}-${item.size}`;
         if (cart[cartKey]) {
           cart[cartKey].quantity++;
         } else {
           cart[cartKey] = { ...item, quantity: 1 };
         }
-        renderCart(); // Re-render cart after modification
+        renderCart();
       }
 
-      /**
-       * Updates the quantity of a specific item in the cart.
-       * @param {string} cartKey - The combined ID and size of the item to update (e.g., 'tee-M').
-       * @param {number} change - The amount to change the quantity by (e.g., 1 for increment, -1 for decrement).
-       */
       function updateCartQuantity(cartKey, change) {
         if (cart[cartKey]) {
           cart[cartKey].quantity += change;
           if (cart[cartKey].quantity <= 0) {
-            delete cart[cartKey]; // Remove item if quantity drops to 0 or below
+            delete cart[cartKey];
           }
         }
-        renderCart(); // Re-render cart after modification
+        renderCart();
       }
 
-      /**
-       * Renders the current state of the shopping cart.
-       */
       function renderCart() {
-        cartItemsList.innerHTML = ''; // Clear current cart display
+        cartItemsList.innerHTML = '';
         let total = 0;
         const itemKeysInCart = Object.keys(cart);
 
         if (itemKeysInCart.length === 0) {
-          emptyCartMessage.classList.remove('hidden');
+          emptyCartMessage.classList.add('hidden'); // Keep hidden for now, will show if no items
           cartTotalElement.classList.add('hidden');
-          checkoutButton.classList.add('hidden'); // Hide checkout button if cart is empty
+          checkoutButton.classList.add('hidden');
         } else {
           emptyCartMessage.classList.add('hidden');
           cartTotalElement.classList.remove('hidden');
-          checkoutButton.classList.remove('hidden'); // Show checkout button if cart has items
+          checkoutButton.classList.remove('hidden');
 
           itemKeysInCart.forEach(cartKey => {
             const item = cart[cartKey];
-            // Adjust price display for Printify (cents to dollars)
             const itemPriceDisplay = (item.price / (item.price > 1000 ? 100 : 1)).toFixed(2);
             const itemTotal = ((item.price / (item.price > 1000 ? 100 : 1)) * item.quantity).toFixed(2);
 
@@ -1662,7 +1685,6 @@
             total += (item.price / (item.price > 1000 ? 100 : 1)) * item.quantity;
           });
 
-          // Add event listeners for quantity and remove buttons in the cart
           document.querySelectorAll('#cart-items-list .quantity-btn').forEach(button => {
             button.addEventListener('click', (event) => {
               const cartKey = event.target.dataset.cartKey;
@@ -1680,29 +1702,26 @@
           });
         }
         totalAmountElement.textContent = total.toFixed(2);
-        modalTotalAmount.textContent = total.toFixed(2); // Update modal total as well
+        modalTotalAmount.textContent = total.toFixed(2);
+
+        // After rendering, check if cart is truly empty to show message
+        if (Object.keys(cart).length === 0) {
+            emptyCartMessage.classList.remove('hidden');
+        }
       }
 
-      /**
-       * Updates the navigation indicator's position and shape based on the active page.
-       * @param {string} activePageId - The ID of the currently active page section.
-       */
       function updateNavIndicator(activePageId) {
           const newActiveNavLinkLi = document.querySelector(`nav ul li[data-page-id="${activePageId}"]`);
 
-          // If the new active link is the same as the current, or no new link, or already navigating, do nothing
           if (newActiveNavLinkLi === currentActiveNavLinkLi || !newActiveNavLinkLi || isNavigating) {
-              // If it's the initial load and indicator is not yet positioned, force update
               if (!currentActiveNavLinkLi && newActiveNavLinkLi) {
-                  // Proceed with initial positioning
               } else {
                   return;
               }
           }
 
-          isNavigating = true; // Set navigation flag to prevent overlapping transitions
+          isNavigating = true;
 
-          // Remove active-nav-link from all links first
           document.querySelectorAll('nav ul li a').forEach(link => {
               link.classList.remove('active-nav-link');
           });
@@ -1711,39 +1730,31 @@
           const liRect = newActiveNavLinkLi.getBoundingClientRect();
           const activeAnchor = newActiveNavLinkLi.querySelector('a');
 
-          // Add active-nav-link class to the active anchor for color inversion
           if (activeAnchor) {
               activeAnchor.classList.add('active-nav-link');
           }
 
-          // Define the target pill's dimensions
-          const paddingX = 8; // Horizontal padding for the pill (slightly smaller)
-          const paddingY = 4;  // Vertical padding for the pill (slightly smaller)
-          const targetWidth = liRect.width + paddingX * 2; // Width of the pill
-          const targetHeight = liRect.height + paddingY * 2; // Height of the pill (should be constant)
-          const targetLeft = liRect.left - navRect.left - paddingX; // Left position of the pill
-          const targetTop = liRect.top - navRect.top - paddingY; // Top position of the pill
+          const paddingX = 8;
+          const paddingY = 4;
+          const targetWidth = liRect.width + paddingX * 2;
+          const targetHeight = liRect.height + paddingY * 2;
+          const targetLeft = liRect.left - navRect.left - paddingX;
+          const targetTop = liRect.top - navRect.top - paddingY;
 
-          // Get current indicator's properties for smooth transition
           const currentLeft = navIndicator.offsetLeft;
           const currentWidth = navIndicator.offsetWidth;
           const currentTop = navIndicator.offsetTop;
           const currentHeight = navIndicator.offsetHeight;
 
-          // If there was a previous active link, we need to animate the "stretch and move" transition
           if (currentActiveNavLinkLi) {
-              // Phase 1: Stretch horizontally and move
-              // Set initial position of indicator to its current position
               navIndicator.style.left = `${currentLeft}px`;
               navIndicator.style.top = `${currentTop}px`;
               navIndicator.style.width = `${currentWidth}px`;
               navIndicator.style.height = `${currentHeight}px`;
-              navIndicator.style.opacity = '1'; // Ensure it's visible during transition
+              navIndicator.style.opacity = '1';
 
-              // Force reflow to ensure initial styles are applied before the transition starts
               void navIndicator.offsetWidth;
 
-              // Calculate the combined span for the stretch phase
               const currentRight = currentLeft + currentWidth;
               const targetRight = targetLeft + targetWidth;
 
@@ -1751,64 +1762,53 @@
               const maxRight = Math.max(currentRight, targetRight);
               const stretchedWidth = maxRight - minLeft;
 
-              // Apply stretched properties and start moving
               navIndicator.style.left = `${minLeft}px`;
               navIndicator.style.width = `${stretchedWidth}px`;
-              navIndicator.style.top = `${targetTop}px`; // Move vertically during stretch
-              navIndicator.style.height = `${targetHeight}px`; // Maintain height during stretch
+              navIndicator.style.top = `${targetTop}px`;
+              navIndicator.style.height = `${targetHeight}px`;
 
-              // Listen for the end of the first transition (stretch and move)
               navIndicator.ontransitionend = () => {
-                  navIndicator.ontransitionend = null; // Remove listener
+                  navIndicator.ontransitionend = null;
 
-                  // Phase 2: Shrink to target width at the destination
                   navIndicator.style.left = `${targetLeft}px`;
                   navIndicator.style.width = `${targetWidth}px`;
-                  navIndicator.style.height = `${targetHeight}px`; // Ensure height is correct
+                  navIndicator.style.height = `${targetHeight}px`;
 
-                  // Reset navigation flag after the final snap
                   isNavigating = false;
               };
 
           } else {
-              // Initial load, no previous active link, just set as pill
               navIndicator.style.left = `${targetLeft}px`;
               navIndicator.style.top = `${targetTop}px`;
               navIndicator.style.width = `${targetWidth}px`;
               navIndicator.style.height = `${targetHeight}px`;
-              navIndicator.style.opacity = '1'; // Ensure it's visible on initial load
-              isNavigating = false; // Reset navigation flag
+              navIndicator.style.opacity = '1';
+              isNavigating = false;
           }
-          currentActiveNavLinkLi = newActiveNavLinkLi; // Update the currently active link
+          currentActiveNavLinkLi = newActiveNavLinkLi;
       }
 
-      /**
-       * Updates the visibility of navigation bar items based on support mode.
-       * @param {boolean} inSupportMode - True if in support mode, false otherwise.
-       */
       function updateNavBarVisibility(inSupportMode) {
           mainNavItems.forEach(item => {
+              item.classList.add('hidden');
+          });
+
+          supportNavItem.classList.add('hidden'); // Hide desktop support item by default
+
+          mobileNavItems.forEach(item => {
               if (inSupportMode) {
-                  item.classList.add('hidden');
+                  if (item.id === 'mobile-support-nav-item') {
+                      item.classList.remove('hidden');
+                  } else {
+                      item.classList.add('hidden');
+                  }
               } else {
                   item.classList.remove('hidden');
               }
           });
-          // Ensure support nav item is always visible or only visible in support mode
-          // Based on requirement: "nav bar should only show the Support button"
-          if (inSupportMode) {
-              supportNavItem.classList.remove('hidden');
-          } else {
-              // If not in support mode, support button should also be visible alongside others
-              supportNavItem.classList.remove('hidden');
-          }
       }
 
-      /**
-       * Shows a specific page section and hides others.
-       * @param {string} pageId - The ID of the section to show.
-       * @param {function} [callback] - Optional callback function to run after the page is shown.
-       */
+
       function showPage(pageId, callback = null) {
         const allMainSections = document.querySelectorAll('#main-website-content-wrapper > section');
         allMainSections.forEach(section => {
@@ -1818,16 +1818,16 @@
         const targetPage = document.getElementById(pageId);
         if (targetPage) {
           targetPage.classList.add('active-page');
-          window.scrollTo(0, 0); // Scroll to top of the page
+          window.scrollTo(0, 0);
 
-          // Determine if we are entering or exiting support mode
           const newSupportMode = (pageId === 'support-main' || pageId === 'chat-interface');
           if (newSupportMode !== supportMode) {
               supportMode = newSupportMode;
-              updateNavBarVisibility(supportMode);
+              if (window.innerWidth < 768) {
+                  updateNavBarVisibility(supportMode);
+              }
           }
 
-          // Perform specific actions for certain pages
           if (pageId === 'shop-page') {
             renderShopItems();
           } else if (pageId === 'cart-main') {
@@ -1838,45 +1838,34 @@
               typeMessage(supportQuestion, "What type of support do you need?", callback);
           } else if (pageId === 'chat-interface') {
               displayChatMessage("Hey, I’m UltreBot — what do you need help with today?", 'bot');
-              chatInput.focus(); // Focus on input when chat opens
-          } else if (pageId === 'settings-main') { // Added for settings page
-              updateSettingsContent('general'); // Default to showing General settings content
+              chatInput.focus();
+          } else if (pageId === 'settings-main') {
+              updateSettingsContent('general');
           }
 
-          // Update the navigation indicator for the new active page
-          updateNavIndicator(pageId);
+          if (window.innerWidth >= 768) {
+              updateNavIndicator(pageId);
+          }
+          mobileNavOverlay.classList.remove('open');
         }
       }
 
-      /**
-       * Displays the detailed view of a selected item.
-       * @param {object} item - The item object containing details to display.
-       */
       function showItemDetail(item) {
           detailItemImage.src = item.imageUrl;
           detailItemName.textContent = item.name;
           detailItemPrice.textContent = `$${(item.price / (item.price > 1000 ? 100 : 1)).toFixed(2)}`;
           detailItemDescription.textContent = item.description;
 
-          // Set data attributes for the "Add to Cart" button on the detail page
           detailAddToCartBtn.dataset.itemId = item.id;
           detailAddToCartBtn.dataset.itemName = item.name;
           detailAddToCartBtn.dataset.itemPrice = item.price;
           detailAddToCartBtn.dataset.itemImage = item.imageUrl;
 
-          // Reset size selection to default (e.g., 'M') when opening detail page
           itemSizeSelect.value = 'M';
 
-          // Transition to the item detail page
           showPage('item-detail-page');
       }
 
-      /**
-       * Displays a chat message in the chat interface.
-       * @param {string} message - The message content.
-       * @param {'user'|'bot'} sender - The sender of the message.
-       * @param {boolean} [isTypingIndicator=false] - True if this is a typing indicator.
-       */
       function displayChatMessage(message, sender, isTypingIndicator = false) {
           const messageElement = document.createElement('div');
           messageElement.classList.add('chat-message-bubble');
@@ -1888,7 +1877,7 @@
               messageElement.classList.add('bot-message');
               const avatar = document.createElement('div');
               avatar.classList.add('bot-avatar');
-              avatar.innerHTML = '<i class="fas fa-robot"></i>'; // Robot icon for bot
+              avatar.innerHTML = '<i class="fas fa-robot"></i>';
               messageElement.appendChild(avatar);
 
               const textContent = document.createElement('span');
@@ -1897,28 +1886,24 @@
 
               if (isTypingIndicator) {
                   messageElement.id = 'typing-indicator';
-                  textContent.textContent = ''; // Clear text for dots
+                  textContent.textContent = '';
                   textContent.classList.add('dot-pulse-container');
                   textContent.innerHTML = '<div class="dot-pulse"></div><div class="dot-pulse"></div><div class="dot-pulse"></div>';
               }
           }
           chatMessages.appendChild(messageElement);
-          chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+          chatMessages.scrollTop = chatMessages.scrollHeight;
       }
 
-      /**
-       * Sends a message to the DeepSeek API and displays the response.
-       * @param {string} userMessage - The user's message.
-       */
       async function sendChatToBot(userMessage) {
-          if (isBotTyping) return; // Prevent sending if bot is already typing
+          if (isBotTyping) return;
 
           displayChatMessage(userMessage, 'user');
           chatHistory.push({ role: "user", content: userMessage });
-          chatInput.value = ''; // Clear input
+          chatInput.value = '';
 
           isBotTyping = true;
-          displayChatMessage('', 'bot', true); // Show typing indicator
+          displayChatMessage('', 'bot', true);
 
           try {
               const response = await fetch(DEEPSEEK_API_URL, {
@@ -1930,7 +1915,7 @@
                   body: JSON.stringify({
                       model: 'deepseek-chat',
                       messages: chatHistory,
-                      stream: false // DeepSeek API supports streaming, but for simplicity of this example, we'll fetch full response then type it out.
+                      stream: false
                   })
               });
 
@@ -1943,13 +1928,11 @@
               const botResponse = data.choices[0].message.content;
               chatHistory.push({ role: "assistant", content: botResponse });
 
-              // Remove typing indicator
               const typingIndicatorElement = document.getElementById('typing-indicator');
               if (typingIndicatorElement) {
                   typingIndicatorElement.remove();
               }
 
-              // Simulate typing out the bot's response
               let i = 0;
               const botMessageElement = document.createElement('div');
               botMessageElement.classList.add('chat-message-bubble', 'bot-message');
@@ -1966,15 +1949,14 @@
                   if (i < botResponse.length) {
                       textContent.textContent += botResponse.charAt(i);
                       i++;
-                      chatMessages.scrollTop = chatMessages.scrollHeight; // Keep scrolling down
+                      chatMessages.scrollTop = chatMessages.scrollHeight;
                   } else {
                       clearInterval(typingInterval);
                       isBotTyping = false;
                   }
-              }, 30); // Typing speed
+              }, 30);
           } catch (error) {
               console.error("Error communicating with UltreBot:", error);
-              // Remove typing indicator on error
               const typingIndicatorElement = document.getElementById('typing-indicator');
               if (typingIndicatorElement) {
                   typingIndicatorElement.remove();
@@ -1984,22 +1966,28 @@
           }
       }
 
-      /**
-       * Updates the content in the right-hand side of the settings page based on category.
-       * @param {string} category - The selected settings category (e.g., 'general', 'privacy').
-       */
       function updateSettingsContent(category) {
           settingsContentTitle.textContent = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
-          settingsContentArea.innerHTML = ''; // Clear previous content
+          settingsContentArea.innerHTML = '';
 
           let contentHtml = '';
+          const userFirstName = localStorage.getItem('userFirstName') || '';
+          const userLastName = localStorage.getItem('userLastName') || '';
 
           switch (category) {
               case 'general':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Basic settings for your account and site experience.</p>
-                          <div class="mt-4 space-y-4">
+                          <p class="font-semibold mb-4">Basic settings for your account and site experience.</p>
+                          <div class="mt-4 space-y-4 text-left">
+                              <div>
+                                  <label for="general-first-name" class="block text-sm font-medium text-gray-300 mb-1">First Name</label>
+                                  <input type="text" id="general-first-name" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white" value="${userFirstName}">
+                              </div>
+                              <div>
+                                  <label for="general-last-name" class="block text-sm font-medium text-gray-300 mb-1">Last Name</label>
+                                  <input type="text" id="general-last-name" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white" value="${userLastName}">
+                              </div>
                               <div>
                                   <label for="language-select" class="block text-sm font-medium text-gray-300 mb-1">Language</label>
                                   <select id="language-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
@@ -2014,66 +2002,75 @@
                                       <option value="utc">UTC</option>
                                       <option value="est">Eastern Standard Time</option>
                                       <option value="pst">Pacific Standard Time</option>
+                                      <option value="dubai">Dubai (GMT+4)</option>
                                   </select>
                               </div>
                           </div>
-                          <button class="shop-button mt-6 w-full">Save General Settings</button>
+                          <button id="save-general-settings" class="shop-button mt-6 w-full">Save General Settings</button>
                       </div>
                   `;
                   break;
               case 'accessibility':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Adjust settings for better accessibility.</p>
-                          <div class="mt-4 space-y-4">
+                          <p class="font-semibold mb-4">Adjust settings for better accessibility.</p>
+                          <div class="mt-4 space-y-4 text-left">
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">High Contrast Mode</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <input type="checkbox" id="high-contrast-toggle" class="sr-only peer">
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Enable Screen Reader Support</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <input type="checkbox" id="screen-reader-toggle" class="sr-only peer">
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
+                              <div>
+                                  <label for="font-size-select" class="block text-sm font-medium text-gray-300 mb-1">Font Size</label>
+                                  <select id="font-size-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
+                                      <option value="small">Small</option>
+                                      <option value="medium" selected>Medium</option>
+                                      <option value="large">Large</option>
+                                  </select>
+                              </div>
                           </div>
-                          <button class="shop-button mt-6 w-full">Save Accessibility Settings</button>
+                          <button id="save-accessibility-settings" class="shop-button mt-6 w-full">Save Accessibility Settings</button>
                       </div>
                   `;
                   break;
               case 'privacy':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Manage your data and privacy preferences.</p>
-                          <div class="mt-4 space-y-4">
+                          <p class="font-semibold mb-4">Manage your data and privacy preferences.</p>
+                          <div class="mt-4 space-y-4 text-left">
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Allow Personalized Ads</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <input type="checkbox" id="personalized-ads-toggle" class="sr-only peer" checked>
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Share Anonymous Usage Data</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <input type="checkbox" id="share-usage-data-toggle" class="sr-only peer">
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
+                              <button id="download-data-btn" class="shop-button mt-6 w-full bg-blue-600 hover:bg-blue-700">Download My Data</button>
                           </div>
-                          <button class="shop-button mt-6 w-full">Save Privacy Settings</button>
                       </div>
                   `;
                   break;
               case 'visuals':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Customize the look and feel of the site.</p>
-                          <div class="mt-4 space-y-4">
+                          <p class="font-semibold mb-4">Customize the look and feel of the site.</p>
+                          <div class="mt-4 space-y-4 text-left">
                               <div>
                                   <label for="theme-select" class="block text-sm font-medium text-gray-300 mb-1">Theme</label>
                                   <select id="theme-select" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white">
@@ -2085,55 +2082,87 @@
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Enable Animations</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <input type="checkbox" id="animations-toggle" class="sr-only peer" checked>
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
                           </div>
-                          <button class="shop-button mt-6 w-full">Save Visual Settings</button>
+                          <button id="save-visual-settings" class="shop-button mt-6 w-full">Save Visual Settings</button>
                       </div>
                   `;
                   break;
               case 'payment-method':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Manage your saved payment methods.</p>
-                          <p class="text-sm text-gray-400 mt-2">No payment methods are currently saved for your account. You can add one during checkout.</p>
-                          <button class="shop-button mt-6 w-full bg-blue-600 hover:bg-blue-700">Add New Payment Method</button>
+                          <p class="font-semibold mb-4">Manage your saved payment methods.</p>
+                          <div class="mt-4 space-y-4 text-left">
+                              <p class="text-sm text-gray-400">No payment methods are currently saved for your account.</p>
+                              <h3 class="text-lg font-semibold text-white mt-6 mb-3">Add New Payment Method</h3>
+                              <div>
+                                  <label for="card-number" class="block text-sm font-medium text-gray-300 mb-1">Card Number</label>
+                                  <input type="text" id="card-number" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white" placeholder="**** **** **** ****">
+                              </div>
+                              <div class="flex gap-4">
+                                  <div class="flex-1">
+                                      <label for="expiry-date" class="block text-sm font-medium text-gray-300 mb-1">Expiry Date (MM/YY)</label>
+                                      <input type="text" id="expiry-date" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white" placeholder="MM/YY">
+                                  </div>
+                                  <div class="flex-1">
+                                      <label for="cvv" class="block text-sm font-medium text-gray-300 mb-1">CVV</label>
+                                      <input type="text" id="cvv" class="w-full p-2 rounded-md bg-gray-600 text-white border border-gray-500 focus:outline-none focus:border-white" placeholder="***">
+                                  </div>
+                              </div>
+                          </div>
+                          <button id="save-payment-method" class="shop-button mt-6 w-full bg-blue-600 hover:bg-blue-700">Save Payment Method</button>
                       </div>
                   `;
                   break;
               case 'notifications':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Control how you receive notifications.</p>
-                          <div class="mt-4 space-y-4">
+                          <p class="font-semibold mb-4">Control how you receive notifications.</p>
+                          <div class="mt-4 space-y-4 text-left">
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Email Notifications</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <input type="checkbox" id="email-notifications-toggle" class="sr-only peer" checked>
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
                               <div class="flex items-center justify-between">
                                   <span class="text-sm font-medium text-gray-300">Promotional Offers</span>
                                   <label class="relative inline-flex items-center cursor-pointer">
-                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <input type="checkbox" id="promotional-offers-toggle" class="sr-only peer">
+                                      <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  </label>
+                              </div>
+                              <div class="flex items-center justify-between">
+                                  <span class="text-sm font-medium text-gray-300">Push Notifications</span>
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" id="push-notifications-toggle" class="sr-only peer">
                                       <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                   </label>
                               </div>
                           </div>
-                          <button class="shop-button mt-6 w-full">Save Notification Settings</button>
+                          <button id="save-notification-settings" class="shop-button mt-6 w-full">Save Notification Settings</button>
                       </div>
                   `;
                   break;
               case 'security':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Manage your account security settings.</p>
-                          <div class="mt-4 space-y-4">
-                              <button class="shop-button w-full bg-red-600 hover:bg-red-700">Change Password</button>
-                              <button class="shop-button w-full bg-yellow-600 hover:bg-yellow-700">Enable Two-Factor Authentication</button>
+                          <p class="font-semibold mb-4">Manage your account security settings.</p>
+                          <div class="mt-4 space-y-4 text-left">
+                              <button id="change-password-btn" class="shop-button w-full bg-red-600 hover:bg-red-700">Change Password</button>
+                              <button id="two-factor-auth-btn" class="shop-button w-full bg-yellow-600 hover:bg-yellow-700">Enable Two-Factor Authentication</button>
+                              <div class="mt-6">
+                                  <h3 class="text-lg font-semibold text-white mb-2">Login Activity</h3>
+                                  <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
+                                      <li>Last login: July 15, 2025 from Chrome on Windows (Dubai, UAE)</li>
+                                      <li>Previous login: July 14, 2025 from Safari on iOS (London, UK)</li>
+                                  </ul>
+                                  <button id="view-all-activity-btn" class="shop-button mt-4 bg-gray-600 hover:bg-gray-700 w-full">View All Activity</button>
+                              </div>
                           </div>
                       </div>
                   `;
@@ -2141,8 +2170,18 @@
               case 'integrations':
                   contentHtml = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Connect or disconnect third-party services.</p>
-                          <p class="text-sm text-gray-400 mt-2">No integrations are currently available.</p>
+                          <p class="font-semibold mb-4">Connect or disconnect third-party services.</p>
+                          <p class="text-sm text-gray-400 mt-2">No integrations are currently available. Check back soon for exciting new connections!</p>
+                          <div class="mt-4 space-y-3">
+                              <div class="flex items-center justify-between p-3 bg-gray-600 rounded-md">
+                                  <span class="text-white font-medium">Shopify</span>
+                                  <button class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition-colors">Connect</button>
+                              </div>
+                              <div class="flex items-center justify-between p-3 bg-gray-600 rounded-md">
+                                  <span class="text-white font-medium">Google Analytics</span>
+                                  <button class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition-colors">Connect</button>
+                              </div>
+                          </div>
                       </div>
                   `;
                   break;
@@ -2156,14 +2195,59 @@
                   break;
           }
           settingsContentArea.innerHTML = contentHtml;
+
+          if (category === 'general') {
+              document.getElementById('save-general-settings').addEventListener('click', () => {
+                  const newFirstName = document.getElementById('general-first-name').value.trim();
+                  const newLastName = document.getElementById('general-last-name').value.trim();
+                  localStorage.setItem('userFirstName', newFirstName);
+                  localStorage.setItem('userLastName', newLastName);
+                  showMessageBox('General settings saved!');
+              });
+          } else if (category === 'accessibility') {
+              document.getElementById('save-accessibility-settings').addEventListener('click', () => {
+                  showMessageBox('Accessibility settings saved!');
+              });
+          } else if (category === 'privacy') {
+              document.getElementById('download-data-btn').addEventListener('click', () => {
+                  showMessageBox('Downloading your data (simulated)!', 3000, false);
+              });
+          } else if (category === 'visuals') {
+              document.getElementById('save-visual-settings').addEventListener('click', () => {
+                  showMessageBox('Visual settings saved!');
+              });
+          } else if (category === 'payment-method') {
+              document.getElementById('save-payment-method').addEventListener('click', () => {
+                  const cardNumber = document.getElementById('card-number').value.trim();
+                  const expiryDate = document.getElementById('expiry-date').value.trim();
+                  const cvv = document.getElementById('cvv').value.trim();
+                  if (cardNumber && expiryDate && cvv) {
+                      showMessageBox('Payment method saved (simulated)!');
+                  } else {
+                      showMessageBox('Please fill in all card details!', 3000, true);
+                  }
+              });
+          } else if (category === 'notifications') {
+              document.getElementById('save-notification-settings').addEventListener('click', () => {
+                  showMessageBox('Notification settings saved!');
+              });
+          } else if (category === 'security') {
+              document.getElementById('change-password-btn').addEventListener('click', () => {
+                  showMessageBox('Redirecting to password change (simulated)!');
+              });
+              document.getElementById('two-factor-auth-btn').addEventListener('click', () => {
+                  showMessageBox('Two-factor authentication setup initiated (simulated)!');
+              });
+              document.getElementById('view-all-activity-btn').addEventListener('click', () => {
+                  showMessageBox('Viewing all login activity (simulated)!');
+              });
+          }
       }
 
-
-      // Event Listeners for Checkout Modal
       checkoutButton.addEventListener('click', () => {
         checkoutModalOverlay.classList.add('show');
-        orderConfirmationMessage.classList.add('hidden'); // Reset confirmation message
-        placeOrderBtn.style.display = 'block'; // Show place order button
+        orderConfirmationMessage.classList.add('hidden');
+        placeOrderBtn.style.display = 'block';
       });
 
       modalCloseBtn.addEventListener('click', () => {
@@ -2171,42 +2255,37 @@
       });
 
       placeOrderBtn.addEventListener('click', () => {
-        // Simulate order placement
-        cart = {}; // Clear the cart
-        renderCart(); // Update cart display
-        placeOrderBtn.style.display = 'none'; // Hide place order button
-        orderConfirmationMessage.classList.remove('hidden'); // Show thank you message
+        cart = {};
+        renderCart();
+        placeOrderBtn.style.display = 'none';
+        orderConfirmationMessage.classList.remove('hidden');
 
-        // Close modal after a short delay and redirect to home page
         setTimeout(() => {
           checkoutModalOverlay.classList.remove('show');
           showPage('home-main');
         }, 2000);
       });
 
-      // Event listener for the "Add to Cart" button on the detail page
       detailAddToCartBtn.addEventListener('click', (event) => {
           const itemId = event.target.dataset.itemId;
           const itemName = event.target.dataset.itemName;
           const itemPrice = parseFloat(event.target.dataset.itemPrice);
           const itemImage = event.target.dataset.itemImage;
-          const selectedSize = itemSizeSelect.value; // Get selected size
+          const selectedSize = itemSizeSelect.value;
           addToCart({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, size: selectedSize });
-          showMessageBox(`${itemName} (Size: ${selectedSize}) has successfully been added to cart!`); // Show custom message
+          showMessageBox(`${itemName} (Size: ${selectedSize}) has successfully been added to cart!`);
       });
 
-      // Event listener for "Back to Shop" button
       backToShopBtn.addEventListener('click', () => {
           showPage('shop-page');
       });
 
-      // --- Sign In/Sign Up Logic ---
       signInBtn.addEventListener('click', (e) => {
           e.preventDefault();
           const email = signInEmailInput.value.trim();
           const password = signInPasswordInput.value.trim();
 
-          signInErrorMessage.classList.add('hidden'); // Hide previous error
+          signInErrorMessage.classList.add('hidden');
 
           if (!email || !password) {
               signInErrorMessage.textContent = 'Please enter both email and password.';
@@ -2215,12 +2294,10 @@
               return;
           }
 
-          // Simulate sign-in success
           showMessageBox('Signed in successfully! Welcome back!', 3000);
-          // In a real app, you'd send data to a server and handle response
           setTimeout(() => {
-              showPage('home-main'); // Redirect to home after successful sign-in
-              signInEmailInput.value = ''; // Clear form
+              showPage('home-main');
+              signInEmailInput.value = '';
               signInPasswordInput.value = '';
           }, 1000);
       });
@@ -2231,7 +2308,7 @@
           const password = signUpPasswordInput.value.trim();
           const confirmPassword = signUpConfirmPasswordInput.value.trim();
 
-          signUpErrorMessage.classList.add('hidden'); // Hide previous error
+          signUpErrorMessage.classList.add('hidden');
 
           if (!email || !password || !confirmPassword) {
               signUpErrorMessage.textContent = 'Please fill in all fields.';
@@ -2247,23 +2324,20 @@
               return;
           }
 
-          // Simulate sign-up success
           showMessageBox('Account created successfully! Please tell us your name!', 3000);
-          // In a real app, you'd send data to a server and handle response
           setTimeout(() => {
-              showPage('onboarding-main'); // Redirect to onboarding page
-              signUpEmailInput.value = ''; // Clear form
+              showPage('onboarding-main');
+              signUpEmailInput.value = '';
               signUpPasswordInput.value = '';
               signUpConfirmPasswordInput.value = '';
           }, 1000);
       });
 
-      // Event listener for onboarding save button (New)
       onboardingSaveBtn.addEventListener('click', () => {
           const firstName = onboardingFirstNameInput.value.trim();
           const lastName = onboardingLastNameInput.value.trim();
 
-          onboardingErrorMessage.classList.add('hidden'); // Hide previous error
+          onboardingErrorMessage.classList.add('hidden');
 
           if (!firstName || !lastName) {
               onboardingErrorMessage.textContent = 'Please enter both your first and last name.';
@@ -2272,20 +2346,17 @@
               return;
           }
 
-          // Save to localStorage
           localStorage.setItem('userFirstName', firstName);
           localStorage.setItem('userLastName', lastName);
 
           showMessageBox(`Welcome, ${firstName}! Enjoy shopping!`, 3000);
           setTimeout(() => {
-              showPage('home-main'); // Redirect to home after saving
-              onboardingFirstNameInput.value = ''; // Clear form
+              showPage('home-main');
+              onboardingFirstNameInput.value = '';
               onboardingLastNameInput.value = '';
           }, 1000);
       });
 
-
-      // Event listeners for switching between sign-in/sign-up forms
       document.querySelectorAll('.auth-form-container .form-link').forEach(link => {
           link.addEventListener('click', function(e) {
               e.preventDefault();
@@ -2294,7 +2365,6 @@
           });
       });
 
-      // --- Support Page Event Listeners (New) ---
       quickEasyBtn.addEventListener('click', () => {
           showPage('chat-interface');
       });
@@ -2304,10 +2374,9 @@
       });
 
       backToMainSiteBtn.addEventListener('click', () => {
-          showPage('home-main'); // Go back to home page
+          showPage('home-main');
       });
 
-      // --- Chat Interface Event Listeners (New) ---
       sendChatBtn.addEventListener('click', () => {
           const message = chatInput.value.trim();
           if (message) {
@@ -2321,13 +2390,10 @@
           }
       });
 
-      // --- Settings Page Event Listeners (New) ---
       settingsNavLinks.forEach(link => {
           link.addEventListener('click', (e) => {
               e.preventDefault();
-              // Remove active class from all settings nav links
               settingsNavLinks.forEach(navLink => navLink.classList.remove('bg-gray-700', 'text-white'));
-              // Add active class to the clicked link
               e.target.classList.add('bg-gray-700', 'text-white');
 
               const category = e.target.dataset.settingCategory;
@@ -2335,33 +2401,44 @@
           });
       });
 
+      hamburgerIcon.addEventListener('click', () => {
+          mobileNavOverlay.classList.add('open');
+      });
 
-      // Initialize animations and event listeners when the window loads
+      mobileNavCloseBtn.addEventListener('click', () => {
+          mobileNavOverlay.classList.remove('open');
+      });
+
+      mobileNavItems.forEach(item => {
+          item.addEventListener('click', function (e) {
+              e.preventDefault();
+              const targetId = this.getAttribute('data-page-id');
+              showPage(targetId);
+              mobileNavOverlay.classList.remove('open');
+          });
+      });
+
+
       window.onload = function() {
-        splitAndAnimateLetters('mainTagline', 1.5); // Animate the intro tagline
+        splitAndAnimateLetters('mainTagline', 1.5);
 
-        // Event listener for the "Head to the shop" button
         shopButton.addEventListener('click', () => {
-          transitionOverlay.classList.add('active'); // Activate the transition overlay
+          transitionOverlay.classList.add('active');
 
-          // Listen for the end of the transition overlay's animation
           transitionOverlay.addEventListener('transitionend', function handler() {
-            transitionOverlay.removeEventListener('transitionend', handler); // Remove listener to prevent multiple calls
+            transitionOverlay.removeEventListener('transitionend', handler);
 
-            introSection.classList.add('hidden-content'); // Hide the intro section
-            mainWebsiteContentWrapper.classList.add('active-content'); // Show the main content wrapper
+            introSection.classList.add('hidden-content');
+            mainWebsiteContentWrapper.classList.add('active-content');
 
-            // Now that main content is visible, set the initial page and nav state
-            supportMode = false; // We are going to the main site (home), not support mode
-            updateNavBarVisibility(supportMode); // Show all main nav items
-            showPage('home-main'); // Direct to home page
+            supportMode = false;
+            showPage('home-main');
 
-            transitionOverlay.classList.remove('active'); // Deactivate the transition overlay
+            transitionOverlay.classList.remove('active');
           });
         });
 
-        // Add event listeners for navigation links within the main content
-        document.querySelectorAll('#main-website-content-wrapper nav ul li a').forEach(anchor => {
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
@@ -2369,7 +2446,6 @@
             });
         });
 
-        // Add event listeners for profile dropdown items
         document.querySelectorAll('.profile-dropdown .dropdown-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -2378,15 +2454,15 @@
             });
         });
 
-        // Handle window resize to update nav indicator position
         window.addEventListener('resize', () => {
             const currentPage = document.querySelector('#main-website-content-wrapper > section.active-page');
             if (currentPage) {
-                updateNavIndicator(currentPage.id);
+                if (window.innerWidth >= 768) {
+                    updateNavIndicator(currentPage.id);
+                }
             }
         });
 
-        // Initially highlight the 'General' setting link and display its content when settings page is loaded
         const initialSettingLink = document.querySelector('.settings-nav-link[data-setting-category="general"]');
         if (initialSettingLink) {
             initialSettingLink.classList.add('bg-gray-700', 'text-white');
