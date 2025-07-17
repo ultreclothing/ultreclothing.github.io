@@ -235,7 +235,7 @@
       }
 
       .logo img {
-          max-width: 120px; /* Set a max width for the logo image */
+          max-width: 150px; /* Set a max width for the logo image - increased from 120px */
           height: auto; /* Maintain aspect ratio */
           object-fit: contain; /* Ensure the entire logo is visible */
           filter: invert(100%); /* Invert colors if logo is black on transparent/white */
@@ -257,15 +257,15 @@
       @keyframes logoPulseGlow {
         0% {
           transform: scale(1);
-          filter: invert(100%) drop-shadow(0 0 0px rgba(66, 153, 225, 0.7)); /* Initial state, no glow */
+          filter: invert(100%) drop-shadow(0 0 0px rgba(255, 255, 255, 0.7)); /* Initial state, no glow - changed to white */
         }
         50% {
           transform: scale(1.05);
-          filter: invert(100%) drop-shadow(0 0 15px rgba(66, 153, 225, 0.9)); /* Pulsing and glowing */
+          filter: invert(100%) drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)); /* Pulsing and glowing - changed to white */
         }
         100% {
           transform: scale(1);
-          filter: invert(100%) drop-shadow(0 0 0px rgba(66, 153, 225, 0.7)); /* Back to initial */
+          filter: invert(100%) drop-shadow(0 0 0px rgba(255, 255, 255, 0.7)); /* Back to initial - changed to white */
         }
       }
 
@@ -1611,7 +1611,7 @@
                       const itemId = card.dataset.itemId;
                       const itemName = card.dataset.itemName;
                       const itemPrice = parseFloat(card.dataset.itemPrice);
-                      const itemImage = card.dataset.itemImage;
+                      const itemImage = card.target.dataset.itemImage;
                       const itemDescription = card.dataset.itemDescription;
                       showItemDetail({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, description: itemDescription });
                   });
@@ -2467,3 +2467,4 @@
     </script>
   </body>
 </html>
+
