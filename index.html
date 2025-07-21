@@ -1264,8 +1264,9 @@
 
       <section id="settings-main">
           <div class="info-title">Settings</div>
-          <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row flex-grow">
+          <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row flex-grow" style="height: calc(100vh - 160px);">
 
+              <!-- Left Sidebar for Settings Navigation -->
               <div class="w-full lg:w-1/4 bg-gray-900 border-r border-gray-700 p-6 space-y-2 flex-shrink-0">
                   <h2 class="text-xl font-semibold text-white mb-4">Categories</h2>
                   <nav class="space-y-1">
@@ -1280,13 +1281,11 @@
                   </nav>
               </div>
 
-              <div class="w-full lg:w-3/4 p-6 flex flex-col flex-grow">
-                  <h2 class="text-2xl font-bold text-white mb-6" id="settings-content-title">Select a Category</h2>
-                  <div id="settings-content-area" class="space-y-6 flex-grow">
-                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Welcome to your settings!</p>
-                          <p>Please select a category from the left to view and adjust your preferences.</p>
-                      </div>
+              <!-- Right Content Area for Settings -->
+              <div id="settings-content-container" class="w-full lg:w-3/4 p-6 flex flex-col flex-grow overflow-y-auto">
+                  <h2 class="text-2xl font-bold text-white mb-6" id="settings-content-title">All Settings</h2>
+                  <div id="settings-content-area" class="flex-grow">
+                      <!-- All settings sections will be rendered here -->
                   </div>
               </div>
           </div>
@@ -1417,6 +1416,7 @@
       let chatHistory = [{ role: "system", content: "You are UltreBot, a helpful assistant for the Ultre clothing brand. You answer questions about products, orders, and general inquiries. Keep responses concise and friendly." }];
 
       const settingsMain = document.getElementById('settings-main');
+      const settingsContentContainer = document.getElementById('settings-content-container');
       const settingsContentTitle = document.getElementById('settings-content-title');
       const settingsContentArea = document.getElementById('settings-content-area');
       const settingsNavLinks = document.querySelectorAll('.settings-nav-link');
@@ -1431,6 +1431,7 @@
       let currentActiveNavLinkLi = null;
       let isNavigating = false;
       let supportMode = false;
+      let settingsInitialized = false;
 
       const localClothingItems = [
         { id: 'tee', name: "Minimalist Tee", price: 35.00, imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee", description: "Our classic minimalist tee, designed for comfort and style. Made from 100% organic cotton, it's perfect for everyday wear. Available in various sizes." },
@@ -1571,7 +1572,7 @@
             } else {
               productsToRender.forEach((item, index) => {
                 const imageUrl = item.images && item.images.length > 0 ? item.images[0].src : item.imageUrl || 'https://placehold.co/300x300/CCCCCC/000000?text=No+Image';
-                const price = item.price ? (item.price / 100).toFixed(2) : item.price.toFixed(2);
+                const price = item.variants && item.variants.length > 0 ? (item.variants[0].price / 100).toFixed(2) : (item.price || 0).toFixed(2);
                 const description = item.description || "A high-quality item from Ultre. Designed for comfort and durability.";
 
                 const itemCard = document.createElement('div');
@@ -1579,7 +1580,7 @@
                 itemCard.style.animationDelay = `${0.1 * index}s`;
                 itemCard.dataset.itemId = item.id;
                 itemCard.dataset.itemName = item.title || item.name;
-                itemCard.dataset.itemPrice = item.price;
+                itemCard.dataset.itemPrice = item.variants && item.variants.length > 0 ? item.variants[0].price : (item.price * 100);
                 itemCard.dataset.itemImage = imageUrl;
                 itemCard.dataset.itemDescription = description;
 
@@ -1588,7 +1589,7 @@
                   <div class="p-4 flex flex-col justify-between flex-grow">
                     <h3 class="text-xl font-semibold text-white mb-2">${item.title || item.name}</h3>
                     <p class="text-gray-300 text-lg mb-4">$${price}</p>
-                    <button class="add-to-cart-btn mt-auto bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}" data-item-name="${item.title || item.name}" data-item-price="${item.price}" data-item-image="${imageUrl}">Add to Cart</button>
+                    <button class="add-to-cart-btn mt-auto bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}" data-item-name="${item.title || item.name}" data-item-price="${item.variants && item.variants.length > 0 ? item.variants[0].price : (item.price * 100)}" data-item-image="${imageUrl}">Add to Cart</button>
                   </div>
                 `;
                 itemsGrid.appendChild(itemCard);
@@ -1611,7 +1612,7 @@
                       const itemId = card.dataset.itemId;
                       const itemName = card.dataset.itemName;
                       const itemPrice = parseFloat(card.dataset.itemPrice);
-                      const itemImage = card.target.dataset.itemImage;
+                      const itemImage = card.dataset.itemImage;
                       const itemDescription = card.dataset.itemDescription;
                       showItemDetail({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, description: itemDescription });
                   });
@@ -1656,8 +1657,8 @@
 
           itemKeysInCart.forEach(cartKey => {
             const item = cart[cartKey];
-            const itemPriceDisplay = (item.price / (item.price > 1000 ? 100 : 1)).toFixed(2);
-            const itemTotal = ((item.price / (item.price > 1000 ? 100 : 1)) * item.quantity).toFixed(2);
+            const itemPriceDisplay = (item.price / 100).toFixed(2);
+            const itemTotal = ((item.price / 100) * item.quantity).toFixed(2);
 
             const itemElement = document.createElement('div');
             itemElement.className = 'flex items-center justify-between bg-gray-800 p-4 rounded-lg shadow-md';
@@ -1677,7 +1678,7 @@
               </div>
             `;
             cartItemsList.appendChild(itemElement);
-            total += (item.price / (item.price > 1000 ? 100 : 1)) * item.quantity;
+            total += (item.price / 100) * item.quantity;
           });
 
           document.querySelectorAll('#cart-items-list .quantity-btn').forEach(button => {
@@ -1835,7 +1836,10 @@
               displayChatMessage("Hey, I’m UltreBot — what do you need help with today?", 'bot');
               chatInput.focus();
           } else if (pageId === 'settings-main') {
-              updateSettingsContent('general');
+              if (!settingsInitialized) {
+                  initializeSettingsPage();
+                  settingsInitialized = true;
+              }
           }
 
           if (window.innerWidth >= 768) {
@@ -1848,7 +1852,7 @@
       function showItemDetail(item) {
           detailItemImage.src = item.imageUrl;
           detailItemName.textContent = item.name;
-          detailItemPrice.textContent = `$${(item.price / (item.price > 1000 ? 100 : 1)).toFixed(2)}`;
+          detailItemPrice.textContent = `$${(item.price / 100).toFixed(2)}`;
           detailItemDescription.textContent = item.description;
 
           detailAddToCartBtn.dataset.itemId = item.id;
@@ -1961,17 +1965,14 @@
           }
       }
 
-      function updateSettingsContent(category) {
-          settingsContentTitle.textContent = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
-          settingsContentArea.innerHTML = '';
-
-          let contentHtml = '';
+      function getSettingsCategoryHtml(category) {
+          let html = '';
           const userFirstName = localStorage.getItem('userFirstName') || '';
           const userLastName = localStorage.getItem('userLastName') || '';
 
           switch (category) {
               case 'general':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Basic settings for your account and site experience.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2006,7 +2007,7 @@
                   `;
                   break;
               case 'accessibility':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Adjust settings for better accessibility.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2038,7 +2039,7 @@
                   `;
                   break;
               case 'privacy':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Manage your data and privacy preferences.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2062,7 +2063,7 @@
                   `;
                   break;
               case 'visuals':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Customize the look and feel of the site.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2087,7 +2088,7 @@
                   `;
                   break;
               case 'payment-method':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Manage your saved payment methods.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2113,7 +2114,7 @@
                   `;
                   break;
               case 'notifications':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Control how you receive notifications.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2144,7 +2145,7 @@
                   `;
                   break;
               case 'security':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Manage your account security settings.</p>
                           <div class="mt-4 space-y-4 text-left">
@@ -2153,8 +2154,8 @@
                               <div class="mt-6">
                                   <h3 class="text-lg font-semibold text-white mb-2">Login Activity</h3>
                                   <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
-                                      <li>Last login: July 15, 2025 from Chrome on Windows (Dubai, UAE)</li>
-                                      <li>Previous login: July 14, 2025 from Safari on iOS (London, UK)</li>
+                                      <li>Last login: July 21, 2025 from Chrome on Windows (Dubai, UAE)</li>
+                                      <li>Previous login: July 20, 2025 from Safari on iOS (London, UK)</li>
                                   </ul>
                                   <button id="view-all-activity-btn" class="shop-button mt-4 bg-gray-600 hover:bg-gray-700 w-full">View All Activity</button>
                               </div>
@@ -2163,7 +2164,7 @@
                   `;
                   break;
               case 'integrations':
-                  contentHtml = `
+                  html = `
                       <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
                           <p class="font-semibold mb-4">Connect or disconnect third-party services.</p>
                           <p class="text-sm text-gray-400 mt-2">No integrations are currently available. Check back soon for exciting new connections!</p>
@@ -2181,63 +2182,107 @@
                   `;
                   break;
               default:
-                  contentHtml = `
-                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Welcome to your settings!</p>
-                          <p>Please select a category from the left to view and adjust your preferences.</p>
-                      </div>
-                  `;
+                  html = ``;
                   break;
           }
-          settingsContentArea.innerHTML = contentHtml;
+          return html;
+      }
 
-          if (category === 'general') {
-              document.getElementById('save-general-settings').addEventListener('click', () => {
-                  const newFirstName = document.getElementById('general-first-name').value.trim();
-                  const newLastName = document.getElementById('general-last-name').value.trim();
-                  localStorage.setItem('userFirstName', newFirstName);
-                  localStorage.setItem('userLastName', newLastName);
-                  showMessageBox('General settings saved!');
-              });
-          } else if (category === 'accessibility') {
-              document.getElementById('save-accessibility-settings').addEventListener('click', () => {
-                  showMessageBox('Accessibility settings saved!');
-              });
-          } else if (category === 'privacy') {
-              document.getElementById('download-data-btn').addEventListener('click', () => {
-                  showMessageBox('Downloading your data (simulated)!', 3000, false);
-              });
-          } else if (category === 'visuals') {
-              document.getElementById('save-visual-settings').addEventListener('click', () => {
-                  showMessageBox('Visual settings saved!');
-              });
-          } else if (category === 'payment-method') {
-              document.getElementById('save-payment-method').addEventListener('click', () => {
-                  const cardNumber = document.getElementById('card-number').value.trim();
-                  const expiryDate = document.getElementById('expiry-date').value.trim();
-                  const cvv = document.getElementById('cvv').value.trim();
-                  if (cardNumber && expiryDate && cvv) {
-                      showMessageBox('Payment method saved (simulated)!');
-                  } else {
-                      showMessageBox('Please fill in all card details!', 3000, true);
+      function addSettingsEventListeners() {
+          document.getElementById('save-general-settings')?.addEventListener('click', () => {
+              const newFirstName = document.getElementById('general-first-name').value.trim();
+              const newLastName = document.getElementById('general-last-name').value.trim();
+              localStorage.setItem('userFirstName', newFirstName);
+              localStorage.setItem('userLastName', newLastName);
+              showMessageBox('General settings saved!');
+          });
+          document.getElementById('save-accessibility-settings')?.addEventListener('click', () => {
+              showMessageBox('Accessibility settings saved!');
+          });
+          document.getElementById('download-data-btn')?.addEventListener('click', () => {
+              showMessageBox('Downloading your data (simulated)!', 3000, false);
+          });
+          document.getElementById('save-visual-settings')?.addEventListener('click', () => {
+              showMessageBox('Visual settings saved!');
+          });
+          document.getElementById('save-payment-method')?.addEventListener('click', () => {
+              const cardNumber = document.getElementById('card-number').value.trim();
+              const expiryDate = document.getElementById('expiry-date').value.trim();
+              const cvv = document.getElementById('cvv').value.trim();
+              if (cardNumber && expiryDate && cvv) {
+                  showMessageBox('Payment method saved (simulated)!');
+              } else {
+                  showMessageBox('Please fill in all card details!', 3000, true);
+              }
+          });
+          document.getElementById('save-notification-settings')?.addEventListener('click', () => {
+              showMessageBox('Notification settings saved!');
+          });
+          document.getElementById('change-password-btn')?.addEventListener('click', () => {
+              showMessageBox('Redirecting to password change (simulated)!');
+          });
+          document.getElementById('two-factor-auth-btn')?.addEventListener('click', () => {
+              showMessageBox('Two-factor authentication setup initiated (simulated)!');
+          });
+          document.getElementById('view-all-activity-btn')?.addEventListener('click', () => {
+              showMessageBox('Viewing all login activity (simulated)!');
+          });
+      }
+
+      function renderAllSettingsSections() {
+          settingsContentArea.innerHTML = '';
+          const categories = ['general', 'accessibility', 'privacy', 'visuals', 'payment-method', 'notifications', 'security', 'integrations'];
+          
+          categories.forEach(category => {
+              const title = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
+              const html = getSettingsCategoryHtml(category);
+              const sectionWrapper = document.createElement('div');
+              sectionWrapper.id = `settings-section-${category}`;
+              sectionWrapper.className = 'mb-12';
+              sectionWrapper.innerHTML = `
+                  <h3 class="text-2xl font-bold text-white mb-4 text-left border-b border-gray-700 pb-2">${title}</h3>
+                  ${html}
+              `;
+              settingsContentArea.appendChild(sectionWrapper);
+          });
+
+          addSettingsEventListeners();
+      }
+
+      function setupSettingsNavigation() {
+          settingsNavLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const category = e.target.dataset.settingCategory;
+                  const section = document.getElementById(`settings-section-${category}`);
+                  if (section) {
+                      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
               });
-          } else if (category === 'notifications') {
-              document.getElementById('save-notification-settings').addEventListener('click', () => {
-                  showMessageBox('Notification settings saved!');
+          });
+
+          const observer = new IntersectionObserver(entries => {
+              entries.forEach(entry => {
+                  const id = entry.target.id;
+                  const category = id.replace('settings-section-', '');
+                  const navLink = document.querySelector(`.settings-nav-link[data-setting-category="${category}"]`);
+                  if (entry.isIntersecting) {
+                      settingsNavLinks.forEach(l => l.classList.remove('bg-gray-700', 'text-white'));
+                      if (navLink) navLink.classList.add('bg-gray-700', 'text-white');
+                  }
               });
-          } else if (category === 'security') {
-              document.getElementById('change-password-btn').addEventListener('click', () => {
-                  showMessageBox('Redirecting to password change (simulated)!');
-              });
-              document.getElementById('two-factor-auth-btn').addEventListener('click', () => {
-                  showMessageBox('Two-factor authentication setup initiated (simulated)!');
-              });
-              document.getElementById('view-all-activity-btn').addEventListener('click', () => {
-                  showMessageBox('Viewing all login activity (simulated)!');
-              });
-          }
+          }, { root: settingsContentContainer, threshold: 0.3, rootMargin: '0px 0px -50% 0px' });
+
+          document.querySelectorAll('[id^="settings-section-"]').forEach(section => {
+              observer.observe(section);
+          });
       }
+      
+      function initializeSettingsPage() {
+          renderAllSettingsSections();
+          setupSettingsNavigation();
+      }
+
 
       checkoutButton.addEventListener('click', () => {
         checkoutModalOverlay.classList.add('show');
@@ -2385,17 +2430,6 @@
           }
       });
 
-      settingsNavLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-              e.preventDefault();
-              settingsNavLinks.forEach(navLink => navLink.classList.remove('bg-gray-700', 'text-white'));
-              e.target.classList.add('bg-gray-700', 'text-white');
-
-              const category = e.target.dataset.settingCategory;
-              updateSettingsContent(category);
-          });
-      });
-
       hamburgerIcon.addEventListener('click', () => {
           mobileNavOverlay.classList.add('open');
       });
@@ -2457,14 +2491,9 @@
                 }
             }
         });
-
-        const initialSettingLink = document.querySelector('.settings-nav-link[data-setting-category="general"]');
-        if (initialSettingLink) {
-            initialSettingLink.classList.add('bg-gray-700', 'text-white');
-            updateSettingsContent('general');
-        }
       };
     </script>
   </body>
 </html>
+
 
