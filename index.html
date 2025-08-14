@@ -132,15 +132,19 @@
 
       #nav-indicator {
           position: absolute;
-          background-color: rgba(50, 50, 50, 0.7);
-          transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-                      width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-                      height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-                      top 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-                      border-radius 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          background: linear-gradient(90deg, rgba(59,130,246,0.18), rgba(139,92,246,0.18));
+          /* animate position and size for morphing effect */
+          transition: left 0.42s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      top 0.42s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      width 0.42s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      height 0.42s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      border-radius 0.42s cubic-bezier(0.25, 0.8, 0.25, 1),
+                      opacity 0.18s ease;
           z-index: 0;
           border-radius: 9999px;
           box-sizing: border-box;
+          pointer-events: none;
+          opacity: 0;
       }
 
       /* Mobile Hamburger Icon */
@@ -252,7 +256,23 @@
       }
 
       #intro-section {
-          min-height: 100vh;
+        /* Keep full-viewport intro but make it scroll away to reveal content underneath */
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50; /* sit above main content */
+        background: #0f0f0f; /* ensure solid background so it covers content while visible */
+        overflow-y: auto; /* allow scrolling within intro */
+      }
+
+      /* Ensure main content sits underneath the intro and can be revealed when scrolling */
+      #main-website-content-wrapper {
+        position: relative;
+        z-index: 10;
+        margin-top: 0;
       }
 
       #main-website-content-wrapper > section {
@@ -605,61 +625,75 @@
       }
 
       .item-detail-left {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 20px;
-          padding: 20px;
-          background-color: #2a2a2a;
-          border-radius: 12px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-          min-width: 300px;
+        flex: 1 1 45%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
       }
+
+      .item-detail-left img {
+        width: 100%;
+        max-width: 420px;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      }
+
+      .item-detail-meta {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .item-detail-name { font-size: 1.6rem; font-weight: 800; color: #fff; }
+      .item-detail-price { font-size: 1.25rem; color: #8b5cf6; font-weight: 700; }
 
       .item-detail-right {
-          flex: 2;
-          padding: 20px;
-          background-color: #2a2a2a;
-          border-radius: 12px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        flex: 1 1 50%;
+        text-align: left;
+        color: #d0d0d0;
       }
 
-      .item-detail-image {
-          width: 100%;
-          max-width: 300px;
-          height: auto;
-          border-radius: 8px;
-          object-fit: cover;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-          transform: translateX(-50px);
-          opacity: 0;
-          transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      .item-detail-right h4 { color: #f2f2f2; margin-bottom: 8px; }
+      .item-detail-right p { margin-bottom: 12px; line-height: 1.6; }
+
+      .item-detail-section { margin-bottom: 14px; }
+      .item-detail-section .label { display: block; font-size: 0.85rem; color: #9ca3af; margin-bottom: 6px; }
+
+      .add-to-cart-inline { width: 100%; padding: 12px 18px; border-radius: 10px; font-weight: 800; cursor: pointer; border: none; background: linear-gradient(90deg,#8b5cf6,#3b82f6); color: white; }
+
+      @keyframes itemDetailEnter {
+        from { transform: translateY(12px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
       }
 
-      #item-detail-page.active-page .item-detail-image {
-          transform: translateX(0);
-          opacity: 1;
+      /* Item detail two-column layout and entrance animation */
+      .item-detail-panel {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border: 1px solid rgba(255,255,255,0.03);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        transform: translateY(12px);
+        opacity: 0;
+        animation: itemDetailEnter 360ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
       }
 
-      .item-detail-name {
-          font-size: 2.5rem;
-          font-weight: 700;
-          color: #f2f2f2;
-          margin-bottom: 10px;
-      }
-
-      .item-detail-price {
-          font-size: 1.8rem;
-          font-weight: 600;
-          color: #d0d0d0;
-          margin-bottom: 20px;
-      }
-
-      .item-detail-description {
-          font-size: 1.1rem;
-          line-height: 1.6;
-          color: #c0c0c0;
+      /* Responsive adjustments */
+      @media (max-width: 900px) {
+        .item-detail-panel { flex-direction: column; padding: 16px; }
+        .item-detail-left, .item-detail-right { flex: none; width: 100%; }
+        .item-detail-left img { max-width: 100%; }
       }
 
       .back-to-shop-btn {
@@ -1312,6 +1346,25 @@
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
       }
 
+      /* Fade helpers: intro -> main transitions */
+      .fade-out {
+        animation: fadeOut 0.6s ease forwards;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; visibility: hidden; }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; visibility: visible; }
+      }
+
       /* Floating Animation for Icons */
       .float-animation {
           animation: float 3s ease-in-out infinite;
@@ -1522,6 +1575,7 @@
         outline: none;
         margin: 0.5rem 0;
         -webkit-appearance: none;
+        appearance: none;
       }
 
       .range-slider::-webkit-slider-thumb {
@@ -2051,7 +2105,28 @@
           <img src="logo.png" alt="Ultre Logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/000000/FFFFFF?text=Logo';">
       </div>
               <div class="tagline" id="mainTagline">This is Ultre.</div>
-      <button class="shop-button" id="shopButton" style="animation-delay: 2.8s;">Head to the shop.</button>
+      <a class="shop-button" id="shopButton" role="button" href="#shop-page">Scroll up to explore.</a>
+      <script>
+        (function(){
+          const btn = document.getElementById('shopButton');
+          if (!btn) return;
+          btn.addEventListener('click', function (e) {
+            e && e.preventDefault && e.preventDefault();
+
+            const targetId = 'shop-page';
+            const baseUrl = window.location.href.split('#')[0];
+
+            // Update hash without creating history entry
+            try { window.location.replace(`${baseUrl}#${targetId}`); } catch (err) { window.location.hash = targetId; }
+
+            // Trigger SPA transition if available
+            try { if (typeof showPage === 'function') showPage(targetId); } catch (err) {}
+
+            // Optional: scroll to top smoothly
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (err) {}
+          });
+        })();
+      </script>
     </section>
 
     <div id="main-website-content-wrapper" class="hidden-content">
@@ -2304,7 +2379,7 @@
               </div>
           </div>
 
-          <button id="back-to-shop-btn" class="back-to-shop-btn mt-8">← Back to Shop</button>
+          <button id="back-to-shop-btn" class="back-to-shop-btn mt-8" onclick="(function(){var b=window.location.href.split('#')[0];try{window.location.replace(b+'#sym:homeMain');}catch(e){window.location.href=b+'#sym:homeMain';}return false; })()">← Back to Shop</button>
       </section>
 
       <section id="about-us-main">
@@ -2356,7 +2431,7 @@
                 <span class="text-6xl mb-4">🛒</span>
                 <p class="text-xl mb-4">Your cart is currently empty</p>
                 <p class="text-gray-500 mb-6">Start shopping to add some Ultre essentials!</p>
-                <button id="start-shopping-btn" class="shop-button">Start Shopping</button>
+                <button id="start-shopping-btn" class="shop-button" onclick="(function(){var b=window.location.href.split('#')[0];try{window.location.replace(b+'#sym:homeMain');}catch(e){window.location.href=b+'#sym:homeMain';}return false; })()">Start Shopping</button>
             </div>
 
             <div id="cart-items-container" class="hidden">
@@ -2664,7 +2739,7 @@
           <div class="info-title" id="supportQuestion"></div>
           <button id="quickEasyBtn" class="support-option-button quick-easy-btn">Quick and Easy (AI)</button>
           <button id="advancedSupportBtn" class="support-option-button advanced-support-btn">Advanced Support (Mail)</button>
-          <button id="backToMainSiteBtn" class="shop-button mt-10">Head to the Shop</button>
+          <button id="backToMainSiteBtn" class="shop-button mt-10" onclick="(function(){var b=window.location.href.split('#')[0];try{window.location.replace(b+'#sym:homeMain');}catch(e){window.location.href=b+'#sym:homeMain';}return false; })()">Head to the Shop</button>
       </section>
 
       <section id="chat-interface">
@@ -3263,17 +3338,31 @@
     </div>
 
     <script>
-      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO3TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
-      const PRINTIFY_API_BASE_URL = 'https://api.printify.com/v1';
+      // PRINTIFY API KEY removed from client-side for safety. Any server-side key should not be embedded in HTML.
+      
+      // Force 'Head to the shop' buttons to jump to #sym:homeMain immediately
+      if (shopButton) {
+        // remove any previous handler to avoid duplicates
+        try { shopButton.removeEventListener('click', window._forceToSymHomeHandler); } catch(e) {}
 
-      const DEEPSEEK_API_KEY = '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';
-      const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+        window._forceToSymHomeHandler = function (evt) {
+          if (evt && evt.preventDefault) evt.preventDefault();
+          const base = window.location.href.split('#')[0];
+          const target = base + '#sym:homeMain';
+          try {
+            window.location.replace(target);
+            return;
+          } catch (err) {
+            // ignore
+          }
+          try { window.location.href = target; } catch(e) { try { window.location.hash = 'sym:homeMain'; } catch(_) {} }
 
+          // Also attempt in-app navigation
+          try { if (typeof showPage === 'function') showPage('home-main'); } catch(e) {}
+        };
 
-      const introSection = document.getElementById('intro-section');
-      const mainWebsiteContentWrapper = document.getElementById('main-website-content-wrapper');
-      const shopButton = document.getElementById('shopButton');
-      const transitionOverlay = document.getElementById('transitionOverlay');
+        shopButton.addEventListener('click', window._forceToSymHomeHandler);
+      }
 
       const loadingIndicator = document.getElementById('loading-indicator');
       const noStockMessage = document.getElementById('no-stock-message');
@@ -3351,6 +3440,50 @@
       const mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
       const mobileNavItems = document.querySelectorAll('#mobile-nav-overlay .mobile-nav-item');
 
+      // Initialize taskbar (main nav) click behavior
+      function initializeTaskbarNavigation() {
+          if (!mainNavItems || mainNavItems.length === 0) return;
+
+          mainNavItems.forEach(li => {
+              // page id is expected on the <li> as data-page-id (falls back to anchor href)
+              const anchor = li.querySelector('a');
+              const pageIdFromLi = li.dataset.pageId || li.getAttribute('data-page-id');
+              const pageIdFromAnchor = anchor ? (anchor.getAttribute('href') || '').replace(/^#/, '') : null;
+              const pageId = pageIdFromLi || pageIdFromAnchor;
+
+              if (!pageId) return;
+
+              const onNavClick = (e) => {
+                  if (e && e.preventDefault) e.preventDefault();
+                  if (isNavigating) return; // ignore while transitioning
+
+                  // mark navigation in-progress
+                  isNavigating = true;
+
+                  // Run the central page switcher which also updates the nav indicator for wide screens
+                  try {
+                      showPage(pageId);
+                  } catch (err) {
+                      console.error('Navigation error', err);
+                  }
+
+                  try { updateNavIndicator(pageId); } catch (err) {}
+
+                  // update URL hash without creating history entries
+                  try { history.replaceState(null, '', '#' + pageId); } catch (err) { window.location.hash = pageId; }
+
+                  // small debounce to avoid re-entrancy
+                  setTimeout(() => { isNavigating = false; }, 350);
+              };
+
+              // attach to both anchor and the li for robustness
+              if (anchor) anchor.addEventListener('click', onNavClick);
+              li.addEventListener('click', onNavClick);
+          });
+      }
+
+      // Call initialization immediately so nav works on load
+      initializeTaskbarNavigation();
 
       let cart = {};
       let currentActiveNavLinkLi = null;
@@ -4464,7 +4597,7 @@ function updateSettingsContent(category) {
         default:
             break;
     }
-}
+   
 
           switch (category) {
               case 'general':
@@ -4659,6 +4792,8 @@ function updateSettingsContent(category) {
                       </div>
                   `;
                   break;
+          }
+      
 
       onboardingSaveBtn.addEventListener('click', () => {
           const firstName = onboardingFirstNameInput.value.trim();
@@ -4691,6 +4826,68 @@ function updateSettingsContent(category) {
               showPage(targetId);
           });
       });
+
+      // Initialize Sign In / Sign Up navigation (no circle indicator)
+      function initializeAuthNavigation() {
+          // Wider selector to catch auth links in dropdowns, forms, and other places
+          const selector = 'a[href="#sign-in-main"], a[href="#sign-up-main"], .dropdown-item[href="#sign-in-main"], .dropdown-item[href="#sign-up-main"], .form-link[href="#sign-in-main"], .form-link[href="#sign-up-main"]';
+          const authAnchors = document.querySelectorAll(selector);
+
+          authAnchors.forEach(a => {
+              // Use capture so this listener runs before other handlers that may stop propagation
+              a.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  const targetId = (this.getAttribute('href') || '').replace(/^#/, '');
+
+                  // Close mobile overlay or any open dropdowns to ensure page becomes visible
+                  try { if (mobileNavOverlay) mobileNavOverlay.classList.remove('open'); } catch (err) {}
+
+                  // Clear any active desktop nav link state so the auth page shows independently
+                  try {
+                      if (currentActiveNavLinkLi) {
+                          currentActiveNavLinkLi.classList.remove('active', 'active-link', 'selected');
+                          currentActiveNavLinkLi = null;
+                      }
+                  } catch (err) { /* ignore if variable not yet declared */ }
+
+                  // Try to use the central router. If it fails, fall back to directly toggling .active-page
+                  let routed = false;
+                  try {
+                      if (typeof showPage === 'function') {
+                          showPage(targetId);
+                          routed = true;
+                      }
+                  } catch (err) {
+                      console.error('Auth nav showPage error', err);
+                  }
+
+                  if (!routed) {
+                      // Fallback: hide all main sections and show target
+                      try {
+                          document.querySelectorAll('#main-website-content-wrapper > section.active-page').forEach(s => s.classList.remove('active-page'));
+                          const target = document.getElementById(targetId);
+                          if (target) target.classList.add('active-page');
+                      } catch (err) { console.error('Auth nav fallback error', err); }
+                  }
+
+                  // Update URL hash without creating a new history entry
+                  try { history.replaceState(null, '', '#' + targetId); } catch (err) { window.location.hash = targetId; }
+
+                  // Small delay to allow any transitions then focus the first input in the auth form
+                  setTimeout(() => {
+                      try {
+                          const firstInput = document.querySelector(`#${targetId} input, #${targetId} textarea`);
+                          if (firstInput) firstInput.focus();
+                      } catch (err) {}
+                  }, 120);
+              }, true);
+          });
+      }
+
+      // Call the auth navigation initializer
+      initializeAuthNavigation();
 
       quickEasyBtn.addEventListener('click', () => {
           showPage('chat-interface');
@@ -6173,36 +6370,90 @@ function updateSettingsContent(category) {
 
         // Shop button transition into site
         if (shopButton) {
-          shopButton.addEventListener('click', () => {
+          // Remove any previous handler we may have attached during edits
+          if (window._shopBtnHandler && typeof window._shopBtnHandler === 'function') {
+            try { shopButton.removeEventListener('click', window._shopBtnHandler); } catch(e) {}
+          }
+
+          // Robust handler implemented below
+          window._shopBtnHandler = function (e) {
+            e && e.preventDefault();
+            if (window._isNavigating) return; // guard against re-entry
+            window._isNavigating = true;
+
+            const targetId = 'shop-page';
+            const baseUrl = window.location.href.split('#')[0];
+
+            // Activate overlay if present
             if (transitionOverlay) transitionOverlay.classList.add('active');
 
-            const handleTransitionEnd = function handler() {
-              if (transitionOverlay) transitionOverlay.removeEventListener('transitionend', handler);
+            // 5s stopwatch fallback — will force a hard hash redirect to #shop-page
+            let elapsed = 0;
+            const stopwatch = setInterval(() => {
+              elapsed += 1;
+              console.log('shopButton stopwatch:', elapsed);
+              if (elapsed >= 5) {
+                clearInterval(stopwatch);
+                console.warn('shopButton: timeout — forcing fallback to shop anchor');
+                try {
+                  window.location.replace(baseUrl + '#shop-page');
+                } catch (err) {
+                  window.location.href = baseUrl + '#shop-page';
+                }
+              }
+            }, 1000);
+
+            // Attempt smooth transition using existing helpers
+            try {
               if (introSection) introSection.classList.add('hidden-content');
               if (mainWebsiteContentWrapper) mainWebsiteContentWrapper.classList.add('active-content');
               if (typeof supportMode !== 'undefined') supportMode = false;
-              // Navigate directly to Shop page
-              showPage('shop-page');
-              // Apply fade-in animation to shop section
-              const shopSection = document.getElementById('shop-page');
-              if (shopSection) {
-                shopSection.classList.add('fade-in');
-                shopSection.addEventListener('animationend', () => {
-                  shopSection.classList.remove('fade-in');
-                }, { once: true });
-              }
+              if (typeof showPage === 'function') showPage(targetId);
+            } catch (err) {
+              console.error('shopButton: showPage error', err);
+            }
+
+            // Small helper to mark success and clean up
+            const succeed = () => {
+              if (window._shopBtnSucceeded) return;
+              window._shopBtnSucceeded = true;
+              clearInterval(stopwatch);
               if (transitionOverlay) transitionOverlay.classList.remove('active');
+              const target = document.getElementById(targetId);
+              if (target) {
+                target.classList.add('fade-in');
+                target.addEventListener('animationend', () => target.classList.remove('fade-in'), { once: true });
+              }
+              window._isNavigating = false;
             };
 
-            // If CSS transitionend doesn't fire (e.g., no CSS), fallback quickly
-            let fallback = setTimeout(handleTransitionEnd, 300);
-            if (transitionOverlay) {
-              transitionOverlay.addEventListener('transitionend', function wrapper(ev){
-                clearTimeout(fallback);
-                handleTransitionEnd();
-              });
-            }
-          });
+            // If overlay emits transitionend, treat that as success
+            const onOverlayEnd = () => {
+              succeed();
+              if (transitionOverlay) transitionOverlay.removeEventListener('transitionend', onOverlayEnd);
+            };
+            if (transitionOverlay) transitionOverlay.addEventListener('transitionend', onOverlayEnd, { once: true });
+
+            // Poll visibility for the target section (quick check loop)
+            let pollCount = 0;
+            const pollInterval = setInterval(() => {
+              pollCount += 1;
+              const target = document.getElementById(targetId);
+              if (target) {
+                const style = window.getComputedStyle(target);
+                const visible = style.display !== 'none' && style.visibility !== 'hidden' && target.offsetParent !== null;
+                if (visible) {
+                  clearInterval(pollInterval);
+                  succeed();
+                }
+              }
+              if (pollCount > 40) { // stop polling after ~6s to avoid leaks
+                clearInterval(pollInterval);
+              }
+            }, 150);
+          };
+
+          shopButton.addEventListener('click', window._shopBtnHandler);
         }
 
         // Initialize existing features
@@ -6232,7 +6483,53 @@ function updateSettingsContent(category) {
           }, 1000);
         }
       };
+    }
 
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const shopButton = document.getElementById('shopButton');
+        const introSection = document.getElementById('intro-section');
+        const mainWrapper = document.getElementById('main-website-content-wrapper');
+        const targetId = 'shop-page';
+        if (!shopButton) return;
+
+        // Remove existing listeners by replacing the node with a clean clone
+        const cleanBtn = shopButton.cloneNode(true);
+        shopButton.parentNode.replaceChild(cleanBtn, shopButton);
+
+        // Ensure label text
+        cleanBtn.textContent = 'Click here to explore.';
+
+        cleanBtn.addEventListener('click', (e) => {
+          if (e && e.preventDefault) e.preventDefault();
+          console.log('Shop button clicked — hiding intro');
+
+          // Fade out intro
+          if (introSection) introSection.classList.add('fade-out');
+
+          setTimeout(() => {
+            try {
+              if (introSection) introSection.style.display = 'none';
+
+              if (mainWrapper) {
+                mainWrapper.classList.remove('hidden-content');
+                mainWrapper.classList.add('fade-in');
+              }
+
+              // Show target section
+              document.querySelectorAll('#main-website-content-wrapper > section').forEach(sec => sec.classList.remove('active-page'));
+              const targetSection = document.getElementById(targetId);
+              if (targetSection) targetSection.classList.add('active-page');
+
+              try { history.replaceState(null, '', '#' + targetId); } catch (err) { window.location.hash = targetId; }
+              try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (err) {}
+            } catch (err) {
+              console.error('Error during intro hide', err);
+            }
+          }, 600);
+        });
+      });
     </script>
   </body>
 </html>
