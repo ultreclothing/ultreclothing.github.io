@@ -90,10 +90,38 @@
         font-size: 0.9rem;
         font-weight: 700;
         padding: 5px 10px;
-        transition: color 0.3s ease, transform 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      nav ul li a::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      nav ul li a:hover::before {
+        width: 100%;
+      }
+
+      nav ul li a:hover {
+        color: #f2f2f2;
+        transform: translateY(-2px);
+      }
+
+      nav ul li a:hover i {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
       }
 
       nav ul li a.active-nav-link {
@@ -181,11 +209,29 @@
           text-decoration: none;
           padding: 10px 20px;
           border-radius: 8px;
-          transition: background-color 0.3s ease, color 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+      }
+
+      #mobile-nav-overlay ul li a::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transition: left 0.5s ease;
+      }
+
+      #mobile-nav-overlay ul li a:hover::before {
+          left: 100%;
       }
 
       #mobile-nav-overlay ul li a:hover {
           background-color: rgba(242, 242, 242, 0.1);
+          transform: translateX(5px);
       }
 
       section {
@@ -196,6 +242,11 @@
         padding: 40px 20px;
         position: relative;
         width: 100%;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      section:hover {
+        transform: translateY(-2px);
       }
 
       #intro-section {
@@ -230,8 +281,14 @@
         margin-bottom: 30px;
         opacity: 0;
         transform: scale(0.5);
-        animation: fadeInScale 1.2s ease-out forwards, logoPulseGlow 2s infinite alternate 1.2s; /* Renamed animation */
-        display: inline-block; /* Essential for transform and margin to work correctly on an element that wraps an image */
+        animation: fadeInScale 1.2s ease-out forwards, logoPulseGlow 2s infinite alternate 1.2s;
+        display: inline-block;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
       }
 
       .logo img {
@@ -290,7 +347,14 @@
         opacity: 0;
         transform: translateY(20px);
         display: inline-block;
-        animation: letterFadeIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        animation: letterFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        transition: all 0.3s ease;
+      }
+
+      .animated-letter:hover {
+        transform: translateY(-5px) scale(1.1);
+        color: #3b82f6;
+        text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
       }
 
       .animated-letter.space {
@@ -310,6 +374,14 @@
         margin-top: 20px;
         color: #a0a0a0;
         animation: fadeInBlock 0.8s ease-out forwards;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .scroll-hint:hover {
+        color: #f2f2f2;
+        transform: translateY(-3px);
+        text-shadow: 0 0 15px rgba(242, 242, 242, 0.3);
       }
 
       @keyframes fadeInBlock {
@@ -327,26 +399,47 @@
       }
 
       .shop-button {
-        background-color: #f2f2f2;
+        background: linear-gradient(135deg, #f2f2f2 0%, #e0e0e0 100%);
         color: #0f0f0f;
         border: none;
         padding: 15px 30px;
-        border-radius: 8px;
+        border-radius: 12px;
         font-family: 'Quicksand', sans-serif;
         font-size: 1.2rem;
         font-weight: 700;
         cursor: pointer;
         margin-top: 30px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
         animation: fadeInBlock 0.8s ease-out forwards;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shop-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .shop-button:hover::before {
+        left: 100%;
       }
 
       .shop-button:hover {
-        background-color: #d0d0d0;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      }
+
+      .shop-button:active {
+        transform: translateY(-2px) scale(0.98);
       }
 
       footer {
@@ -631,7 +724,14 @@
       .profile-icon {
           font-size: 2.5rem;
           color: #f2f2f2;
-          transition: color 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+      }
+
+      .profile-icon:hover {
+          color: #3b82f6;
+          transform: scale(1.1) rotate(5deg);
+          filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
       }
 
       .profile-icon:hover {
@@ -643,22 +743,23 @@
           top: calc(100% + 10px);
           right: 0;
           background-color: rgba(26, 26, 26, 0.9);
-          backdrop-filter: blur(5px);
-          border-radius: 8px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(10px);
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
           min-width: 150px;
           display: flex;
           flex-direction: column;
           opacity: 0;
           visibility: hidden;
-          transform: translateY(-10px);
-          transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+          transform: translateY(-10px) scale(0.95);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .profile-menu-container:hover .profile-dropdown {
           opacity: 1;
           visibility: visible;
-          transform: translateY(0);
+          transform: translateY(0) scale(1);
       }
 
       .dropdown-item {
@@ -667,13 +768,31 @@
           text-decoration: none;
           font-size: 1rem;
           font-weight: 500;
-          transition: background-color 0.2s ease, color 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           border-radius: 8px;
+          position: relative;
+          overflow: hidden;
+      }
+
+      .dropdown-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+          transition: left 0.5s ease;
+      }
+
+      .dropdown-item:hover::before {
+          left: 100%;
       }
 
       .dropdown-item:hover {
-          background-color: #3a3a3a;
-          color: #f2f2f2;
+          background-color: rgba(59, 130, 246, 0.1);
+          color: #3b82f6;
+          transform: translateX(5px);
       }
 
       .profile-dropdown .dropdown-item:first-child {
@@ -686,736 +805,328 @@
           border-bottom-right-radius: 8px;
       }
 
+      /* Enhanced Authentication Forms */
       .auth-form-container {
-          background-color: #2a2a2a;
+          background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
           padding: 40px;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-          max-width: 450px;
-          width: 90%;
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          text-align: left;
-      }
-
-      .auth-form-container label {
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: #f2f2f2;
-          margin-bottom: 5px;
-          display: block;
-      }
-
-      .auth-form-container input[type="email"],
-      .auth-form-container input[type="password"],
-      .auth-form-container input[type="text"] {
-          width: 100%;
-          padding: 12px 15px;
-          border: 1px solid #555;
-          border-radius: 8px;
-          background-color: #3a3a3a;
-          color: #f2f2f2;
-          font-size: 1rem;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .auth-form-container input[type="email"]:focus,
-      .auth-form-container input[type="password"]:focus,
-      .auth-form-container input[type="text"]:focus {
-          border-color: #f2f2f2;
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(242, 242, 242, 0.2);
-      }
-
-      .auth-form-container .form-link {
-          color: #d0d0d0;
-          text-decoration: none;
-          font-size: 0.95rem;
-          transition: color 0.2s ease;
-      }
-
-      .auth-form-container .form-link:hover {
-          color: #f2f2f2;
-      }
-
-      .auth-form-container .shop-button {
-          width: 100%;
-          margin-top: 10px;
-          padding: 12px 25px;
-          font-size: 1.1rem;
-      }
-
-      .error-message {
-          color: #ff6b6b;
-          font-size: 0.9rem;
-          margin-top: -10px;
-          margin-bottom: 10px;
-          text-align: center;
-      }
-
-      @keyframes slideInUpFadeIn {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-      }
-
-      @keyframes fadeInUp {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-      }
-
-      .animate-slide-in-up {
-          animation: slideInUpFadeIn 0.6s ease-out forwards;
-      }
-
-      .product-card {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.6s ease-out forwards;
-      }
-
-      #support-main .support-option-button {
-          padding: 15px 30px;
-          border-radius: 8px;
-          font-family: 'Quicksand', sans-serif;
-          font-size: 1.2rem;
-          font-weight: 70;
-          cursor: pointer;
-          margin: 15px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-          transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-          opacity: 0;
-          animation: fadeInBlock 0.8s ease-out forwards;
-          width: 90%;
-          max-width: 300px;
-      }
-
-      #support-main .quick-easy-btn {
-          background-color: #f2f2f2;
-          color: #0f0f0f;
-      }
-
-      #support-main .quick-easy-btn:hover {
-          background-color: #d0d0d0;
-          transform: translateY(-3px);
-          box-shadow: 0 0 25px 5px rgba(242, 242, 242, 0.7);
-      }
-
-      #support-main .advanced-support-btn {
-          background-color: #3a3a3a;
-          color: #f2f2f2;
-          border: 1px solid #555;
-      }
-
-      #support-main .advanced-support-btn:hover {
-          background-color: #555;
-          transform: translateY(-3px);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      }
-
-      #chat-interface {
-          display: flex;
-          flex-direction: column;
-          height: calc(100vh - 100px);
-          padding-bottom: 80px;
-          position: relative;
-      }
-
-      #chat-messages {
-          flex-grow: 1;
-          overflow-y: auto;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          -webkit-overflow-scrolling: touch;
-      }
-
-      .chat-message-bubble {
-          max-width: 70%;
-          padding: 12px 18px;
           border-radius: 20px;
-          line-height: 1.5;
-          word-wrap: break-word;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: slideInUpFadeIn 0.4s ease-out forwards;
-      }
-
-      .user-message {
-          background-color: #007bff;
-          color: white;
-          align-self: flex-end;
-          border-bottom-right-radius: 5px;
-      }
-
-      .bot-message {
-          background-color: #2a2a2a;
-          color: #f2f2f2;
-          align-self: flex-start;
-          border-bottom-left-radius: 5px;
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-      }
-
-      .bot-avatar {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          background-color: #f2f2f2;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 1.2rem;
-          color: #0f0f0f;
-          flex-shrink: 0;
-      }
-
-      #chat-input-container {
-          position: fixed;
-          bottom: 60px;
-          left: 0;
-          width: 100%;
-          background: rgba(15, 15, 15, 0.9);
-          backdrop-filter: blur(8px);
-          padding: 15px 20px;
-          display: flex;
-          gap: 10px;
-          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-          z-index: 1000;
-      }
-
-      #chat-input {
-          flex-grow: 1;
-          padding: 12px 15px;
-          border-radius: 25px;
-          border: 1px solid #555;
-          background-color: #3a3a3a;
-          color: #f2f2f2;
-          font-size: 1rem;
-          outline: none;
-          transition: border-color 0.3s ease;
-      }
-
-      #chat-input:focus {
-          border-color: #f2f2f2;
-      }
-
-      #send-chat-btn {
-          background-color: #007bff;
-          color: white;
-          border: none;
-          border-radius: 25px;
-          padding: 12px 20px;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-      }
-
-      #send-chat-btn:hover {
-          background-color: #0056b3;
-      }
-
-      #typing-indicator {
-          align-self: flex-start;
-          padding: 10px 15px;
-          background-color: #2a2a2a;
-          color: #f2f2f2;
-          border-radius: 20px;
-          font-style: italic;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: slideInUpFadeIn 0.4s ease-out forwards;
-      }
-
-      .dot-pulse {
-          width: 8px;
-          height: 8px;
-          background-color: #f2f2f2;
-          border-radius: 50%;
-          animation: dotPulse 1.2s infinite ease-in-out;
-      }
-      .dot-pulse:nth-child(2) { animation-delay: 0.2s; }
-      .dot-pulse:nth-child(3) { animation-delay: 0.4s; }
-
-      @keyframes dotPulse {
-          0%, 100% { transform: scale(0.8); opacity: 0.5; }
-          50% { transform: scale(1.2); opacity: 1; }
-      }
-
-
-      @media (max-width: 767px) {
-        /* Hide desktop navigation on mobile */
-        nav {
-            display: none;
-        }
-
-        /* Show hamburger icon on mobile */
-        .hamburger-menu-icon {
-            display: block;
-        }
-
-        /* Adjust profile menu for mobile if needed, currently it's fine */
-        .profile-menu-container {
-            top: 20px;
-            right: 20px;
-        }
-
-        .modal-content {
-          padding: 20px;
-          width: 95%;
-        }
-        .modal-title {
-          font-size: 1.8rem;
-        }
-        .modal-total {
-          font-size: 1.5rem;
-        }
-        .payment-methods label {
-          font-size: 1rem;
-        }
-        .place-order-btn {
-          font-size: 1.1rem;
-          padding: 12px 25px;
-        }
-        .tagline {
-            font-size: 2.5rem;
-        }
-        .info-title {
-            font-size: 2rem;
-        }
-        .info-content {
-            font-size: 1rem;
-        }
-        #item-detail-page-content {
-            flex-direction: column;
-        }
-        .item-detail-left, .item-detail-right {
-            width: 100%;
-        }
-        .item-detail-name {
-            font-size: 2rem;
-        }
-        .item-detail-price {
-            font-size: 1.5rem;
-        }
-        .profile-icon {
-            font-size: 2rem;
-        }
-        .profile-dropdown {
-            min-width: 120px;
-        }
-        .dropdown-item {
-            padding: 10px 12px;
-            font-size: 0.9rem;
-        }
-        .auth-form-container {
-            padding: 25px;
-            gap: 15px;
-        }
-        .auth-form-container label {
-            font-size: 1rem;
-        }
-        .auth-form-container input {
-            padding: 10px 12px;
-            font-size: 0.9rem;
-        }
-        .auth-form-container .shop-button {
-            font-size: 1rem;
-            padding: 10px 20px;
-        }
-        #chat-input-container {
-            bottom: 0;
-            padding: 10px;
-        }
-        #chat-input, #send-chat-btn {
-            padding: 10px 15px;
-            font-size: 0.9rem;
-        }
-        .chat-message-bubble {
-            max-width: 90%;
-        }
-        #chat-interface {
-            padding-bottom: 60px;
-        }
-      }
-
-      /* Enhanced Product Cards */
-      .product-card {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.6s ease-out forwards;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+          max-width: 500px;
+          width: 90%;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px);
           position: relative;
           overflow: hidden;
       }
 
-      .product-card::before {
+      .auth-form-container::before {
           content: '';
           position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-          transition: left 0.5s;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+          transition: left 0.6s ease;
       }
 
-      .product-card:hover::before {
+      .auth-form-container:hover::before {
           left: 100%;
       }
 
-      .product-card .wishlist-btn {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: rgba(0,0,0,0.7);
-          color: white;
-          border: none;
-          width: 35px;
-          height: 35px;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          opacity: 0;
-          transform: scale(0.8);
+      .auth-header {
+          animation: slideInDown 0.8s ease-out;
       }
 
-      .product-card:hover .wishlist-btn {
-          opacity: 1;
-          transform: scale(1);
+      .auth-icon {
+          animation: bounceIn 1s ease-out 0.2s both;
       }
 
-      .wishlist-btn.active {
-          color: #ff6b6b;
-      }
-
-      /* Progress Indicators */
-      .cart-progress {
-          margin-bottom: 2rem;
-      }
-
-      .progress-step {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+      .form-group {
           position: relative;
+          margin-bottom: 20px;
       }
 
-      .progress-circle {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: #3a3a3a;
-          color: #888;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
+      .form-label {
+          display: block;
+          font-size: 1rem;
+          font-weight: 600;
+          color: #f2f2f2;
           margin-bottom: 8px;
           transition: all 0.3s ease;
       }
 
-      .progress-step.active .progress-circle {
-          background: #f2f2f2;
-          color: #0f0f0f;
-      }
-
-      .progress-step.completed .progress-circle {
-          background: #28a745;
-          color: white;
-      }
-
-      .progress-label {
-          font-size: 0.9rem;
-          color: #888;
-          font-weight: 500;
-      }
-
-      .progress-step.active .progress-label {
-          color: #f2f2f2;
-      }
-
-      .progress-line {
-          width: 60px;
-          height: 2px;
-          background: #3a3a3a;
-          margin: 0 10px;
-          margin-top: -24px;
-      }
-
-      /* Enhanced Modals */
-      .modal-content {
-          background-color: #1a1a1a;
-          padding: 30px;
+      .form-input {
+          width: 100%;
+          padding: 15px 20px;
+          border: 2px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-          max-width: 500px;
-          width: 90%;
+          background: rgba(255, 255, 255, 0.05);
           color: #f2f2f2;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+          outline: none;
+          border-color: #3b82f6;
+          background: rgba(255, 255, 255, 0.1);
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+          transform: translateY(-2px);
+      }
+
+      .form-input::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+          transition: color 0.3s ease;
+      }
+
+      .form-input:focus::placeholder {
+          color: rgba(255, 255, 255, 0.3);
+      }
+
+      .input-focus-line {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+          transition: all 0.3s ease;
+          transform: translateX(-50%);
+      }
+
+      .form-input:focus + .input-focus-line {
+          width: 100%;
+      }
+
+      .password-input-container {
           position: relative;
-          transform: translateY(-20px);
-          opacity: 0;
-          transition: transform 0.3s ease-out, opacity 0.3s ease-out;
       }
 
-      .modal-content.max-w-4xl {
-          max-width: 900px;
+      .password-toggle {
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: rgba(255, 255, 255, 0.6);
+          cursor: pointer;
+          padding: 5px;
+          transition: all 0.3s ease;
       }
 
-      .modal-overlay.show .modal-content {
-          transform: translateY(0);
-          opacity: 1;
+      .password-toggle:hover {
+          color: #f2f2f2;
+          transform: translateY(-50%) scale(1.1);
       }
 
-      /* Size Chart Styles */
-      .size-chart-table {
-          background: #2a2a2a;
-          border-radius: 8px;
-          overflow: hidden;
-      }
-
-      .size-chart-table th {
-          background: #3a3a3a;
-          font-weight: 600;
-      }
-
-      .size-chart-table td, .size-chart-table th {
-          padding: 12px;
-          text-align: center;
-      }
-
-      .size-chart-table tr:hover {
-          background: #3a3a3a;
-      }
-
-      /* Tracking Timeline */
-      .tracking-timeline {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 20px;
-      }
-
-      .tracking-step {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          flex: 1;
-      }
-
-      .tracking-dot {
+      .form-checkbox {
+          appearance: none;
           width: 20px;
           height: 20px;
-          border-radius: 50%;
-          background: #3a3a3a;
-          margin-bottom: 8px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.05);
+          cursor: pointer;
+          transition: all 0.3s ease;
           position: relative;
       }
 
-      .tracking-step.completed .tracking-dot {
-          background: #28a745;
+      .form-checkbox:checked {
+          background: #3b82f6;
+          border-color: #3b82f6;
       }
 
-      .tracking-step.active .tracking-dot {
-          background: #007bff;
-          animation: pulse 2s infinite;
-      }
-
-      .tracking-step.completed .tracking-dot::after {
+      .form-checkbox:checked::after {
           content: '✓';
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
           color: white;
-          font-size: 12px;
+          font-size: 14px;
+          font-weight: bold;
       }
 
-      .tracking-label {
-          font-size: 0.8rem;
-          color: #888;
+      .form-checkbox:hover {
+          border-color: #3b82f6;
+          transform: scale(1.05);
+      }
+
+      .auth-submit-btn {
+          width: 100%;
+          padding: 15px 30px;
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-size: 1.1rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+      }
+
+      .auth-submit-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s ease;
+      }
+
+      .auth-submit-btn:hover::before {
+          left: 100%;
+      }
+
+      .auth-submit-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+      }
+
+      .auth-submit-btn:active {
+          transform: translateY(-1px);
+      }
+
+      .btn-loader {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .spinner {
+          width: 20px;
+          height: 20px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid white;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+      }
+
+      .auth-divider {
+          position: relative;
           text-align: center;
       }
 
-      .tracking-step.active .tracking-label,
-      .tracking-step.completed .tracking-label {
+      .auth-divider::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.2);
+      }
+
+      .divider-text {
+          background: #1a1a1a;
+          padding: 0 20px;
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.9rem;
+      }
+
+      .social-auth-buttons {
+          margin-top: 20px;
+      }
+
+      .social-auth-btn {
+          width: 100%;
+          padding: 12px 20px;
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.05);
           color: #f2f2f2;
-      }
-
-      @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
-          70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
-      }
-
-      /* Newsletter and Blog Styles */
-      .newsletter-signup {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-      }
-
-      .blog-card {
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
           transition: all 0.3s ease;
-          border: 1px solid transparent;
+          display: flex;
+          align-items: center;
+          justify-content: center;
       }
 
-      .blog-card:hover {
-          border-color: #555;
-          transform: translateY(-5px);
-      }
-
-      .testimonial {
-          border: 1px solid #3a3a3a;
-          transition: all 0.3s ease;
-      }
-
-      .testimonial:hover {
-          border-color: #555;
-          transform: translateY(-3px);
-      }
-
-      /* Enhanced Form Elements */
-      .search-filter-container {
-          background: rgba(42, 42, 42, 0.8);
-          padding: 20px;
-          border-radius: 12px;
-          backdrop-filter: blur(10px);
-      }
-
-      .filter-controls select,
-      .filter-controls button {
-          transition: all 0.3s ease;
-      }
-
-      .filter-controls select:focus,
-      .filter-controls button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      /* Quantity Selector */
-      .quantity-selector button {
-          transition: all 0.2s ease;
-      }
-
-      .quantity-selector button:hover {
-          transform: scale(1.1);
-      }
-
-      .quantity-selector button:active {
-          transform: scale(0.95);
-      }
-
-      /* Enhanced Cart Items */
-      .cart-item {
-          background: #2a2a2a;
-          border-radius: 12px;
-          padding: 20px;
-          border: 1px solid #3a3a3a;
-          transition: all 0.3s ease;
-      }
-
-      .cart-item:hover {
-          border-color: #555;
+      .social-auth-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.2);
           transform: translateY(-2px);
       }
 
-      /* Shipping Options */
-      .shipping-options label {
+      .google-btn:hover {
+          border-color: #ea4335;
+          color: #ea4335;
+      }
+
+      .apple-btn:hover {
+          border-color: #a2aaad;
+          color: #a2aaad;
+      }
+
+      /* Password Strength Indicator */
+      .password-strength {
+          margin-top: 10px;
+      }
+
+      .strength-bar {
+          width: 100%;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 2px;
+          overflow: hidden;
+      }
+
+      .strength-fill {
+          height: 100%;
+          width: 0%;
           transition: all 0.3s ease;
-          border: 1px solid transparent;
+          border-radius: 2px;
       }
 
-      .shipping-options label:hover {
-          border-color: #555;
-      }
+      .strength-fill.weak { width: 25%; background: #ef4444; }
+      .strength-fill.fair { width: 50%; background: #f59e0b; }
+      .strength-fill.good { width: 75%; background: #10b981; }
+      .strength-fill.strong { width: 100%; background: #059669; }
 
-      .shipping-options input[type="radio"]:checked + span {
-          color: #007bff;
-      }
-
-      /* Promo Code */
-      .promo-code input:focus {
-          border-color: #007bff;
-          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-      }
-
-      /* Responsive Enhancements */
-      @media (max-width: 768px) {
-          .search-filter-container {
-              padding: 15px;
-          }
-
-          .filter-controls {
-              grid-template-columns: 1fr;
-          }
-
-          .cart-progress {
-              margin-bottom: 1.5rem;
-          }
-
-          .progress-line {
-              width: 30px;
-          }
-
-          .tracking-timeline {
-              flex-direction: column;
-              gap: 20px;
-          }
-
-          .tracking-step {
-              flex-direction: row;
-              width: 100%;
-              justify-content: flex-start;
-          }
-
-          .tracking-dot {
-              margin-bottom: 0;
-              margin-right: 12px;
-          }
-
-          .modal-content.max-w-4xl {
-              max-width: 95vw;
-              margin: 20px;
-          }
-
-          .size-chart-table {
-              font-size: 0.8rem;
-          }
-
-          .size-chart-table td, 
-          .size-chart-table th {
-              padding: 8px 4px;
-          }
-      }
-
-      /* Loading States */
-      .loading-skeleton {
-          background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
-          background-size: 200% 100%;
-          animation: loading 1.5s infinite;
-      }
-
-      @keyframes loading {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
+      .strength-text {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.8rem;
       }
 
       /* Enhanced Animations */
-      .fade-in-up {
-          animation: fadeInUp 0.6s ease-out forwards;
+      @keyframes slideInDown {
+          from {
+              opacity: 0;
+              transform: translateY(-30px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
       }
 
-      .slide-in-left {
-          animation: slideInLeft 0.6s ease-out forwards;
-      }
-
-      .slide-in-right {
-          animation: slideInRight 0.6s ease-out forwards;
+      @keyframes slideInUp {
+          from {
+              opacity: 0;
+              transform: translateY(30px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
       }
 
       @keyframes slideInLeft {
@@ -1440,49 +1151,854 @@
           }
       }
 
-      /* Enhanced Focus States */
-      .focus-ring:focus {
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(242, 242, 242, 0.3);
+      @keyframes bounceIn {
+          0% {
+              opacity: 0;
+              transform: scale(0.3);
+          }
+          50% {
+              opacity: 1;
+              transform: scale(1.05);
+          }
+          70% {
+              transform: scale(0.9);
+          }
+          100% {
+              opacity: 1;
+              transform: scale(1);
+          }
       }
 
-      /* Smooth Scrolling for Product Gallery */
-      .product-gallery {
+      @keyframes fadeInScale {
+          0% {
+              opacity: 0;
+              transform: scale(0.8);
+          }
+          100% {
+              opacity: 1;
+              transform: scale(1);
+          }
+      }
+
+      @keyframes float {
+          0%, 100% {
+              transform: translateY(0px);
+          }
+          50% {
+              transform: translateY(-10px);
+          }
+      }
+
+      @keyframes glow {
+          0%, 100% {
+              box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+          }
+          50% {
+              box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+          }
+      }
+
+      /* Smooth Page Transitions */
+      .page-transition {
+          animation: fadeInScale 0.6s ease-out;
+      }
+
+      .section-enter {
+          animation: slideInUp 0.8s ease-out;
+      }
+
+      .section-enter-delayed {
+          animation: slideInUp 0.8s ease-out 0.2s both;
+      }
+
+      .section-enter-more-delayed {
+          animation: slideInUp 0.8s ease-out 0.4s both;
+      }
+
+      /* Enhanced Hover Effects */
+      .hover-lift {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .hover-lift:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .hover-glow {
+          transition: all 0.3s ease;
+      }
+
+      .hover-glow:hover {
+          box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+      }
+
+      /* Smooth Scrolling and Parallax */
+      html {
           scroll-behavior: smooth;
       }
 
-      .thumbnail-gallery img {
+      .parallax-bg {
+          background-attachment: fixed;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+      }
+
+      /* Enhanced Loading States */
+      .loading-shimmer {
+          background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+      }
+
+      @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+      }
+
+      /* Micro-interactions */
+      .click-ripple {
+          position: relative;
+          overflow: hidden;
+      }
+
+      .click-ripple::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
+      }
+
+      .click-ripple:active::after {
+          width: 300px;
+          height: 300px;
+      }
+
+      /* Enhanced Focus States */
+      .focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      }
+
+      /* Smooth Button Transitions */
+      .btn-smooth {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .btn-smooth:hover {
+          transform: translateY(-2px) scale(1.02);
+      }
+
+      .btn-smooth:active {
+          transform: translateY(0) scale(0.98);
+      }
+
+      /* Enhanced Card Animations */
+      .card-hover {
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card-hover:hover {
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Floating Animation for Icons */
+      .float-animation {
+          animation: float 3s ease-in-out infinite;
+      }
+
+      .float-animation-delayed {
+          animation: float 3s ease-in-out infinite 1.5s;
+      }
+
+      /* Glow Effects */
+      .glow-effect {
+          animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      /* Enhanced Form Animations */
+      .form-group {
+          animation: slideInUp 0.6s ease-out;
+      }
+
+      .form-group:nth-child(1) { animation-delay: 0.1s; }
+      .form-group:nth-child(2) { animation-delay: 0.2s; }
+      .form-group:nth-child(3) { animation-delay: 0.3s; }
+      .form-group:nth-child(4) { animation-delay: 0.4s; }
+      .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+      /* Responsive Enhancements */
+      @media (max-width: 768px) {
+          .auth-form-container {
+              padding: 30px 20px;
+              margin: 20px;
+          }
+
+          .form-row {
+              grid-template-columns: 1fr;
+          }
+
+          .auth-submit-btn {
+              padding: 12px 25px;
+              font-size: 1rem;
+          }
+
+          .social-auth-btn {
+              padding: 10px 15px;
+              font-size: 0.9rem;
+          }
+      }
+
+      /* Enhanced Product Features */
+      .product-badges {
+        z-index: 10;
+      }
+
+              .comparison-btn {
+          position: absolute;
+          top: 2;
+          right: 2;
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
+          border: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
           cursor: pointer;
           transition: all 0.3s ease;
-          border: 2px solid transparent;
+          z-index: 10;
+        }
+
+      .comparison-btn:hover {
+        background: rgba(59, 130, 246, 0.8);
+        transform: scale(1.1);
       }
 
-      .thumbnail-gallery img:hover,
-      .thumbnail-gallery img.active {
-          border-color: #007bff;
-          transform: scale(1.1);
+      .comparison-btn.active {
+        background: rgb(59, 130, 246);
+        transform: scale(1.1);
       }
 
-      /* Enhanced Button States */
-      .btn-primary {
-          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-          transition: all 0.3s ease;
+      .product-tags {
+        margin-bottom: 0.75rem;
       }
 
-      .btn-primary:hover {
-          background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+      .product-tags span {
+        background: rgba(55, 65, 81, 0.8);
+        color: #d1d5db;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        transition: all 0.3s ease;
       }
 
-      .btn-secondary {
-          background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-          transition: all 0.3s ease;
+      .product-tags span:hover {
+        background: rgba(75, 85, 99, 0.8);
+        transform: translateY(-1px);
       }
 
-      .btn-secondary:hover {
-          background: linear-gradient(135deg, #495057 0%, #343a40 100%);
-          transform: translateY(-2px);
+      /* Comparison Modal Styles */
+      .comparison-table-container {
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+
+      .comparison-table {
+        border-collapse: collapse;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        border: 1px solid #4b5563;
+        padding: 0.75rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .comparison-table th {
+        background: rgba(31, 41, 55, 0.8);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .product-comparison-header {
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      .product-comparison-header img {
+        border-radius: 0.5rem;
+        border: 2px solid #374151;
+      }
+
+      .product-comparison-header h4 {
+        margin: 0.5rem 0;
+        font-size: 0.875rem;
+      }
+
+      /* Advanced Search Modal Styles */
+      .search-filters-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+
+      .filter-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-label {
+        display: block;
+        color: #f3f4f6;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .filter-select {
+        width: 100%;
+        padding: 0.75rem;
+        background: #374151;
+        border: 1px solid #4b5563;
+        border-radius: 0.5rem;
+        color: #f3f4f6;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+              .checkbox-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: #d1d5db;
+          font-size: 0.875rem;
+          cursor: pointer;
+          transition: color 0.3s ease;
+        }
+
+      .checkbox-item:hover {
+        color: #f3f4f6;
+      }
+
+      .checkbox-item input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: #3b82f6;
+      }
+
+      .price-range-slider {
+        position: relative;
+        padding: 1rem 0;
+      }
+
+      .range-slider {
+        width: 100%;
+        height: 4px;
+        background: #4b5563;
+        border-radius: 2px;
+        outline: none;
+        margin: 0.5rem 0;
+        -webkit-appearance: none;
+      }
+
+      .range-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #3b82f6;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .range-slider::-webkit-slider-thumb:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+      }
+
+      .range-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #3b82f6;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .range-slider::-moz-range-thumb:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+      }
+
+      .price-display {
+        text-align: center;
+        color: #f3f4f6;
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+      }
+
+      .search-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      /* Dashboard Styles */
+      .dashboard-tabs {
+        border-bottom: 1px solid #4b5563;
+        margin-bottom: 1.5rem;
+      }
+
+      .dashboard-tab {
+        padding: 0.75rem 1.5rem;
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent;
+        font-weight: 500;
+      }
+
+      .dashboard-tab:hover {
+        color: #d1d5db;
+      }
+
+      .dashboard-tab.active {
+        color: #3b82f6;
+        border-bottom-color: #3b82f6;
+      }
+
+              .dashboard-tab-content {
+          display: none;
+        }
+
+        .dashboard-tab-content.active {
+          display: block;
+        }
+
+      .dashboard-stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        border: 1px solid #4b5563;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        border-color: #3b82f6;
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-number {
+        color: #f3f4f6;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-label {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .recent-activity {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        border: 1px solid #4b5563;
+      }
+
+      .activity-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #4b5563;
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+
+      .wishlist-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+
+      .wishlist-item {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        border: 1px solid #4b5563;
+        transition: all 0.3s ease;
+      }
+
+      .wishlist-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        border-color: #3b82f6;
+      }
+
+      .preferences-form {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #4b5563;
+      }
+
+      .preference-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .preference-label {
+        display: block;
+        color: #f3f4f6;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .toggle-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .toggle-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #d1d5db;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .toggle-item:hover {
+        color: #f3f4f6;
+        background: rgba(59, 130, 246, 0.1);
+      }
+
+      .toggle-item input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: #3b82f6;
+      }
+
+      /* Size Recommendation Tool Styles */
+      .measurement-form {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #4b5563;
+      }
+
+      .measurement-input-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .measurement-input {
+        width: 4rem;
+        padding: 0.75rem;
+        background: #374151;
+        border: 1px solid #4b5563;
+        border-radius: 0.5rem;
+        color: #f3f4f6;
+        text-align: center;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .measurement-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .measurement-unit {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        font-weight: 500;
+        min-width: 1.5rem;
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 0.75rem;
+        background: #374151;
+        border: 1px solid #4b5563;
+        border-radius: 0.5rem;
+        color: #f3f4f6;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .fit-options {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+      }
+
+      .fit-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .fit-radio {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: #3b82f6;
+      }
+
+      .fit-label {
+        color: #d1d5db;
+        font-size: 0.875rem;
+        text-align: center;
+        transition: color 0.3s ease;
+      }
+
+      .fit-option:hover .fit-label {
+        color: #f3f4f6;
+      }
+
+      .recommendation-result {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        border: 1px solid #3b82f6;
+        animation: fadeInScale 0.5s ease-out;
+      }
+
+      .recommendation-details {
+        color: #f3f4f6;
+      }
+
+      .recommendation-details > div {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+      }
+
+      .recommendation-details > div:last-child {
+        border-bottom: none;
+      }
+
+      /* Comparison Section Styles */
+      .comparison-section {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #3b82f6;
+        margin-bottom: 1.5rem;
+      }
+
+      .comparison-info {
+        display: flex;
+        align-items: center;
+        font-size: 0.875rem;
+      }
+
+      /* Enhanced Product Card Animations */
+      .product-card {
+        animation: fadeInScale 0.6s ease-out forwards;
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      .product-card:nth-child(1) { animation-delay: 0.1s; }
+      .product-card:nth-child(2) { animation-delay: 0.2s; }
+      .product-card:nth-child(3) { animation-delay: 0.3s; }
+      .product-card:nth-child(4) { animation-delay: 0.4s; }
+      .product-card:nth-child(5) { animation-delay: 0.5s; }
+      .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+      /* Responsive Design for New Features */
+      @media (max-width: 768px) {
+        .comparison-section {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .search-filters-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .wishlist-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .fit-options {
+          grid-template-columns: 1fr;
+        }
+
+        .measurement-input-group {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .search-actions {
+          flex-direction: column;
+        }
+
+        .comparison-table-container {
+          max-height: 60vh;
+        }
+
+        .comparison-table {
+          font-size: 0.75rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+          padding: 0.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .dashboard-tabs {
+          flex-wrap: wrap;
+        }
+
+        .dashboard-tab {
+          flex: 1;
+          min-width: 120px;
+          text-align: center;
+          font-size: 0.875rem;
+        }
+
+        .stat-card {
+          padding: 1rem;
+        }
+
+        .stat-icon {
+          font-size: 1.5rem;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* Loading States and Micro-interactions */
+      .loading-shimmer {
+        background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .hover-glow:hover {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+      }
+
+      /* Enhanced Focus States */
+      .focus-visible:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+
+      /* Smooth Transitions */
+      .btn-smooth {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .btn-smooth:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Card Hover Effects */
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card-hover:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Floating Animations */
+      .float-animation {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .float-animation-delayed {
+        animation: float 3s ease-in-out infinite;
+        animation-delay: 1.5s;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+
+      /* Glow Effects */
+      .glow-effect {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .glow-effect::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+        transition: left 0.5s;
+      }
+
+      .glow-effect:hover::before {
+        left: 100%;
       }
     </style>
   </head>
@@ -1927,44 +2443,197 @@
       </section>
 
       <section id="sign-in-main">
-          <div class="info-title">Sign In</div>
+          <div class="info-title">Welcome Back</div>
           <div class="auth-form-container">
+              <div class="auth-header mb-6 text-center">
+                  <div class="auth-icon mb-4">
+                      <i class="fas fa-user-circle text-6xl text-blue-400"></i>
+                  </div>
+                  <h3 class="text-2xl font-bold text-white mb-2">Sign In to Your Account</h3>
+                  <p class="text-gray-400">Access your personalized Ultre experience</p>
+              </div>
+
               <div id="signin-error-message" class="error-message hidden"></div>
-              <div>
-                  <label for="signin-email">Email:</label>
-                  <input type="email" id="signin-email" placeholder="your@example.com" required>
+              
+              <form id="signin-form" class="space-y-6">
+                  <div class="form-group">
+                      <label for="signin-email" class="form-label">
+                          <i class="fas fa-envelope mr-2 text-blue-400"></i>Email Address
+                      </label>
+                      <input type="email" id="signin-email" placeholder="your@example.com" required class="form-input">
+                      <div class="input-focus-line"></div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="signin-password" class="form-label">
+                          <i class="fas fa-lock mr-2 text-blue-400"></i>Password
+                      </label>
+                      <div class="password-input-container">
+                          <input type="password" id="signin-password" placeholder="Enter your password" required class="form-input">
+                          <button type="button" class="password-toggle" onclick="togglePassword('signin-password')">
+                              <i class="fas fa-eye"></i>
+                          </button>
+                      </div>
+                      <div class="input-focus-line"></div>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                      <label class="flex items-center">
+                          <input type="checkbox" id="remember-me" class="form-checkbox">
+                          <span class="ml-2 text-gray-300">Remember me</span>
+                      </label>
+                      <a href="#" class="form-link text-blue-400 hover:text-blue-300 transition-colors">Forgot Password?</a>
+                  </div>
+
+                  <button type="submit" id="signin-btn" class="auth-submit-btn">
+                      <span class="btn-text">Sign In</span>
+                      <div class="btn-loader hidden">
+                          <div class="spinner"></div>
+                      </div>
+                  </button>
+              </form>
+
+              <div class="auth-divider my-6">
+                  <span class="divider-text">or continue with</span>
               </div>
-              <div>
-                  <label for="signin-password">Password:</label>
-                  <input type="password" id="signin-password" placeholder="********" required>
+
+              <div class="social-auth-buttons space-y-3">
+                  <button class="social-auth-btn google-btn">
+                      <i class="fab fa-google mr-3"></i>
+                      Continue with Google
+                  </button>
+                  <button class="social-auth-btn apple-btn">
+                      <i class="fab fa-apple mr-3"></i>
+                      Continue with Apple
+                  </button>
               </div>
-              <a href="#" class="form-link text-right">Forgot Password?</a>
-              <button id="signin-btn" class="shop-button">Sign In</button>
-              <p class="text-center text-gray-400 text-sm">
-                  Don't have an account? <a href="#sign-up-main" class="form-link">Sign Up</a>
+
+              <p class="text-center text-gray-400 text-sm mt-6">
+                  Don't have an account? 
+                  <a href="#sign-up-main" class="form-link text-blue-400 hover:text-blue-300 transition-colors font-semibold">Sign Up</a>
               </p>
           </div>
       </section>
 
       <section id="sign-up-main">
-          <div class="info-title">Sign Up</div>
+          <div class="info-title">Join the Ultre Family</div>
           <div class="auth-form-container">
+              <div class="auth-header mb-6 text-center">
+                  <div class="auth-icon mb-4">
+                      <i class="fas fa-user-plus text-6xl text-green-400"></i>
+                  </div>
+                  <h3 class="text-2xl font-bold text-white mb-2">Create Your Account</h3>
+                  <p class="text-gray-400">Start your journey with Ultre</p>
+              </div>
+
               <div id="signup-error-message" class="error-message hidden"></div>
-              <div>
-                  <label for="signup-email">Email:</label>
-                  <input type="email" id="signup-email" placeholder="your@example.com" required>
+              
+              <form id="signup-form" class="space-y-6">
+                  <div class="form-row grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="form-group">
+                          <label for="signup-first-name" class="form-label">
+                              <i class="fas fa-user mr-2 text-green-400"></i>First Name
+                          </label>
+                          <input type="text" id="signup-first-name" placeholder="Your first name" required class="form-input">
+                          <div class="input-focus-line"></div>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="signup-last-name" class="form-label">
+                              <i class="fas fa-user mr-2 text-green-400"></i>Last Name
+                          </label>
+                          <input type="text" id="signup-last-name" placeholder="Your last name" required class="form-input">
+                          <div class="input-focus-line"></div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="signup-email" class="form-label">
+                          <i class="fas fa-envelope mr-2 text-green-400"></i>Email Address
+                      </label>
+                      <input type="email" id="signup-email" placeholder="your@example.com" required class="form-input">
+                      <div class="input-focus-line"></div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="signup-password" class="form-label">
+                          <i class="fas fa-lock mr-2 text-green-400"></i>Password
+                      </label>
+                      <div class="password-input-container">
+                          <input type="password" id="signup-password" placeholder="Create a strong password" required class="form-input">
+                          <button type="button" class="password-toggle" onclick="togglePassword('signup-password')">
+                              <i class="fas fa-eye"></i>
+                          </button>
+                      </div>
+                      <div class="input-focus-line"></div>
+                      <div class="password-strength mt-2">
+                          <div class="strength-bar">
+                              <div class="strength-fill" id="password-strength-fill"></div>
+                          </div>
+                          <p class="strength-text text-xs mt-1" id="password-strength-text">Password strength</p>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="signup-confirm-password" class="form-label">
+                          <i class="fas fa-lock mr-2 text-green-400"></i>Confirm Password
+                      </label>
+                      <div class="password-input-container">
+                          <input type="password" id="signup-confirm-password" placeholder="Confirm your password" required class="form-input">
+                          <button type="button" class="password-toggle" onclick="togglePassword('signup-confirm-password')">
+                              <i class="fas fa-eye"></i>
+                          </button>
+                      </div>
+                      <div class="input-focus-line"></div>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="flex items-start">
+                          <input type="checkbox" id="terms-accept" required class="form-checkbox mt-1">
+                          <span class="ml-2 text-gray-300 text-sm">
+                              I agree to the 
+                              <a href="#" class="text-blue-400 hover:text-blue-300">Terms of Service</a> 
+                              and 
+                              <a href="#" class="text-blue-400 hover:text-blue-300">Privacy Policy</a>
+                          </span>
+                      </label>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="flex items-start">
+                          <input type="checkbox" id="newsletter-signup" class="form-checkbox mt-1">
+                          <span class="ml-2 text-gray-300 text-sm">
+                              Subscribe to our newsletter for exclusive offers and updates
+                          </span>
+                      </label>
+                  </div>
+
+                  <button type="submit" id="signup-btn" class="auth-submit-btn">
+                      <span class="btn-text">Create Account</span>
+                      <div class="btn-loader hidden">
+                          <div class="spinner"></div>
+                      </div>
+                  </button>
+              </form>
+
+              <div class="auth-divider my-6">
+                  <span class="divider-text">or sign up with</span>
               </div>
-              <div>
-                  <label for="signup-password">Password:</label>
-                  <input type="password" id="signup-password" placeholder="********" required>
+
+              <div class="social-auth-buttons space-y-3">
+                  <button class="social-auth-btn google-btn">
+                      <i class="fab fa-google mr-3"></i>
+                      Continue with Google
+                  </button>
+                  <button class="social-auth-btn apple-btn">
+                      <i class="fab fa-apple mr-3"></i>
+                      Continue with Apple
+                  </button>
               </div>
-              <div>
-                  <label for="signup-confirm-password">Confirm Password:</label>
-                  <input type="password" id="signup-confirm-password" placeholder="********" required>
-              </div>
-              <button id="signup-btn" class="shop-button">Sign Up</button>
-              <p class="text-center text-gray-400 text-sm">
-                  Already have an account? <a href="#sign-in-main" class="form-link">Sign In</a>
+
+              <p class="text-center text-gray-400 text-sm mt-6">
+                  Already have an account? 
+                  <a href="#sign-in-main" class="form-link text-blue-400 hover:text-blue-300 transition-colors font-semibold">Sign In</a>
               </p>
           </div>
       </section>
@@ -2205,8 +2874,390 @@
       </div>
     </div>
 
+    <!-- Product Comparison Modal -->
+    <div id="product-comparison-modal" class="modal-overlay">
+      <div class="modal-content max-w-6xl">
+        <button class="modal-close-btn" id="comparison-close-btn">&times;</button>
+        <div class="modal-title">Product Comparison</div>
+        <div id="comparison-content" class="comparison-table-container">
+          <!-- Comparison table will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Search Modal -->
+    <div id="advanced-search-modal" class="modal-overlay">
+      <div class="modal-content max-w-4xl">
+        <button class="modal-close-btn" id="advanced-search-close-btn">&times;</button>
+        <div class="modal-title">Advanced Search</div>
+        <div class="advanced-search-content">
+          <div class="search-filters-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="filter-group">
+              <label class="filter-label">Price Range</label>
+              <div class="price-range-slider">
+                <input type="range" id="min-price" min="0" max="200" value="0" class="range-slider">
+                <input type="range" id="max-price" min="0" max="200" value="200" class="range-slider">
+                <div class="price-display">
+                  $<span id="min-price-display">0</span> - $<span id="max-price-display">200</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="filter-group">
+              <label class="filter-label">Brand/Collection</label>
+              <select id="brand-filter" class="filter-select">
+                <option value="">All Collections</option>
+                <option value="essentials">Essentials</option>
+                <option value="premium">Premium</option>
+                <option value="limited">Limited Edition</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label class="filter-label">Material</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="cotton" class="material-checkbox">
+                  <span>Cotton</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="polyester" class="material-checkbox">
+                  <span>Polyester</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="wool" class="material-checkbox">
+                  <span>Wool</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="denim" class="material-checkbox">
+                  <span>Denim</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="filter-group">
+              <label class="filter-label">Style</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="casual" class="style-checkbox">
+                  <span>Casual</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="formal" class="style-checkbox">
+                  <span>Formal</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="streetwear" class="style-checkbox">
+                  <span>Streetwear</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="athletic" class="style-checkbox">
+                  <span>Athletic</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="search-actions mt-6">
+            <button id="apply-advanced-filters" class="shop-button">Apply Filters</button>
+            <button id="clear-advanced-filters" class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors">Clear All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Dashboard Modal -->
+    <div id="user-dashboard-modal" class="modal-overlay">
+      <div class="modal-content max-w-5xl">
+        <button class="modal-close-btn" id="dashboard-close-btn">&times;</button>
+        <div class="modal-title">My Dashboard</div>
+        <div class="dashboard-content">
+          <div class="dashboard-tabs flex border-b border-gray-600 mb-6">
+            <button class="dashboard-tab active" data-tab="overview">Overview</button>
+            <button class="dashboard-tab" data-tab="orders">Orders</button>
+            <button class="dashboard-tab" data-tab="wishlist">Wishlist</button>
+            <button class="dashboard-tab" data-tab="preferences">Preferences</button>
+          </div>
+          
+          <div id="dashboard-overview" class="dashboard-tab-content active">
+            <div class="dashboard-stats grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div class="stat-card bg-gray-800 p-6 rounded-xl text-center">
+                <div class="stat-icon text-3xl text-blue-400 mb-2">📦</div>
+                <div class="stat-number text-2xl font-bold text-white">0</div>
+                <div class="stat-label text-gray-400">Orders</div>
+              </div>
+              <div class="stat-card bg-gray-800 p-6 rounded-xl text-center">
+                <div class="stat-icon text-3xl text-red-400 mb-2">❤️</div>
+                <div class="stat-number text-2xl font-bold text-white">0</div>
+                <div class="stat-label text-gray-400">Wishlist Items</div>
+              </div>
+              <div class="stat-card bg-gray-800 p-6 rounded-xl text-center">
+                <div class="stat-icon text-3xl text-green-400 mb-2">⭐</div>
+                <div class="stat-number text-2xl font-bold text-white">0</div>
+                <div class="stat-label text-gray-400">Reviews</div>
+              </div>
+            </div>
+            
+            <div class="recent-activity bg-gray-800 p-6 rounded-xl">
+              <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
+              <div class="activity-list space-y-3">
+                <div class="activity-item text-gray-300 text-sm">
+                  Welcome to Ultre! Start exploring our collection.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div id="dashboard-orders" class="dashboard-tab-content hidden">
+            <div class="orders-list space-y-4">
+              <div class="text-center text-gray-400 py-8">
+                <div class="text-6xl mb-4">📦</div>
+                <p>No orders yet</p>
+                <p class="text-sm">Start shopping to see your order history here</p>
+              </div>
+            </div>
+          </div>
+          
+          <div id="dashboard-wishlist" class="dashboard-tab-content hidden">
+            <div id="dashboard-wishlist-items" class="wishlist-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Wishlist items will be populated dynamically -->
+            </div>
+          </div>
+          
+          <div id="dashboard-preferences" class="dashboard-tab-content hidden">
+            <div class="preferences-form space-y-6">
+              <div class="preference-group">
+                <label class="preference-label">Email Notifications</label>
+                <div class="toggle-group space-y-3">
+                  <label class="toggle-item">
+                    <input type="checkbox" id="email-orders" checked>
+                    <span>Order updates</span>
+                  </label>
+                  <label class="toggle-item">
+                    <input type="checkbox" id="email-promotions">
+                    <span>Promotions & deals</span>
+                  </label>
+                  <label class="toggle-item">
+                    <input type="checkbox" id="email-newsletter" checked>
+                    <span>Newsletter</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="preference-group">
+                <label class="preference-label">Shopping Preferences</label>
+                <div class="toggle-group space-y-3">
+                  <label class="toggle-item">
+                    <input type="checkbox" id="save-payment">
+                    <span>Save payment methods</span>
+                  </label>
+                  <label class="toggle-item">
+                    <input type="checkbox" id="quick-checkout" checked>
+                    <span>Quick checkout</span>
+                  </label>
+                </div>
+              </div>
+              
+              <button id="save-preferences" class="shop-button">Save Preferences</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Size Recommendation Tool Modal -->
+    <div id="size-recommendation-modal" class="modal-overlay">
+      <div class="modal-content max-w-4xl">
+        <button class="modal-close-btn" id="size-recommendation-close-btn">&times;</button>
+        <div class="modal-title">Size Recommendation Tool</div>
+        <div class="size-recommendation-content">
+          <div class="measurement-form space-y-6">
+            <div class="form-group">
+              <label class="form-label">Height</label>
+              <div class="measurement-input-group">
+                <input type="number" id="height-feet" placeholder="5" min="4" max="7" class="measurement-input">
+                <span class="measurement-unit">ft</span>
+                <input type="number" id="height-inches" placeholder="10" min="0" max="11" class="measurement-input">
+                <span class="measurement-unit">in</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Weight</label>
+              <div class="measurement-input-group">
+                <input type="number" id="weight" placeholder="150" min="80" max="300" class="measurement-input">
+                <span class="measurement-unit">lbs</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Body Type</label>
+              <select id="body-type" class="form-select">
+                <option value="">Select body type</option>
+                <option value="slim">Slim</option>
+                <option value="athletic">Athletic</option>
+                <option value="regular">Regular</option>
+                <option value="plus">Plus Size</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Preferred Fit</label>
+              <div class="fit-options grid grid-cols-3 gap-3">
+                <label class="fit-option">
+                  <input type="radio" name="preferred-fit" value="slim" class="fit-radio">
+                  <span class="fit-label">Slim</span>
+                </label>
+                <label class="fit-option">
+                  <input type="radio" name="preferred-fit" value="regular" checked class="fit-radio">
+                  <span class="fit-label">Regular</span>
+                </label>
+                <label class="fit-option">
+                  <input type="radio" name="preferred-fit" value="loose" class="fit-radio">
+                  <span class="fit-label">Loose</span>
+                </label>
+              </div>
+            </div>
+            
+            <button id="get-size-recommendation" class="shop-button w-full">Get Size Recommendation</button>
+          </div>
+          
+          <div id="size-recommendation-result" class="recommendation-result hidden mt-6 p-6 bg-gray-800 rounded-xl">
+            <!-- Size recommendation will be populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog System Modal -->
+    <div id="blog-modal" class="modal-overlay">
+      <div class="modal-content max-w-5xl">
+        <button class="modal-close-btn" id="blog-close-btn">&times;</button>
+        <div class="modal-title">Ultre Blog</div>
+        <div class="blog-content">
+          <div class="blog-categories mb-6">
+            <button class="blog-category-btn active" data-category="all">All Posts</button>
+            <button class="blog-category-btn" data-category="style">Style Tips</button>
+            <button class="blog-category-btn" data-category="sustainability">Sustainability</button>
+            <button class="blog-category-btn" data-category="behind-scenes">Behind the Scenes</button>
+          </div>
+          
+          <div id="blog-posts-container" class="blog-posts-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Blog posts will be populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Post Detail Modal -->
+    <div id="blog-post-modal" class="modal-overlay">
+      <div class="modal-content max-w-4xl">
+        <button class="modal-close-btn" id="blog-post-close-btn">&times;</button>
+        <div id="blog-post-content" class="blog-post-detail">
+          <!-- Blog post content will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Signup Enhanced Modal -->
+    <div id="newsletter-modal" class="modal-overlay">
+      <div class="modal-content max-w-2xl">
+        <button class="modal-close-btn" id="newsletter-close-btn">&times;</button>
+        <div class="newsletter-content text-center">
+          <div class="newsletter-icon text-6xl mb-4">📧</div>
+          <h3 class="text-2xl font-bold text-white mb-4">Stay in the Loop!</h3>
+          <p class="text-gray-300 mb-6">Get exclusive access to new collections, style tips, and special offers before anyone else.</p>
+          
+          <div class="newsletter-form space-y-4">
+            <div class="form-group">
+              <input type="text" id="newsletter-first-name" placeholder="First Name" class="form-input">
+              <div class="input-focus-line"></div>
+            </div>
+            
+            <div class="form-group">
+              <input type="email" id="newsletter-email" placeholder="Email Address" class="form-input">
+              <div class="input-focus-line"></div>
+            </div>
+            
+            <div class="newsletter-preferences">
+              <label class="newsletter-checkbox">
+                <input type="checkbox" id="newsletter-style-tips" checked>
+                <span>Style tips and fashion advice</span>
+              </label>
+              <label class="newsletter-checkbox">
+                <input type="checkbox" id="newsletter-new-collections" checked>
+                <span>New collection announcements</span>
+              </label>
+              <label class="newsletter-checkbox">
+                <input type="checkbox" id="newsletter-exclusive-offers">
+                <span>Exclusive offers and discounts</span>
+              </label>
+            </div>
+            
+            <button id="newsletter-submit" class="shop-button w-full">Subscribe to Newsletter</button>
+          </div>
+          
+          <p class="text-xs text-gray-500 mt-4">By subscribing, you agree to our privacy policy. Unsubscribe at any time.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media Integration Modal -->
+    <div id="social-modal" class="modal-overlay">
+      <div class="modal-content max-w-4xl">
+        <button class="modal-close-btn" id="social-close-btn">&times;</button>
+        <div class="modal-title">Follow Us on Social Media</div>
+        <div class="social-content">
+          <div class="social-platforms grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="social-platform bg-gradient-to-br from-pink-500 to-purple-600 p-6 rounded-xl text-center">
+              <div class="social-icon text-4xl mb-3">📸</div>
+              <h4 class="text-xl font-bold text-white mb-2">Instagram</h4>
+              <p class="text-pink-100 mb-4">Follow for daily style inspiration and behind-the-scenes content</p>
+              <button class="social-follow-btn bg-white text-pink-600 px-6 py-2 rounded-lg font-semibold hover:bg-pink-50 transition-colors">
+                Follow @ultre
+              </button>
+            </div>
+            
+            <div class="social-platform bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl text-center">
+              <div class="social-icon text-4xl mb-3">🐦</div>
+              <h4 class="text-xl font-bold text-white mb-2">Twitter</h4>
+              <p class="text-blue-100 mb-4">Stay updated with the latest news and community discussions</p>
+              <button class="social-follow-btn bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                Follow @ultre
+              </button>
+            </div>
+            
+            <div class="social-platform bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-xl text-center">
+              <div class="social-icon text-4xl mb-3">📺</div>
+              <h4 class="text-xl font-bold text-white mb-2">YouTube</h4>
+              <p class="text-red-100 mb-4">Watch styling tutorials and fashion vlogs</p>
+              <button class="social-follow-btn bg-white text-red-600 px-6 py-2 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                Subscribe
+              </button>
+            </div>
+            
+            <div class="social-platform bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl text-center">
+              <div class="social-icon text-4xl mb-3">💬</div>
+              <h4 class="text-xl font-bold text-white mb-2">Discord</h4>
+              <p class="text-green-100 mb-4">Join our community for style discussions and exclusive events</p>
+              <button class="social-follow-btn bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors">
+                Join Server
+              </button>
+            </div>
+          </div>
+          
+          <div class="social-feed mt-8">
+            <h4 class="text-xl font-bold text-white mb-4">Recent Social Posts</h4>
+            <div id="social-feed-container" class="social-feed-grid grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- Social feed will be populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
-      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwiY2F0YWxvZy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO3TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
+      const PRINTIFY_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6IjYxODFiN2NiNWY3NmZjMmU1ZmEzMDBiNjU5NTRlOTYyN2UzMTk5NTJjMWFkZGIwMGQ0N2UwMzFiOTdkMTk2YzM2NTcyMWJlYTE1YzE1OGQ4IiwiaWF0IjoxNzUyNDk3MzQ3LjUzOTAzMywibmJmIjoxNzUyNDk3MzQ3LjUzOTM1MiwiZXhwIjoxNzg0MDMzMzQ3LjUyOTg1Niwic3ViIjoiMjM2MjgyMzEiLCJzY29wZXMianMiOiJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJoY29va3MucmVhZCIsIndlYmhvb2tzLndyaXRlIiwidXBsb2Fkcy5yZWFkIiwidXBsb2Fkcy53cml0ZSIsInByaW50X3Byb3ZpZGVycy5yZWFkIiwidXNlci5pbmZvIl19.uEApTE90qYMKYPMpu8B6Uo44ZdVFtQSOnWeDs3SGKXjkR-F9pqNmPGa8u7j-jb__skJLleadd9ZsV-ebb8Tw4hGeBO3TKU0F0yJT0L8swLAcGITpcd2tQHK9ypQ0J1uUKQIoaBFDixJPdpOKf5hjU8e98DbOlyxIVMO0TfmCD4wGmVRMpqtb7RKhtjV_an3f5A0Xx8mRBJQPEWqC9T0FsTZKQfJzFQA2JG_TNpkkxiVJuYOlNtrVNbR0U7pe4wGqpE8OAf9_y5CXrL3jamre6LVwpbIlwwfIcXGjzQ2S2E5YvB-UOLNq8NejM-cZoB7r7JElQt3c4MRuJWrjiqs1Q6WP1YLbllswaVbB8QWv_kbc22oVutRhtUWyu1IiDlhF3vWtKpZeaHJfIH8h0Jpq9nDuE-fp3hHJhSRFBV8urGHaP8zv08c3Qu9F2pSVHJInJs7zwgPru3syz3eSkDjn1FqyQu1YsXzwq10W5kjVBgEWRgihT-k2GkjCv0uMVTLF2zQfavqhD3b-8GUhIv9-L2n';
       const PRINTIFY_API_BASE_URL = 'https://api.printify.com/v1';
 
       const DEEPSEEK_API_KEY = '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';
@@ -2307,6 +3358,9 @@
           name: "Minimalist Tee", 
           price: 35.00, 
           category: 'tops',
+          brand: 'essentials',
+          material: 'cotton',
+          style: 'casual',
           imageUrl: "https://placehold.co/300x300/333333/FFFFFF?text=Tee", 
           images: [
             "https://placehold.co/300x300/333333/FFFFFF?text=Tee+1",
@@ -2315,16 +3369,25 @@
           ],
           description: "Our classic minimalist tee, designed for comfort and style. Made from 100% organic cotton, it's perfect for everyday wear. Available in various sizes.",
           sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+          colors: ['Black', 'White', 'Navy', 'Gray'],
+          features: ['100% Organic Cotton', 'Breathable', 'Easy Care', 'Sustainable'],
+          care: ['Machine wash cold', 'Tumble dry low', 'Iron if needed'],
           reviews: [
-            { rating: 5, comment: "Perfect fit and amazing quality!", author: "Mike S." },
-            { rating: 5, comment: "Love the minimalist design", author: "Sarah L." }
-          ]
+            { rating: 5, comment: "Perfect fit and amazing quality!", author: "Mike S.", date: "2025-01-15" },
+            { rating: 5, comment: "Love the minimalist design", author: "Sarah L.", date: "2025-01-10" }
+          ],
+          inStock: true,
+          stockCount: 45,
+          tags: ['minimalist', 'comfortable', 'versatile', 'sustainable']
         },
         { 
           id: 'hoodie', 
           name: "Essential Hoodie", 
           price: 65.00, 
           category: 'outerwear',
+          brand: 'essentials',
+          material: 'polyester',
+          style: 'casual',
           imageUrl: "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie", 
           images: [
             "https://placehold.co/300x300/555555/FFFFFF?text=Hoodie+1",
@@ -2332,16 +3395,25 @@
           ],
           description: "Stay warm and stylish with our essential hoodie. Crafted from a soft fleece blend, featuring a subtle Ultre logo. Ideal for cooler days.",
           sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+          colors: ['Black', 'Gray', 'Navy'],
+          features: ['Soft Fleece Blend', 'Kangaroo Pocket', 'Adjustable Hood', 'Ribbed Cuffs'],
+          care: ['Machine wash cold', 'Tumble dry low', 'Do not bleach'],
           reviews: [
-            { rating: 5, comment: "So comfortable and warm!", author: "Alex K." },
-            { rating: 4, comment: "Great quality, perfect for winter", author: "Jordan M." }
-          ]
+            { rating: 5, comment: "So comfortable and warm!", author: "Alex K.", date: "2025-01-12" },
+            { rating: 4, comment: "Great quality, perfect for winter", author: "Jordan M.", date: "2025-01-08" }
+          ],
+          inStock: true,
+          stockCount: 28,
+          tags: ['warm', 'comfortable', 'stylish', 'winter']
         },
         { 
           id: 'joggers', 
           name: "Core Joggers", 
           price: 50.00, 
           category: 'bottoms',
+          brand: 'essentials',
+          material: 'cotton',
+          style: 'athletic',
           imageUrl: "https://placehold.co/300x300/777777/FFFFFF?text=Joggers", 
           images: [
             "https://placehold.co/300x300/777777/FFFFFF?text=Joggers+1",
@@ -2349,41 +3421,65 @@
           ],
           description: "Comfortable and versatile core joggers, perfect for lounging or light activity. Designed with a modern tapered fit and elastic waistband.",
           sizes: ['XS', 'S', 'M', 'L', 'XL'],
+          colors: ['Black', 'Gray', 'Navy'],
+          features: ['Tapered Fit', 'Elastic Waistband', 'Side Pockets', 'Ribbed Cuffs'],
+          care: ['Machine wash cold', 'Tumble dry low', 'Iron if needed'],
           reviews: [
-            { rating: 5, comment: "Best joggers I've ever owned!", author: "Chris R." },
-            { rating: 5, comment: "Perfect fit and super comfortable", author: "Emma T." }
-          ]
+            { rating: 5, comment: "Best joggers I've ever owned!", author: "Chris R.", date: "2025-01-14" },
+            { rating: 5, comment: "Perfect fit and super comfortable", author: "Emma T.", date: "2025-01-11" }
+          ],
+          inStock: true,
+          stockCount: 32,
+          tags: ['comfortable', 'versatile', 'modern', 'athletic']
         },
         { 
           id: 'cap', 
           name: "Urban Cap", 
           price: 25.00, 
           category: 'accessories',
+          brand: 'essentials',
+          material: 'cotton',
+          style: 'streetwear',
           imageUrl: "https://placehold.co/300x300/999999/FFFFFF?text=Cap", 
           images: [
             "https://placehold.co/300x300/999999/FFFFFF?text=Cap+1"
           ],
           description: "Complete your look with our urban cap. A classic design with an adjustable strap for the perfect fit. Features a discreet embroidered detail.",
           sizes: ['One Size'],
+          colors: ['Black', 'Navy', 'Gray'],
+          features: ['Adjustable Strap', 'Embroidered Detail', 'Classic Design', 'Perfect Fit'],
+          care: ['Hand wash cold', 'Air dry', 'Do not bleach'],
           reviews: [
-            { rating: 4, comment: "Great cap, fits perfectly", author: "David L." }
-          ]
+            { rating: 4, comment: "Great cap, fits perfectly", author: "David L.", date: "2025-01-09" }
+          ],
+          inStock: true,
+          stockCount: 15,
+          tags: ['classic', 'adjustable', 'stylish', 'urban']
         },
         { 
-          id: 'socks', 
-          name: "Signature Socks", 
-          price: 15.00, 
-          category: 'accessories',
-          imageUrl: "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks", 
+          id: 'premium-shirt', 
+          name: "Premium Oxford Shirt", 
+          price: 85.00, 
+          category: 'tops',
+          brand: 'premium',
+          material: 'cotton',
+          style: 'formal',
+          imageUrl: "https://placehold.co/300x300/666666/FFFFFF?text=Shirt", 
           images: [
-            "https://placehold.co/300x300/AAAAAA/FFFFFF?text=Socks+1"
+            "https://placehold.co/300x300/666666/FFFFFF?text=Shirt+1",
+            "https://placehold.co/300x300/666666/FFFFFF?text=Shirt+2"
           ],
-          description: "Step up your sock game with our signature socks. Soft, breathable, and designed for all-day comfort. Comes in a pack of three.",
-          sizes: ['One Size'],
+          description: "Elevate your style with our premium Oxford shirt. Crafted from the finest cotton with a modern slim fit, perfect for both casual and formal occasions.",
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: ['White', 'Light Blue', 'Pink'],
+          features: ['Premium Cotton', 'Modern Slim Fit', 'Button-down Collar', 'Chest Pocket'],
+          care: ['Machine wash cold', 'Tumble dry low', 'Iron on medium'],
           reviews: [
-            { rating: 5, comment: "Amazing quality socks!", author: "Lisa P." },
-            { rating: 5, comment: "Worth every penny", author: "Tom W." }
-          ]
+            { rating: 5, comment: "Exceptional quality and fit!", author: "Michael B.", date: "2025-01-16" }
+          ],
+          inStock: true,
+          stockCount: 18,
+          tags: ['premium', 'formal', 'quality', 'versatile']
         }
       ];
 
@@ -3277,10 +4373,10 @@
               let i = 0;
               const botMessageElement = document.createElement('div');
               botMessageElement.classList.add('chat-message-bubble', 'bot-message');
-              const avatar = document.createElement('div');
-              avatar.classList.add('bot-avatar');
-              avatar.innerHTML = '<i class="fas fa-robot"></i>';
-              botMessageElement.appendChild(avatar);
+              const botAvatar = document.createElement('div');
+              botAvatar.classList.add('bot-avatar');
+              botAvatar.innerHTML = '<i class="fas fa-robot"></i>';
+              botMessageElement.appendChild(botAvatar);
               const textContent = document.createElement('span');
               botMessageElement.appendChild(textContent);
               chatMessages.appendChild(botMessageElement);
@@ -3508,171 +4604,6 @@
                       </div>
                   `;
                   break;
-              case 'integrations':
-                  contentHtml = `
-                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-4">Connect or disconnect third-party services.</p>
-                          <p class="text-sm text-gray-400 mt-2">No integrations are currently available. Check back soon for exciting new connections!</p>
-                          <div class="mt-4 space-y-3">
-                              <div class="flex items-center justify-between p-3 bg-gray-600 rounded-md">
-                                  <span class="text-white font-medium">Shopify</span>
-                                  <button class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition-colors">Connect</button>
-                              </div>
-                              <div class="flex items-center justify-between p-3 bg-gray-600 rounded-md">
-                                  <span class="text-white font-medium">Google Analytics</span>
-                                  <button class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition-colors">Connect</button>
-                              </div>
-                          </div>
-                      </div>
-                  `;
-                  break;
-              default:
-                  contentHtml = `
-                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-2">Welcome to your settings!</p>
-                          <p>Please select a category from the left to view and adjust your preferences.</p>
-                      </div>
-                  `;
-                  break;
-          }
-          settingsContentArea.innerHTML = contentHtml;
-
-          if (category === 'general') {
-              document.getElementById('save-general-settings').addEventListener('click', () => {
-                  const newFirstName = document.getElementById('general-first-name').value.trim();
-                  const newLastName = document.getElementById('general-last-name').value.trim();
-                  localStorage.setItem('userFirstName', newFirstName);
-                  localStorage.setItem('userLastName', newLastName);
-                  showMessageBox('General settings saved!');
-              });
-          } else if (category === 'accessibility') {
-              document.getElementById('save-accessibility-settings').addEventListener('click', () => {
-                  showMessageBox('Accessibility settings saved!');
-              });
-          } else if (category === 'privacy') {
-              document.getElementById('download-data-btn').addEventListener('click', () => {
-                  showMessageBox('Downloading your data (simulated)!', 3000, false);
-              });
-          } else if (category === 'visuals') {
-              document.getElementById('save-visual-settings').addEventListener('click', () => {
-                  showMessageBox('Visual settings saved!');
-              });
-          } else if (category === 'payment-method') {
-              document.getElementById('save-payment-method').addEventListener('click', () => {
-                  const cardNumber = document.getElementById('card-number').value.trim();
-                  const expiryDate = document.getElementById('expiry-date').value.trim();
-                  const cvv = document.getElementById('cvv').value.trim();
-                  if (cardNumber && expiryDate && cvv) {
-                      showMessageBox('Payment method saved (simulated)!');
-                  } else {
-                      showMessageBox('Please fill in all card details!', 3000, true);
-                  }
-              });
-          } else if (category === 'notifications') {
-              document.getElementById('save-notification-settings').addEventListener('click', () => {
-                  showMessageBox('Notification settings saved!');
-              });
-          } else if (category === 'security') {
-              document.getElementById('change-password-btn').addEventListener('click', () => {
-                  showMessageBox('Redirecting to password change (simulated)!');
-              });
-              document.getElementById('two-factor-auth-btn').addEventListener('click', () => {
-                  showMessageBox('Two-factor authentication setup initiated (simulated)!');
-              });
-              document.getElementById('view-all-activity-btn').addEventListener('click', () => {
-                  showMessageBox('Viewing all login activity (simulated)!');
-              });
-          }
-      }
-
-      checkoutButton.addEventListener('click', () => {
-        checkoutModalOverlay.classList.add('show');
-        orderConfirmationMessage.classList.add('hidden');
-        placeOrderBtn.style.display = 'block';
-      });
-
-      modalCloseBtn.addEventListener('click', () => {
-        checkoutModalOverlay.classList.remove('show');
-      });
-
-      placeOrderBtn.addEventListener('click', () => {
-        cart = {};
-        renderCart();
-        placeOrderBtn.style.display = 'none';
-        orderConfirmationMessage.classList.remove('hidden');
-
-        setTimeout(() => {
-          checkoutModalOverlay.classList.remove('show');
-          showPage('home-main');
-        }, 2000);
-      });
-
-      detailAddToCartBtn.addEventListener('click', (event) => {
-          const itemId = event.target.dataset.itemId;
-          const itemName = event.target.dataset.itemName;
-          const itemPrice = parseFloat(event.target.dataset.itemPrice);
-          const itemImage = event.target.dataset.itemImage;
-          const selectedSize = itemSizeSelect.value;
-          addToCart({ id: itemId, name: itemName, price: itemPrice, imageUrl: itemImage, size: selectedSize });
-          showMessageBox(`${itemName} (Size: ${selectedSize}) has successfully been added to cart!`);
-      });
-
-      backToShopBtn.addEventListener('click', () => {
-          showPage('shop-page');
-      });
-
-      signInBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const email = signInEmailInput.value.trim();
-          const password = signInPasswordInput.value.trim();
-
-          signInErrorMessage.classList.add('hidden');
-
-          if (!email || !password) {
-              signInErrorMessage.textContent = 'Please enter both email and password.';
-              signInErrorMessage.classList.remove('hidden');
-              showMessageBox('Please fill in all fields!', 3000, true);
-              return;
-          }
-
-          showMessageBox('Signed in successfully! Welcome back!', 3000);
-          setTimeout(() => {
-              showPage('home-main');
-              signInEmailInput.value = '';
-              signInPasswordInput.value = '';
-          }, 1000);
-      });
-
-      signUpBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const email = signUpEmailInput.value.trim();
-          const password = signUpPasswordInput.value.trim();
-          const confirmPassword = signUpConfirmPasswordInput.value.trim();
-
-          signUpErrorMessage.classList.add('hidden');
-
-          if (!email || !password || !confirmPassword) {
-              signUpErrorMessage.textContent = 'Please fill in all fields.';
-              signUpErrorMessage.classList.remove('hidden');
-              showMessageBox('Please fill in all fields!', 3000, true);
-              return;
-          }
-
-          if (password !== confirmPassword) {
-              signUpErrorMessage.textContent = 'Passwords do not match.';
-              signUpErrorMessage.classList.remove('hidden');
-              showMessageBox('Passwords do not match!', 3000, true);
-              return;
-          }
-
-          showMessageBox('Account created successfully! Please tell us your name!', 3000);
-          setTimeout(() => {
-              showPage('onboarding-main');
-              signUpEmailInput.value = '';
-              signUpPasswordInput.value = '';
-              signUpConfirmPasswordInput.value = '';
-          }, 1000);
-      });
 
       onboardingSaveBtn.addEventListener('click', () => {
           const firstName = onboardingFirstNameInput.value.trim();
@@ -3812,9 +4743,1460 @@
 
         // Initialize enhanced features
         initializeEnhancedFeatures();
+        
+        // Initialize enhanced authentication
+        initializeEnhancedAuth();
       };
+
+      // Password strength checker
+      function checkPasswordStrength(password) {
+          let strength = 0;
+          let feedback = '';
+
+          if (password.length >= 8) strength += 1;
+          if (/[a-z]/.test(password)) strength += 1;
+          if (/[A-Z]/.test(password)) strength += 1;
+          if (/[0-9]/.test(password)) strength += 1;
+          if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+          const strengthFill = document.getElementById('password-strength-fill');
+          const strengthText = document.getElementById('password-strength-text');
+
+          if (strengthFill && strengthText) {
+              strengthFill.className = 'strength-fill';
+              if (strength <= 2) {
+                  strengthFill.classList.add('weak');
+                  feedback = 'Weak password';
+              } else if (strength === 3) {
+                  strengthFill.classList.add('fair');
+                  feedback = 'Fair password';
+              } else if (strength === 4) {
+                  strengthFill.classList.add('good');
+                  feedback = 'Good password';
+              } else {
+                  strengthFill.classList.add('strong');
+                  feedback = 'Strong password';
+              }
+              strengthText.textContent = feedback;
+          }
+      }
+
+      // Password visibility toggle
+      function togglePassword(inputId) {
+          const input = document.getElementById(inputId);
+          const toggle = input.nextElementSibling;
+          const icon = toggle.querySelector('i');
+
+          if (input.type === 'password') {
+              input.type = 'text';
+              icon.className = 'fas fa-eye-slash';
+          } else {
+              input.type = 'password';
+              icon.className = 'fas fa-eye';
+          }
+      }
+
+      // Enhanced form validation
+      function validateForm(formId) {
+          const form = document.getElementById(formId);
+          const inputs = form.querySelectorAll('input[required]');
+          let isValid = true;
+
+          inputs.forEach(input => {
+              if (!input.value.trim()) {
+                  showInputError(input, 'This field is required');
+                  isValid = false;
+              } else {
+                  clearInputError(input);
+              }
+
+              // Email validation
+              if (input.type === 'email' && input.value.trim()) {
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(input.value)) {
+                      showInputError(input, 'Please enter a valid email address');
+                      isValid = false;
+                  }
+              }
+
+              // Password confirmation validation
+              if (input.id === 'signup-confirm-password') {
+                  const password = document.getElementById('signup-password').value;
+                  if (input.value !== password) {
+                      showInputError(input, 'Passwords do not match');
+                      isValid = false;
+                  }
+              }
+          });
+
+          return isValid;
+      }
+
+      function showInputError(input, message) {
+          clearInputError(input);
+          input.style.borderColor = '#ef4444';
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'input-error text-red-400 text-sm mt-1';
+          errorDiv.textContent = message;
+          input.parentNode.appendChild(errorDiv);
+      }
+
+      function clearInputError(input) {
+          input.style.borderColor = '';
+          const errorDiv = input.parentNode.querySelector('.input-error');
+          if (errorDiv) {
+              errorDiv.remove();
+          }
+      }
+
+      // Enhanced form submission with loading states
+      function showFormLoading(formId) {
+          const form = document.getElementById(formId);
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const btnText = submitBtn.querySelector('.btn-text');
+          const btnLoader = submitBtn.querySelector('.btn-loader');
+
+          btnText.classList.add('hidden');
+          btnLoader.classList.remove('hidden');
+          submitBtn.disabled = true;
+      }
+
+      function hideFormLoading(formId) {
+          const form = document.getElementById(formId);
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const btnText = submitBtn.querySelector('.btn-text');
+          const btnLoader = submitBtn.querySelector('.btn-loader');
+
+          btnText.classList.remove('hidden');
+          btnLoader.classList.add('hidden');
+          submitBtn.disabled = false;
+      }
+
+      // Enhanced sign-in functionality
+      function handleEnhancedSignIn(e) {
+          e.preventDefault();
+          
+          if (!validateForm('signin-form')) {
+              return;
+          }
+
+          showFormLoading('signin-form');
+
+          // Simulate API call
+          setTimeout(() => {
+              hideFormLoading('signin-form');
+              showMessageBox('Signed in successfully! Welcome back!', 3000);
+              
+              // Store user data
+              const email = document.getElementById('signin-email').value.trim();
+              const rememberMe = document.getElementById('remember-me').checked;
+              
+              if (rememberMe) {
+                  localStorage.setItem('userEmail', email);
+                  localStorage.setItem('rememberMe', 'true');
+              }
+
+              setTimeout(() => {
+                  showPage('home-main');
+                  // Reset form
+                  document.getElementById('signin-form').reset();
+              }, 1000);
+          }, 2000);
+      }
+
+      // Enhanced sign-up functionality
+      function handleEnhancedSignUp(e) {
+          e.preventDefault();
+          
+          if (!validateForm('signup-form')) {
+              return;
+          }
+
+          showFormLoading('signup-form');
+
+          // Simulate API call
+          setTimeout(() => {
+              hideFormLoading('signup-form');
+              showMessageBox('Account created successfully! Please tell us your name!', 3000);
+              
+              // Store user data
+              const email = document.getElementById('signup-email').value.trim();
+              const firstName = document.getElementById('signup-first-name').value.trim();
+              const lastName = document.getElementById('signup-last-name').value.trim();
+              const newsletterSignup = document.getElementById('newsletter-signup').checked;
+              
+              localStorage.setItem('userEmail', email);
+              localStorage.setItem('userFirstName', firstName);
+              localStorage.setItem('userLastName', lastName);
+              if (newsletterSignup) {
+                  localStorage.setItem('newsletterSubscribed', 'true');
+              }
+
+              setTimeout(() => {
+                  showPage('onboarding-main');
+                  // Reset form
+                  document.getElementById('signup-form').reset();
+              }, 1000);
+          }, 2000);
+      }
+
+      // Social authentication handlers
+      function handleGoogleAuth() {
+          showMessageBox('Google authentication coming soon!', 3000);
+      }
+
+      function handleAppleAuth() {
+          showMessageBox('Apple authentication coming soon!', 3000);
+      }
+
+      // Initialize enhanced authentication
+      function initializeEnhancedAuth() {
+          // Password strength monitoring
+          const passwordInput = document.getElementById('signup-password');
+          if (passwordInput) {
+              passwordInput.addEventListener('input', (e) => {
+                  checkPasswordStrength(e.target.value);
+              });
+          }
+
+          // Form submissions
+          const signinForm = document.getElementById('signin-form');
+          if (signinForm) {
+              signinForm.addEventListener('submit', handleEnhancedSignIn);
+          }
+
+          const signupForm = document.getElementById('signup-form');
+          if (signupForm) {
+              signupForm.addEventListener('submit', handleEnhancedSignUp);
+          }
+
+          // Social auth buttons
+          document.querySelectorAll('.google-btn').forEach(btn => {
+              btn.addEventListener('click', handleGoogleAuth);
+          });
+
+          document.querySelectorAll('.apple-btn').forEach(btn => {
+              btn.addEventListener('click', handleAppleAuth);
+          });
+
+          // Auto-fill remembered email
+          const rememberedEmail = localStorage.getItem('userEmail');
+          const rememberMe = localStorage.getItem('rememberMe');
+          
+          if (rememberedEmail && rememberMe === 'true') {
+              const emailInput = document.getElementById('signin-email');
+              if (emailInput) {
+                  emailInput.value = rememberedEmail;
+                  document.getElementById('remember-me').checked = true;
+              }
+          }
+
+          // Enhanced input animations
+          document.querySelectorAll('.form-input').forEach(input => {
+              input.addEventListener('focus', () => {
+                  input.parentNode.classList.add('focused');
+              });
+
+              input.addEventListener('blur', () => {
+                  if (!input.value) {
+                      input.parentNode.classList.remove('focused');
+                  }
+              });
+          });
+      }
+
+      // Product comparison functionality
+      let comparisonList = [];
+      const maxComparisonItems = 4;
+
+      function addToComparison(productId) {
+        if (comparisonList.length >= maxComparisonItems) {
+          showMessageBox('Maximum 4 items can be compared at once', 3000, true);
+          return;
+        }
+        
+        if (comparisonList.includes(productId)) {
+          showMessageBox('Item already in comparison', 3000, true);
+          return;
+        }
+        
+        comparisonList.push(productId);
+        updateComparisonUI();
+        showMessageBox('Added to comparison');
+      }
+
+      function removeFromComparison(productId) {
+        comparisonList = comparisonList.filter(id => id !== productId);
+        updateComparisonUI();
+      }
+
+      function updateComparisonUI() {
+        const comparisonBtn = document.getElementById('comparison-btn');
+        if (comparisonBtn) {
+          comparisonBtn.innerHTML = `Compare (${comparisonList.length})`;
+          comparisonBtn.disabled = comparisonList.length < 2;
+        }
+      }
+
+      function showComparisonModal() {
+        if (comparisonList.length < 2) {
+          showMessageBox('Please select at least 2 items to compare', 3000, true);
+          return;
+        }
+        
+        const comparisonContent = document.getElementById('comparison-content');
+        const productsToCompare = localClothingItems.filter(item => comparisonList.includes(item.id));
+        
+        let comparisonHTML = `
+          <div class="comparison-table overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-600">
+                  <th class="p-3 text-left text-white">Features</th>
+                  ${productsToCompare.map(product => `
+                    <th class="p-3 text-center text-white">
+                      <div class="product-comparison-header">
+                        <img src="${product.imageUrl}" alt="${product.name}" class="w-16 h-16 object-cover rounded mx-auto mb-2">
+                        <h4 class="font-semibold">${product.name}</h4>
+                        <p class="text-blue-400">$${product.price.toFixed(2)}</p>
+                        <button onclick="removeFromComparison('${product.id}')" class="text-red-400 hover:text-red-300 text-xs">
+                          <i class="fas fa-times"></i> Remove
+                        </button>
+                      </div>
+                    </th>
+                  `).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Category</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">${product.category}</td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Material</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">${product.material}</td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Style</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">${product.style}</td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Sizes Available</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">${product.sizes.join(', ')}</td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Colors</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">${product.colors.join(', ')}</td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Features</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">
+                      <ul class="text-xs space-y-1">
+                        ${product.features.map(feature => `<li>• ${feature}</li>`).join('')}
+                      </ul>
+                    </td>
+                  `).join('')}
+                </tr>
+                <tr class="border-b border-gray-700">
+                  <td class="p-3 text-white font-semibold">Rating</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center text-gray-300">
+                      <div class="flex justify-center text-yellow-400">
+                        ${'★'.repeat(Math.floor(product.reviews.reduce((acc, rev) => acc + rev.rating, 0) / product.reviews.length))}
+                        ${'☆'.repeat(5 - Math.floor(product.reviews.reduce((acc, rev) => acc + rev.rating, 0) / product.reviews.length))}
+                      </div>
+                      <span class="text-xs">(${product.reviews.length} reviews)</span>
+                    </td>
+                  `).join('')}
+                </tr>
+                <tr>
+                  <td class="p-3 text-white font-semibold">Actions</td>
+                  ${productsToCompare.map(product => `
+                    <td class="p-3 text-center">
+                      <button onclick="addToCart({id: '${product.id}', name: '${product.name}', price: ${product.price}, imageUrl: '${product.imageUrl}', size: 'M'})" class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                        Add to Cart
+                      </button>
+                    </td>
+                  `).join('')}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+        
+        comparisonContent.innerHTML = comparisonHTML;
+        document.getElementById('product-comparison-modal').classList.add('show');
+      }
+
+      // Size recommendation tool
+      function getSizeRecommendation() {
+        const heightFeet = parseInt(document.getElementById('height-feet').value) || 5;
+        const heightInches = parseInt(document.getElementById('height-inches').value) || 10;
+        const weight = parseInt(document.getElementById('weight').value) || 150;
+        const bodyType = document.getElementById('body-type').value;
+        const preferredFit = document.querySelector('input[name="preferred-fit"]:checked').value;
+        
+        if (!bodyType) {
+          showMessageBox('Please select your body type', 3000, true);
+          return;
+        }
+        
+        // Simple size recommendation algorithm
+        const totalHeight = heightFeet * 12 + heightInches;
+        let recommendedSize = 'M';
+        
+        if (totalHeight < 66) { // Under 5'6"
+          if (weight < 140) recommendedSize = 'XS';
+          else if (weight < 160) recommendedSize = 'S';
+          else recommendedSize = 'M';
+        } else if (totalHeight < 70) { // 5'6" to 5'10"
+          if (weight < 150) recommendedSize = 'S';
+          else if (weight < 180) recommendedSize = 'M';
+          else recommendedSize = 'L';
+        } else if (totalHeight < 74) { // 5'10" to 6'2"
+          if (weight < 160) recommendedSize = 'M';
+          else if (weight < 190) recommendedSize = 'L';
+          else recommendedSize = 'XL';
+        } else { // Over 6'2"
+          if (weight < 170) recommendedSize = 'L';
+          else if (weight < 200) recommendedSize = 'XL';
+          else recommendedSize = 'XXL';
+        }
+        
+        // Adjust based on body type and preferred fit
+        if (bodyType === 'slim' && preferredFit === 'slim') {
+          if (recommendedSize === 'M') recommendedSize = 'S';
+          else if (recommendedSize === 'L') recommendedSize = 'M';
+        } else if (bodyType === 'plus' || preferredFit === 'loose') {
+          if (recommendedSize === 'M') recommendedSize = 'L';
+          else if (recommendedSize === 'L') recommendedSize = 'XL';
+        }
+        
+        const resultDiv = document.getElementById('size-recommendation-result');
+        resultDiv.innerHTML = `
+          <h4 class="text-lg font-semibold text-white mb-4">Size Recommendation</h4>
+          <div class="recommendation-details space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-300">Your Height:</span>
+              <span class="text-white">${heightFeet}'${heightInches}"</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Your Weight:</span>
+              <span class="text-white">${weight} lbs</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Body Type:</span>
+              <span class="text-white">${bodyType.charAt(0).toUpperCase() + bodyType.slice(1)}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Preferred Fit:</span>
+              <span class="text-white">${preferredFit.charAt(0).toUpperCase() + preferredFit.slice(1)}</span>
+            </div>
+            <div class="border-t border-gray-600 pt-3 mt-3">
+              <div class="flex justify-between">
+                <span class="text-gray-300 font-semibold">Recommended Size:</span>
+                <span class="text-2xl font-bold text-blue-400">${recommendedSize}</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-blue-900 bg-opacity-20 border border-blue-500 rounded-lg">
+            <p class="text-blue-300 text-sm">
+              💡 <strong>Tip:</strong> This is a general recommendation. For the best fit, 
+              consider trying on different sizes or checking our detailed size chart.
+            </p>
+          </div>
+        `;
+        
+        resultDiv.classList.remove('hidden');
+      }
+
+      // Enhanced filtering system
+      function applyAdvancedFilters() {
+        const minPrice = parseInt(document.getElementById('min-price').value);
+        const maxPrice = parseInt(document.getElementById('max-price').value);
+        const brandFilter = document.getElementById('brand-filter').value;
+        const materialCheckboxes = document.querySelectorAll('.material-checkbox:checked');
+        const styleCheckboxes = document.querySelectorAll('.style-checkbox:checked');
+        
+        const selectedMaterials = Array.from(materialCheckboxes).map(cb => cb.value);
+        const selectedStyles = Array.from(styleCheckboxes).map(cb => cb.value);
+        
+        let filteredProducts = localClothingItems.filter(item => {
+          const matchesPrice = item.price >= minPrice && item.price <= maxPrice;
+          const matchesBrand = !brandFilter || item.brand === brandFilter;
+          const matchesMaterial = selectedMaterials.length === 0 || selectedMaterials.includes(item.material);
+          const matchesStyle = selectedStyles.length === 0 || selectedStyles.includes(item.style);
+          
+          return matchesPrice && matchesBrand && matchesMaterial && matchesStyle;
+        });
+        
+        renderFilteredProducts(filteredProducts);
+        document.getElementById('advanced-search-modal').classList.remove('show');
+        showMessageBox(`Found ${filteredProducts.length} products matching your criteria`);
+      }
+
+      function clearAdvancedFilters() {
+        document.getElementById('min-price').value = 0;
+        document.getElementById('max-price').value = 200;
+        document.getElementById('brand-filter').value = '';
+        document.querySelectorAll('.material-checkbox').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.style-checkbox').forEach(cb => cb.checked = false);
+        
+        renderFilteredProducts(localClothingItems);
+        showMessageBox('All filters cleared');
+      }
+
+      // Dashboard functionality
+      function showDashboard() {
+        updateDashboardStats();
+        updateDashboardWishlist();
+        document.getElementById('user-dashboard-modal').classList.add('show');
+      }
+
+      function updateDashboardStats() {
+        const orderCount = Object.keys(cart).length > 0 ? 1 : 0; // Simplified for demo
+        const wishlistCount = wishlist.length;
+        const reviewCount = localClothingItems.reduce((acc, item) => acc + item.reviews.length, 0);
+        
+        document.querySelector('#dashboard-overview .stat-card:nth-child(1) .stat-number').textContent = orderCount;
+        document.querySelector('#dashboard-overview .stat-card:nth-child(2) .stat-number').textContent = wishlistCount;
+        document.querySelector('#dashboard-overview .stat-card:nth-child(3) .stat-number').textContent = reviewCount;
+      }
+
+      function updateDashboardWishlist() {
+        const wishlistContainer = document.getElementById('dashboard-wishlist-items');
+        if (wishlist.length === 0) {
+          wishlistContainer.innerHTML = `
+            <div class="col-span-full text-center py-8">
+              <div class="text-6xl mb-4">💔</div>
+              <p class="text-gray-400">Your wishlist is empty</p>
+              <p class="text-sm text-gray-500">Start adding items you love!</p>
+            </div>
+          `;
+        } else {
+          wishlistContainer.innerHTML = wishlist.map(item => `
+            <div class="wishlist-item bg-gray-700 rounded-lg p-4">
+              <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-32 object-cover rounded mb-3">
+              <h4 class="text-white font-semibold mb-2">${item.name}</h4>
+              <p class="text-blue-400 font-bold mb-3">$${item.price.toFixed(2)}</p>
+              <div class="flex gap-2">
+                <button onclick="addToCart({id: '${item.id}', name: '${item.name}', price: ${item.price}, imageUrl: '${item.imageUrl}', size: 'M'})" class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                  Add to Cart
+                </button>
+                <button onclick="removeFromWishlist('${item.id}')" class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition-colors">
+                  Remove
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Dashboard tab switching
+      function switchDashboardTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.dashboard-tab-content').forEach(content => {
+          content.classList.add('hidden');
+        });
+        
+        // Remove active class from all tabs
+        document.querySelectorAll('.dashboard-tab').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        document.getElementById(`dashboard-${tabName}`).classList.remove('hidden');
+        
+        // Add active class to selected tab
+        event.target.classList.add('active');
+        
+        // Update content if needed
+        if (tabName === 'wishlist') {
+          updateDashboardWishlist();
+        }
+      }
+
+      // Save user preferences
+      function saveUserPreferences() {
+        const preferences = {
+          emailOrders: document.getElementById('email-orders').checked,
+          emailPromotions: document.getElementById('email-promotions').checked,
+          emailNewsletter: document.getElementById('email-newsletter').checked,
+          savePayment: document.getElementById('save-payment').checked,
+          quickCheckout: document.getElementById('quick-checkout').checked
+        };
+        
+        localStorage.setItem('userPreferences', JSON.stringify(preferences));
+        showMessageBox('Preferences saved successfully!');
+      }
+
+      // Load user preferences
+      function loadUserPreferences() {
+        const savedPreferences = localStorage.getItem('userPreferences');
+        if (savedPreferences) {
+          const preferences = JSON.parse(savedPreferences);
+          document.getElementById('email-orders').checked = preferences.emailOrders;
+          document.getElementById('email-promotions').checked = preferences.emailPromotions;
+          document.getElementById('email-newsletter').checked = preferences.emailNewsletter;
+          document.getElementById('save-payment').checked = preferences.savePayment;
+          document.getElementById('quick-checkout').checked = preferences.quickCheckout;
+        }
+      }
+
+      // Enhanced product rendering with comparison buttons
+      function renderFilteredProducts(products) {
+        itemsGrid.innerHTML = '';
+        
+        if (products.length === 0) {
+          itemsGrid.innerHTML = `
+            <div class="col-span-full text-center py-12">
+              <span class="text-6xl mb-4 block">🔍</span>
+              <p class="text-xl text-gray-300 mb-2">No products found</p>
+              <p class="text-gray-500">Try adjusting your search or filters</p>
+            </div>
+          `;
+          return;
+        }
+
+        products.forEach((item, index) => {
+          const isInWishlist = wishlist.some(w => w.id === item.id);
+          const isInComparison = comparisonList.includes(item.id);
+          const itemCard = document.createElement('div');
+          itemCard.className = 'bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col cursor-pointer product-card';
+          itemCard.style.animationDelay = `${0.1 * index}s`;
+          itemCard.dataset.itemId = item.id;
+          itemCard.dataset.itemName = item.name;
+          itemCard.dataset.itemPrice = item.price;
+          itemCard.dataset.itemImage = item.imageUrl;
+          itemCard.dataset.itemDescription = item.description;
+
+          itemCard.innerHTML = `
+            <div class="relative">
+              <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
+              <button class="wishlist-btn ${isInWishlist ? 'active' : ''}" data-item-id="${item.id}">
+                <i class="fas fa-heart"></i>
+              </button>
+              <button class="comparison-btn ${isInComparison ? 'active' : ''}" data-item-id="${item.id}">
+                <i class="fas fa-balance-scale"></i>
+              </button>
+              <div class="product-badges absolute top-2 left-2 flex gap-2">
+                ${item.brand === 'premium' ? '<span class="bg-yellow-600 text-white text-xs px-2 py-1 rounded">Premium</span>' : ''}
+                ${item.inStock ? '<span class="bg-green-600 text-white text-xs px-2 py-1 rounded">In Stock</span>' : '<span class="bg-red-600 text-white text-xs px-2 py-1 rounded">Out of Stock</span>'}
+              </div>
+            </div>
+            <div class="p-4 flex flex-col justify-between flex-grow">
+              <div>
+                <h3 class="text-xl font-semibold text-white mb-2">${item.name}</h3>
+                <p class="text-gray-300 text-sm mb-2">${item.category} • ${item.material} • ${item.style}</p>
+                <p class="text-gray-300 text-lg mb-4">$${item.price.toFixed(2)}</p>
+                <div class="product-tags flex flex-wrap gap-1 mb-3">
+                  ${item.tags.slice(0, 3).map(tag => `<span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="add-to-cart-btn flex-1 bg-white text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors" data-item-id="${item.id}" data-item-name="${item.name}" data-item-price="${item.price}" data-item-image="${item.imageUrl}">Add to Cart</button>
+                <button class="compare-btn bg-gray-600 text-white px-3 py-2 rounded-md hover:bg-gray-500 transition-colors ${isInComparison ? 'bg-blue-600' : ''}" onclick="toggleComparison('${item.id}')">
+                  <i class="fas fa-balance-scale"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          itemsGrid.appendChild(itemCard);
+        });
+
+        addProductEventListeners();
+      }
+
+      function toggleComparison(productId) {
+        if (comparisonList.includes(productId)) {
+          removeFromComparison(productId);
+        } else {
+          addToComparison(productId);
+        }
+        renderFilteredProducts(localClothingItems); // Refresh to update UI
+      }
+
+      // Initialize all enhanced features
+      function initializeAllFeatures() {
+        // Initialize existing features
+        initializeEnhancedFeatures();
+        initializeEnhancedAuth();
+        
+        // Initialize new features
+        initializeComparisonFeatures();
+        initializeDashboardFeatures();
+        initializeAdvancedSearch();
+        initializeSizeRecommendation();
+        
+        // Load saved preferences
+        loadUserPreferences();
+        
+        // Update comparison UI
+        updateComparisonUI();
+      }
+
+      function initializeComparisonFeatures() {
+        // Add comparison button to shop page
+        const shopContent = document.getElementById('shop-content');
+        if (shopContent) {
+          const comparisonSection = document.createElement('div');
+          comparisonSection.className = 'comparison-section mb-6 flex justify-between items-center';
+          comparisonSection.innerHTML = `
+            <div class="comparison-info text-gray-400">
+              <i class="fas fa-info-circle mr-2"></i>
+              Select products to compare features and make informed decisions
+            </div>
+            <button id="comparison-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" onclick="showComparisonModal()" disabled>
+              Compare (0)
+            </button>
+          `;
+          shopContent.insertBefore(comparisonSection, shopContent.firstChild);
+        }
+      }
+
+      function initializeDashboardFeatures() {
+        // Add dashboard button to profile dropdown
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        if (profileDropdown) {
+          const dashboardItem = document.createElement('a');
+          dashboardItem.href = '#';
+          dashboardItem.className = 'dropdown-item';
+          dashboardItem.innerHTML = '<i class="fas fa-tachometer-alt mr-2"></i>Dashboard';
+          dashboardItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            showDashboard();
+          });
+          profileDropdown.appendChild(dashboardItem);
+        }
+      }
+
+      function initializeAdvancedSearch() {
+        // Add advanced search button to shop page
+        const searchBar = document.querySelector('.search-bar');
+        if (searchBar) {
+          const advancedSearchBtn = document.createElement('button');
+          advancedSearchBtn.className = 'absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-300 transition-colors';
+          advancedSearchBtn.innerHTML = '<i class="fas fa-sliders-h"></i>';
+          advancedSearchBtn.title = 'Advanced Search';
+          advancedSearchBtn.addEventListener('click', () => {
+            document.getElementById('advanced-search-modal').classList.add('show');
+          });
+          searchBar.appendChild(advancedSearchBtn);
+        }
+      }
+
+      function initializeSizeRecommendation() {
+        // Add size recommendation button to product detail page
+        const sizeSelector = document.querySelector('.size-selector');
+        if (sizeSelector) {
+          const sizeRecommendationBtn = document.createElement('button');
+          sizeRecommendationBtn.className = 'text-blue-400 text-sm hover:text-blue-300 mt-1 block';
+          sizeRecommendationBtn.innerHTML = '<i class="fas fa-magic"></i> Size Recommendation Tool';
+          sizeRecommendationBtn.addEventListener('click', () => {
+            document.getElementById('size-recommendation-modal').classList.add('show');
+          });
+          sizeSelector.appendChild(sizeRecommendationBtn);
+        }
+      }
+
+      // Event listeners for new features
+      document.addEventListener('DOMContentLoaded', function() {
+        // Dashboard tab switching
+        document.querySelectorAll('.dashboard-tab').forEach(tab => {
+          tab.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+            switchDashboardTab(tabName);
+          });
+        });
+
+        // Save preferences button
+        const savePreferencesBtn = document.getElementById('save-preferences');
+        if (savePreferencesBtn) {
+          savePreferencesBtn.addEventListener('click', saveUserPreferences);
+        }
+
+        // Advanced search filters
+        const applyFiltersBtn = document.getElementById('apply-advanced-filters');
+        if (applyFiltersBtn) {
+          applyFiltersBtn.addEventListener('click', applyAdvancedFilters);
+        }
+
+        const clearAdvancedFiltersBtn = document.getElementById('clear-advanced-filters');
+        if (clearAdvancedFiltersBtn) {
+          clearAdvancedFiltersBtn.addEventListener('click', clearAdvancedFilters);
+        }
+
+        // Size recommendation
+        const getSizeRecommendationBtn = document.getElementById('get-size-recommendation');
+        if (getSizeRecommendationBtn) {
+          getSizeRecommendationBtn.addEventListener('click', getSizeRecommendation);
+        }
+
+        // Price range sliders
+        const minPriceSlider = document.getElementById('min-price');
+        const maxPriceSlider = document.getElementById('max-price');
+        const minPriceDisplay = document.getElementById('min-price-display');
+        const maxPriceDisplay = document.getElementById('max-price-display');
+
+        if (minPriceSlider && maxPriceSlider) {
+          minPriceSlider.addEventListener('input', function() {
+            minPriceDisplay.textContent = this.value;
+            if (parseInt(this.value) > parseInt(maxPriceSlider.value)) {
+              maxPriceSlider.value = this.value;
+              maxPriceDisplay.textContent = this.value;
+            }
+          });
+
+          maxPriceSlider.addEventListener('input', function() {
+            maxPriceDisplay.textContent = this.value;
+            if (parseInt(this.value) < parseInt(minPriceSlider.value)) {
+              minPriceSlider.value = this.value;
+              minPriceDisplay.textContent = this.value;
+            }
+          });
+        }
+
+        // Modal close buttons
+        const comparisonCloseBtn = document.getElementById('comparison-close-btn');
+        if (comparisonCloseBtn) {
+          comparisonCloseBtn.addEventListener('click', () => {
+            document.getElementById('product-comparison-modal').classList.remove('show');
+          });
+        }
+
+        const advancedSearchCloseBtn = document.getElementById('advanced-search-close-btn');
+        if (advancedSearchCloseBtn) {
+          advancedSearchCloseBtn.addEventListener('click', () => {
+            document.getElementById('advanced-search-modal').classList.remove('show');
+          });
+        }
+
+        const dashboardCloseBtn = document.getElementById('dashboard-close-btn');
+        if (dashboardCloseBtn) {
+          dashboardCloseBtn.addEventListener('click', () => {
+            document.getElementById('user-dashboard-modal').classList.remove('show');
+          });
+        }
+
+        const sizeRecommendationCloseBtn = document.getElementById('size-recommendation-close-btn');
+        if (sizeRecommendationCloseBtn) {
+          sizeRecommendationCloseBtn.addEventListener('click', () => {
+            document.getElementById('size-recommendation-modal').classList.remove('show');
+          });
+        }
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+          modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+              this.classList.remove('show');
+            }
+          });
+        });
+
+        // Enhanced product search with real-time filtering
+        const productSearch = document.getElementById('product-search');
+        if (productSearch) {
+          productSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredProducts = localClothingItems.filter(item => 
+              item.name.toLowerCase().includes(searchTerm) ||
+              item.description.toLowerCase().includes(searchTerm) ||
+              item.category.toLowerCase().includes(searchTerm) ||
+              item.material.toLowerCase().includes(searchTerm) ||
+              item.style.toLowerCase().includes(searchTerm) ||
+              item.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            renderFilteredProducts(filteredProducts);
+          });
+        }
+
+        // Enhanced category filtering
+        const categoryFilter = document.getElementById('category-filter');
+        if (categoryFilter) {
+          categoryFilter.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            let filteredProducts = localClothingItems;
+            
+            if (selectedCategory) {
+              filteredProducts = localClothingItems.filter(item => item.category === selectedCategory);
+            }
+            
+            renderFilteredProducts(filteredProducts);
+          });
+        }
+
+        // Enhanced price filtering
+        const priceFilter = document.getElementById('price-filter');
+        if (priceFilter) {
+          priceFilter.addEventListener('change', function() {
+            const selectedPrice = this.value;
+            let filteredProducts = localClothingItems;
+            
+            if (selectedPrice) {
+              const [min, max] = selectedPrice.split('-').map(Number);
+              filteredProducts = localClothingItems.filter(item => {
+                if (max) {
+                  return item.price >= min && item.price <= max;
+                } else {
+                  return item.price >= min;
+                }
+              });
+            }
+            
+            renderFilteredProducts(filteredProducts);
+          });
+        }
+
+        // Enhanced size filtering
+        const sizeFilter = document.getElementById('size-filter');
+        if (sizeFilter) {
+          sizeFilter.addEventListener('change', function() {
+            const selectedSize = this.value;
+            let filteredProducts = localClothingItems;
+            
+            if (selectedSize) {
+              filteredProducts = localClothingItems.filter(item => 
+                item.sizes.includes(selectedSize)
+              );
+            }
+            
+            renderFilteredProducts(filteredProducts);
+          });
+        }
+
+        // Clear filters button
+        const clearFiltersBtn = document.getElementById('clear-filters');
+        if (clearFiltersBtn) {
+          clearFiltersBtn.addEventListener('click', function() {
+            // Reset all filters
+            if (productSearch) productSearch.value = '';
+            if (categoryFilter) categoryFilter.value = '';
+            if (priceFilter) priceFilter.value = '';
+            if (sizeFilter) sizeFilter.value = '';
+            
+            // Clear advanced filters
+            if (minPriceSlider) minPriceSlider.value = 0;
+            if (maxPriceSlider) maxPriceSlider.value = 200;
+            if (minPriceDisplay) minPriceDisplay.textContent = '0';
+            if (maxPriceDisplay) maxPriceDisplay.textContent = '200';
+            
+            if (document.getElementById('brand-filter')) {
+              document.getElementById('brand-filter').value = '';
+            }
+            
+            document.querySelectorAll('.material-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.style-checkbox').forEach(cb => cb.checked = false);
+            
+            // Show all products
+            renderFilteredProducts(localClothingItems);
+            showMessageBox('All filters cleared');
+          });
+        }
+
+        // Initialize comparison features
+        initializeComparisonFeatures();
+        
+        // Initialize dashboard features
+        initializeDashboardFeatures();
+        
+        // Initialize advanced search
+        initializeAdvancedSearch();
+        
+        // Initialize size recommendation
+        initializeSizeRecommendation();
+        
+        // Load user preferences
+        loadUserPreferences();
+        
+        // Update comparison UI
+        updateComparisonUI();
+        
+        // Blog system event listeners
+        document.querySelectorAll('.blog-category-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('.blog-category-btn').forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            // Render posts for selected category
+            const category = this.dataset.category;
+            renderBlogPosts(category);
+          });
+        });
+        
+        // Newsletter submit button
+        const newsletterSubmitBtn = document.getElementById('newsletter-submit');
+        if (newsletterSubmitBtn) {
+          newsletterSubmitBtn.addEventListener('click', subscribeToNewsletter);
+        }
+        
+        // Modal close buttons for new modals
+        const blogCloseBtn = document.getElementById('blog-close-btn');
+        if (blogCloseBtn) {
+          blogCloseBtn.addEventListener('click', () => {
+            document.getElementById('blog-modal').classList.remove('show');
+          });
+        }
+        
+        const blogPostCloseBtn = document.getElementById('blog-post-close-btn');
+        if (blogPostCloseBtn) {
+          blogPostCloseBtn.addEventListener('click', () => {
+            document.getElementById('blog-post-modal').classList.remove('show');
+          });
+        }
+        
+        const newsletterCloseBtn = document.getElementById('newsletter-close-btn');
+        if (newsletterCloseBtn) {
+          newsletterCloseBtn.addEventListener('click', () => {
+            document.getElementById('newsletter-modal').classList.remove('show');
+          });
+        }
+        
+        const socialCloseBtn = document.getElementById('social-close-btn');
+        if (socialCloseBtn) {
+          socialCloseBtn.addEventListener('click', () => {
+            document.getElementById('social-modal').classList.remove('show');
+          });
+        }
+        
+        // Social media follow buttons
+        document.querySelectorAll('.social-follow-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const platform = this.closest('.social-platform').querySelector('h4').textContent;
+            showMessageBox(`Thanks for following us on ${platform}! 🎉`, 3000);
+          });
+        });
+      });
+
+
+
+
+
+      // Blog system and enhanced features
+      const blogPosts = [
+        {
+          id: 'style-tips-1',
+          title: '5 Essential Style Tips for Every Wardrobe',
+          excerpt: 'Discover the fundamental style principles that will transform your everyday look...',
+          content: `
+            <div class="blog-post-content">
+              <img src="https://placehold.co/600x300/4a5568/FFFFFF?text=Style+Tips" alt="Style Tips" class="w-full h-64 object-cover rounded-lg mb-6">
+              <h2 class="text-3xl font-bold text-white mb-4">5 Essential Style Tips for Every Wardrobe</h2>
+              <p class="text-gray-300 mb-4">Building a timeless wardrobe starts with understanding the basics. Here are five essential style tips that will elevate your fashion game.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">1. Invest in Quality Basics</h3>
+              <p class="text-gray-300 mb-4">Start with high-quality essentials like a well-fitted white tee, classic jeans, and versatile blazers. These pieces form the foundation of your wardrobe.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">2. Understand Your Body Type</h3>
+              <p class="text-gray-300 mb-4">Knowing your body shape helps you choose flattering silhouettes. Experiment with different cuts to find what works best for you.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">3. Master the Art of Layering</h3>
+              <p class="text-gray-300 mb-4">Layering adds depth and interest to your outfits. Start with thin layers and build up for a sophisticated look.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">4. Pay Attention to Fit</h3>
+              <p class="text-gray-300 mb-4">The right fit can make or break an outfit. Don't be afraid to get items tailored for the perfect fit.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">5. Develop Your Personal Style</h3>
+              <p class="text-gray-300 mb-4">Fashion is about self-expression. Take inspiration from others but always stay true to your unique style.</p>
+              
+              <div class="blog-tags mt-6">
+                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm mr-2">Style Tips</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Fashion</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Wardrobe</span>
+              </div>
+            </div>
+          `,
+          category: 'style',
+          author: 'Ultre Team',
+          date: '2025-01-15',
+          readTime: '5 min read',
+          image: 'https://placehold.co/400x250/4a5568/FFFFFF?text=Style+Tips'
+        },
+        {
+          id: 'sustainability-1',
+          title: 'Our Commitment to Sustainable Fashion',
+          excerpt: 'Learn about Ultre\'s dedication to eco-friendly practices and sustainable materials...',
+          content: `
+            <div class="blog-post-content">
+              <img src="https://placehold.co/600x300/38a169/FFFFFF?text=Sustainability" alt="Sustainability" class="w-full h-64 object-cover rounded-lg mb-6">
+              <h2 class="text-3xl font-bold text-white mb-4">Our Commitment to Sustainable Fashion</h2>
+              <p class="text-gray-300 mb-4">At Ultre, we believe fashion should be both beautiful and responsible. Here's how we're making a difference.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Eco-Friendly Materials</h3>
+              <p class="text-gray-300 mb-4">We source organic cotton, recycled polyester, and other sustainable materials to reduce our environmental impact.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Ethical Manufacturing</h3>
+              <p class="text-gray-300 mb-4">Our production partners follow fair labor practices and maintain safe working conditions for all workers.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Reduced Waste</h3>
+              <p class="text-gray-300 mb-4">We implement zero-waste patterns and recycle fabric scraps to minimize textile waste.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Carbon Footprint</h3>
+              <p class="text-gray-300 mb-4">We're working towards carbon-neutral operations through renewable energy and efficient logistics.</p>
+              
+              <div class="blog-tags mt-6">
+                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm mr-2">Sustainability</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Eco-Friendly</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Fashion</span>
+              </div>
+            </div>
+          `,
+          category: 'sustainability',
+          author: 'Ultre Team',
+          date: '2025-01-12',
+          readTime: '4 min read',
+          image: 'https://placehold.co/400x250/38a169/FFFFFF?text=Sustainability'
+        },
+        {
+          id: 'behind-scenes-1',
+          title: 'A Day in the Life: Behind the Scenes at Ultre',
+          excerpt: 'Take a peek into our creative process and see how we bring your favorite pieces to life...',
+          content: `
+            <div class="blog-post-content">
+              <img src="https://placehold.co/600x300/805ad5/FFFFFF?text=Behind+Scenes" alt="Behind the Scenes" class="w-full h-64 object-cover rounded-lg mb-6">
+              <h2 class="text-3xl font-bold text-white mb-4">A Day in the Life: Behind the Scenes at Ultre</h2>
+              <p class="text-gray-300 mb-4">Ever wondered what goes into creating your favorite Ultre pieces? Join us for a behind-the-scenes look at our creative process.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Morning Inspiration</h3>
+              <p class="text-gray-300 mb-4">Our day starts with trend research, mood boards, and inspiration gathering from around the world.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Design Development</h3>
+              <p class="text-gray-300 mb-4">Our designers sketch, prototype, and refine each piece until it meets our high standards.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Quality Control</h3>
+              <p class="text-gray-300 mb-4">Every garment undergoes rigorous testing to ensure durability, comfort, and style.</p>
+              
+              <h3 class="text-xl font-semibold text-white mb-3">Photography & Marketing</h3>
+              <p class="text-gray-300 mb-4">We capture each piece in its best light to showcase the quality and style you can expect.</p>
+              
+              <div class="blog-tags mt-6">
+                <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm mr-2">Behind the Scenes</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Creative Process</span>
+                <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Team</span>
+              </div>
+            </div>
+          `,
+          category: 'behind-scenes',
+          author: 'Ultre Team',
+          date: '2025-01-10',
+          readTime: '6 min read',
+          image: 'https://placehold.co/400x250/805ad5/FFFFFF?text=Behind+Scenes'
+        }
+      ];
+
+      // Social media feed data
+      const socialFeed = [
+        {
+          platform: 'Instagram',
+          content: 'New collection dropping next week! 🔥 #UltreStyle #NewCollection',
+          likes: 1247,
+          comments: 89,
+          image: 'https://placehold.co/300x300/e53e3e/FFFFFF?text=IG+Post',
+          time: '2 hours ago'
+        },
+        {
+          platform: 'Twitter',
+          content: 'Sustainability isn\'t just a trend—it\'s our future. 🌱 #SustainableFashion #Ultre',
+          likes: 567,
+          comments: 23,
+          image: 'https://placehold.co/300x300/3182ce/FFFFFF?text=Twitter+Post',
+          time: '5 hours ago'
+        },
+        {
+          platform: 'YouTube',
+          content: 'New styling tutorial: How to layer like a pro! 👔 #StyleTips #UltreTutorial',
+          likes: 892,
+          comments: 156,
+          image: 'https://placehold.co/300x300/d53f8c/FFFFFF?text=YT+Post',
+          time: '1 day ago'
+        }
+      ];
+
+      // Blog system functions
+      function showBlogModal() {
+        renderBlogPosts('all');
+        document.getElementById('blog-modal').classList.add('show');
+      }
+
+      function renderBlogPosts(category) {
+        const container = document.getElementById('blog-posts-container');
+        const filteredPosts = category === 'all' ? blogPosts : blogPosts.filter(post => post.category === category);
+        
+        container.innerHTML = filteredPosts.map(post => `
+          <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300" onclick="showBlogPost('${post.id}')">
+            <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+            <div class="p-6">
+              <div class="blog-meta text-sm text-gray-400 mb-2">
+                <span class="mr-3">${post.date}</span>
+                <span>${post.readTime}</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-3">${post.title}</h3>
+              <p class="text-gray-300 mb-4">${post.excerpt}</p>
+              <div class="blog-author text-sm text-gray-400">By ${post.author}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function showBlogPost(postId) {
+        const post = blogPosts.find(p => p.id === postId);
+        if (!post) return;
+        
+        const container = document.getElementById('blog-post-content');
+        container.innerHTML = post.content;
+        
+        document.getElementById('blog-post-modal').classList.add('show');
+        document.getElementById('blog-modal').classList.remove('show');
+      }
+
+      // Newsletter system
+      function showNewsletterModal() {
+        document.getElementById('newsletter-modal').classList.add('show');
+      }
+
+      function subscribeToNewsletter() {
+        const firstName = document.getElementById('newsletter-first-name').value;
+        const email = document.getElementById('newsletter-email').value;
+        const styleTips = document.getElementById('newsletter-style-tips').checked;
+        const newCollections = document.getElementById('newsletter-new-collections').checked;
+        const exclusiveOffers = document.getElementById('newsletter-exclusive-offers').checked;
+        
+        if (!firstName || !email) {
+          showMessageBox('Please fill in all required fields', 3000, true);
+          return;
+        }
+        
+        // Save newsletter preferences
+        const newsletterData = {
+          firstName,
+          email,
+          preferences: {
+            styleTips,
+            newCollections,
+            exclusiveOffers
+          },
+          subscribedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('newsletterSubscription', JSON.stringify(newsletterData));
+        
+        document.getElementById('newsletter-modal').classList.remove('show');
+        showMessageBox('Thank you for subscribing to our newsletter! 🎉');
+        
+        // Clear form
+        document.getElementById('newsletter-first-name').value = '';
+        document.getElementById('newsletter-email').value = '';
+      }
+
+      // Social media integration
+      function showSocialModal() {
+        renderSocialFeed();
+        document.getElementById('social-modal').classList.add('show');
+      }
+
+      function renderSocialFeed() {
+        const container = document.getElementById('social-feed-container');
+        container.innerHTML = socialFeed.map(post => `
+          <div class="social-post bg-gray-800 rounded-lg p-4">
+            <div class="social-post-header flex items-center justify-between mb-3">
+              <span class="text-sm font-semibold text-white">${post.platform}</span>
+              <span class="text-xs text-gray-400">${post.time}</span>
+            </div>
+            <img src="${post.image}" alt="Social post" class="w-full h-32 object-cover rounded mb-3">
+            <p class="text-gray-300 text-sm mb-3">${post.content}</p>
+            <div class="social-stats flex justify-between text-xs text-gray-400">
+              <span>❤️ ${post.likes}</span>
+              <span>💬 ${post.comments}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Enhanced homepage features
+      function enhanceHomepage() {
+        // Add blog section button
+        const featuredBlog = document.querySelector('#featured-blog');
+        if (featuredBlog) {
+          const viewAllBtn = document.createElement('button');
+          viewAllBtn.className = 'shop-button mt-6';
+          viewAllBtn.textContent = 'View All Blog Posts';
+          viewAllBtn.onclick = showBlogModal;
+          featuredBlog.appendChild(viewAllBtn);
+        }
+        
+        // Add newsletter section button
+        const newsletterSection = document.querySelector('#newsletter-signup');
+        if (newsletterSection) {
+          const newsletterBtn = document.querySelector('#newsletter-signup button');
+          if (newsletterBtn) {
+            newsletterBtn.onclick = showNewsletterModal;
+          }
+        }
+        
+        // Add social media section
+        const socialProof = document.querySelector('#social-proof');
+        if (socialProof) {
+          const socialBtn = document.createElement('button');
+          socialBtn.className = 'shop-button mt-6';
+          socialBtn.textContent = 'Follow Us on Social Media';
+          socialBtn.onclick = showSocialModal;
+          socialProof.appendChild(socialBtn);
+        }
+      }
+
+      // Enhanced product recommendations
+      function getProductRecommendations(userId) {
+        // Simple recommendation algorithm based on wishlist and cart
+        const userWishlist = wishlist.map(item => item.id);
+        const userCart = Object.keys(cart);
+        
+        let recommendations = localClothingItems.filter(item => 
+          !userWishlist.includes(item.id) && !userCart.includes(item.id)
+        );
+        
+        // Sort by rating and popularity
+        recommendations.sort((a, b) => {
+          const aRating = a.reviews.reduce((acc, rev) => acc + rev.rating, 0) / a.reviews.length;
+          const bRating = b.reviews.reduce((acc, rev) => acc + rev.rating, 0) / b.reviews.length;
+          return bRating - aRating;
+        });
+        
+        return recommendations.slice(0, 4);
+      }
+
+      // Enhanced user experience features
+      function showWelcomeTour() {
+        const tourSteps = [
+          {
+            title: 'Welcome to Ultre! 👋',
+            content: 'Let\'s take a quick tour of our amazing features.',
+            target: '.logo'
+          },
+          {
+            title: 'Shop Our Collection 🛍️',
+            content: 'Browse our curated selection of premium clothing.',
+            target: '#shop-button'
+          },
+          {
+            title: 'Compare Products ⚖️',
+            content: 'Use our comparison tool to find the perfect items.',
+            target: '.comparison-section'
+          },
+          {
+            title: 'Track Your Orders 📦',
+            content: 'Keep track of your orders and delivery status.',
+            target: '#cart-button'
+          }
+        ];
+        
+        let currentStep = 0;
+        
+        function showStep() {
+          if (currentStep >= tourSteps.length) {
+            hideTour();
+            return;
+          }
+          
+          const step = tourSteps[currentStep];
+          const target = document.querySelector(step.target);
+          
+          if (target) {
+            showMessageBox(`${step.title}\n\n${step.content}`, 4000);
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          
+          currentStep++;
+          setTimeout(showStep, 4500);
+        }
+        
+        showStep();
+      }
+
+      function hideTour() {
+        // Tour completed
+        localStorage.setItem('tourCompleted', 'true');
+      }
+
+      // Initialize enhanced homepage features
+      function initializeEnhancedHomepage() {
+        enhanceHomepage();
+        
+        // Show welcome tour for new users
+        if (!localStorage.getItem('tourCompleted')) {
+          setTimeout(showWelcomeTour, 2000);
+        }
+        
+        // Add product recommendations to homepage
+        const recommendations = getProductRecommendations();
+        if (recommendations.length > 0) {
+          const homeMain = document.getElementById('home-main');
+          if (homeMain) {
+            const recommendationsSection = document.createElement('section');
+            recommendationsSection.className = 'recommendations-section py-16 bg-gray-900';
+            recommendationsSection.innerHTML = `
+              <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-white text-center mb-12">Recommended for You</h2>
+                <div class="recommendations-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  ${recommendations.map(item => `
+                    <div class="recommendation-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300" onclick="showItemDetail('${item.id}')">
+                      <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
+                      <div class="p-4">
+                        <h3 class="text-lg font-semibold text-white mb-2">${item.name}</h3>
+                        <p class="text-blue-400 font-bold">$${item.price.toFixed(2)}</p>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+            homeMain.appendChild(recommendationsSection);
+          }
+        }
+      }
+
+      // Initialize all features when window loads
+      window.onload = function() {
+        // Initialize existing features
+        initializeEnhancedFeatures();
+        initializeEnhancedAuth();
+        
+        // Initialize new features
+        initializeAllFeatures();
+        initializeEnhancedHomepage();
+        
+        // Show home page by default
+        showPage('home');
+        
+        // Load saved data
+        loadCartFromStorage();
+        loadWishlistFromStorage();
+        
+        // Update UI
+        updateCartCount();
+        updateComparisonUI();
+        
+        // Show welcome message for first-time visitors
+        if (!localStorage.getItem('hasVisited')) {
+          setTimeout(() => {
+            showMessageBox('Welcome to Ultre! 🎉 Explore our collection and discover your perfect style.', 5000);
+            localStorage.setItem('hasVisited', 'true');
+          }, 1000);
+        }
+      };
+
     </script>
   </body>
 </html>
-
 
