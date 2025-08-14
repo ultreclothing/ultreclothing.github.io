@@ -14,6 +14,8 @@
         box-sizing: border-box;
       }
 
+      
+
       body {
         background: #0f0f0f;
         color: #f2f2f2;
@@ -1362,19 +1364,21 @@
         z-index: 10;
       }
 
-              .comparison-btn {
-          position: absolute;
-          top: 2;
-          right: 2;
-          background: rgba(0, 0, 0, 0.7);
-          color: white;
-          border: none;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          z-index: 10;
+        .comparison-btn {
+            position: absolute;
+            top: 2;
+            right: 2;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
       .comparison-btn:hover {
@@ -1526,7 +1530,7 @@
         width: 20px;
         height: 20px;
         background: #3b82f6;
-          border-radius: 50%;
+        border-radius: 50%;
         cursor: pointer;
         transition: all 0.3s ease;
       }
@@ -1751,7 +1755,7 @@
       }
 
       .form-select {
-            width: 100%;
+        width: 100%;
         padding: 0.75rem;
         background: #374151;
         border: 1px solid #4b5563;
@@ -1759,6 +1763,8 @@
         color: #f3f4f6;
         font-size: 0.875rem;
         transition: all 0.3s ease;
+        -webkit-appearance: none;
+        appearance: none;
       }
 
       .form-select:focus {
@@ -4403,13 +4409,62 @@
           }
       }
 
-      function updateSettingsContent(category) {
-          settingsContentTitle.textContent = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
-          settingsContentArea.innerHTML = '';
+function updateSettingsContent(category) {
+    let tHtml = '';
+    settingsContentTitle.textContent = `${category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')} Settings`;
+    settingsContentArea.innerHTML = '';
 
-          let contentHtml = '';
-          const userFirstName = localStorage.getItem('userFirstName') || '';
-          const userLastName = localStorage.getItem('userLastName') || '';
+    let contentHtml = '';
+    const userFirstName = localStorage.getItem('userFirstName') || '';
+    const userLastName = localStorage.getItem('userLastName') || '';
+
+    switch (category) {
+        case 'general':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'accessibility':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'privacy':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'visuals':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'payment-method':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'notifications':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        case 'security':
+            contentHtml = `
+                <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
+                </div>
+            `;
+            break;
+        default:
+            break;
+    }
+}
 
           switch (category) {
               case 'general':
@@ -4604,155 +4659,30 @@
                       </div>
                   `;
                   break;
-              case 'integrations':
-                  contentHtml = `
-                      <div class="bg-gray-700 border border-gray-600 text-gray-200 p-4 rounded-lg">
-                          <p class="font-semibold mb-4">Connect your Ultre account with other services.</p>
-                          <div class="mt-4 space-y-4 text-left">
-                              <p class="text-sm text-gray-400">No integrations are currently connected to your account.</p>
-                              <h3 class="text-lg font-semibold text-white mt-6 mb-3">Available Integrations</h3>
-                              <div class="space-y-3">
-                                  <button class="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors text-left">
-                                      <i class="fab fa-google mr-3"></i>Connect Google Account
-                                  </button>
-                                  <button class="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors text-left">
-                                      <i class="fab fa-apple mr-3"></i>Connect Apple ID
-                                  </button>
-                                  <button class="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors text-left">
-                                      <i class="fab fa-facebook mr-3"></i>Connect Facebook
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-                  `;
-                  break;
+
+      onboardingSaveBtn.addEventListener('click', () => {
+          const firstName = onboardingFirstNameInput.value.trim();
+          const lastName = onboardingLastNameInput.value.trim();
+
+          onboardingErrorMessage.classList.add('hidden');
+
+          if (!firstName || !lastName) {
+              onboardingErrorMessage.textContent = 'Please enter both your first and last name.';
+              onboardingErrorMessage.classList.remove('hidden');
+              showMessageBox('Please fill in all fields!', 3000, true);
+              return;
           }
-          
-          settingsContentArea.innerHTML = contentHtml;
-          
-          // Add event listeners for the new content
-          addSettingsEventListeners(category);
-      }
-      
-      function addSettingsEventListeners(category) {
-          // Add event listeners based on the category
-          switch(category) {
-              case 'general':
-                  const saveGeneralBtn = document.getElementById('save-general-settings');
-                  if (saveGeneralBtn) {
-                      saveGeneralBtn.addEventListener('click', function() {
-                          const firstName = document.getElementById('general-first-name').value;
-                          const lastName = document.getElementById('general-last-name').value;
-                          
-                          if (firstName && lastName) {
-                              localStorage.setItem('userFirstName', firstName);
-                              localStorage.setItem('userLastName', lastName);
-                              showMessageBox('General settings saved successfully!');
-                          } else {
-                              showMessageBox('Please fill in all fields', 3000, true);
-                          }
-                      });
-                  }
-                  break;
-              case 'accessibility':
-                  const saveAccessibilityBtn = document.getElementById('save-accessibility-settings');
-                  if (saveAccessibilityBtn) {
-                      saveAccessibilityBtn.addEventListener('click', function() {
-                          showMessageBox('Accessibility settings saved successfully!');
-                      });
-                  }
-                  break;
-              case 'privacy':
-                  const downloadDataBtn = document.getElementById('download-data-btn');
-                  if (downloadDataBtn) {
-                      downloadDataBtn.addEventListener('click', function() {
-                          showMessageBox('Data download started. You will receive an email when ready.');
-                      });
-                  }
-                  break;
-              case 'visuals':
-                  const saveVisualBtn = document.getElementById('save-visual-settings');
-                  if (saveVisualBtn) {
-                      saveVisualBtn.addEventListener('click', function() {
-                          showMessageBox('Visual settings saved successfully!');
-                      });
-                  }
-                  break;
-              case 'payment-method':
-                  const savePaymentBtn = document.getElementById('save-payment-method');
-                  if (savePaymentBtn) {
-                      savePaymentBtn.addEventListener('click', function() {
-                          showMessageBox('Payment method saved successfully!');
-                      });
-                  }
-                  break;
-              case 'notifications':
-                  const saveNotificationBtn = document.getElementById('save-notification-settings');
-                  if (saveNotificationBtn) {
-                      saveNotificationBtn.addEventListener('click', function() {
-                          showMessageBox('Notification settings saved successfully!');
-                      });
-                  }
-                  break;
-              case 'security':
-                  const changePasswordBtn = document.getElementById('change-password-btn');
-                  const twoFactorBtn = document.getElementById('two-factor-auth-btn');
-                  const viewActivityBtn = document.getElementById('view-all-activity-btn');
-                  
-                  if (changePasswordBtn) {
-                      changePasswordBtn.addEventListener('click', function() {
-                          showMessageBox('Password change functionality coming soon!');
-                      });
-                  }
-                  
-                  if (twoFactorBtn) {
-                      twoFactorBtn.addEventListener('click', function() {
-                          showMessageBox('Two-factor authentication setup coming soon!');
-                      });
-                  }
-                  
-                  if (viewActivityBtn) {
-                      viewActivityBtn.addEventListener('click', function() {
-                          showMessageBox('Full activity log coming soon!');
-                      });
-                  }
-                  break;
-              case 'integrations':
-                  // Integration buttons will be handled by their individual event listeners
-                  break;
-          }
-      }
 
-      // Event listener for onboarding save button
-      if (onboardingSaveBtn) {
-          onboardingSaveBtn.addEventListener('click', () => {
-              const firstName = onboardingFirstNameInput.value.trim();
-              const lastName = onboardingLastNameInput.value.trim();
+          localStorage.setItem('userFirstName', firstName);
+          localStorage.setItem('userLastName', lastName);
 
-              if (onboardingErrorMessage) {
-                  onboardingErrorMessage.classList.add('hidden');
-              }
-
-              if (!firstName || !lastName) {
-                  if (onboardingErrorMessage) {
-                      onboardingErrorMessage.textContent = 'Please enter both your first and last name.';
-                      onboardingErrorMessage.classList.remove('hidden');
-                  }
-                  showMessageBox('Please fill in all fields!', 3000, true);
-                  return;
-              }
-
-              localStorage.setItem('userFirstName', firstName);
-              localStorage.setItem('userLastName', lastName);
-
-              showMessageBox(`Welcome, ${firstName}! Enjoy shopping!`, 3000);
-              setTimeout(() => {
-                  showPage('home-main');
-                  if (onboardingFirstNameInput) onboardingFirstNameInput.value = '';
-                  if (onboardingLastNameInput) onboardingLastNameInput.value = '';
-              }, 1000);
-          });
-      }
+          showMessageBox(`Welcome, ${firstName}! Enjoy shopping!`, 3000);
+          setTimeout(() => {
+              showPage('home-main');
+              onboardingFirstNameInput.value = '';
+              onboardingLastNameInput.value = '';
+          }, 1000);
+      });
 
       document.querySelectorAll('.auth-form-container .form-link').forEach(link => {
           link.addEventListener('click', function(e) {
@@ -5098,6 +5028,14 @@
       function removeFromComparison(productId) {
         comparisonList = comparisonList.filter(id => id !== productId);
         updateComparisonUI();
+      }
+
+      function updateComparisonUI() {
+        const comparisonBtn = document.getElementById('comparison-btn');
+        if (comparisonBtn) {
+          comparisonBtn.innerHTML = `Compare (${comparisonList.length})`;
+          comparisonBtn.disabled = comparisonList.length < 2;
+        }
       }
 
       function showComparisonModal() {
@@ -5491,41 +5429,21 @@
 
       // Initialize all enhanced features
       function initializeAllFeatures() {
-        try {
-          // Initialize existing features
-          if (typeof initializeEnhancedFeatures === 'function') {
-            initializeEnhancedFeatures();
-          }
-          if (typeof initializeEnhancedAuth === 'function') {
-            initializeEnhancedAuth();
-          }
-          
-          // Initialize new features
-          if (typeof initializeComparisonFeatures === 'function') {
-            initializeComparisonFeatures();
-          }
-          if (typeof initializeDashboardFeatures === 'function') {
-            initializeDashboardFeatures();
-          }
-          if (typeof initializeAdvancedSearch === 'function') {
-            initializeAdvancedSearch();
-          }
-          if (typeof initializeSizeRecommendation === 'function') {
-            initializeSizeRecommendation();
-          }
-          
-          // Load saved preferences
-          if (typeof loadUserPreferences === 'function') {
-            loadUserPreferences();
-          }
-          
-          // Update comparison UI
-          if (typeof updateComparisonUI === 'function') {
-            updateComparisonUI();
-          }
-        } catch (error) {
-          console.error('Error initializing features:', error);
-        }
+        // Initialize existing features
+        initializeEnhancedFeatures();
+        initializeEnhancedAuth();
+        
+        // Initialize new features
+        initializeComparisonFeatures();
+        initializeDashboardFeatures();
+        initializeAdvancedSearch();
+        initializeSizeRecommendation();
+        
+        // Load saved preferences
+        loadUserPreferences();
+        
+        // Update comparison UI
+        updateComparisonUI();
       }
 
       function initializeComparisonFeatures() {
@@ -5599,26 +5517,6 @@
           tab.addEventListener('click', function() {
             const tabName = this.dataset.tab;
             switchDashboardTab(tabName);
-          });
-        });
-        
-        // Add missing modal close functionality
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-          modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-              this.classList.remove('show');
-            }
-          });
-        });
-        
-        // Add missing close button functionality
-        const closeButtons = document.querySelectorAll('.modal-close-btn');
-        closeButtons.forEach(btn => {
-          btn.addEventListener('click', function() {
-            const modal = this.closest('.modal-overlay');
-            if (modal) {
-              modal.classList.remove('show');
-            }
           });
         });
 
@@ -5819,15 +5717,11 @@
         // Initialize size recommendation
         initializeSizeRecommendation();
         
-              // Load user preferences
-      if (typeof loadUserPreferences === 'function') {
+        // Load user preferences
         loadUserPreferences();
-      }
-      
-      // Update comparison UI
-      if (typeof updateComparisonUI === 'function') {
+        
+        // Update comparison UI
         updateComparisonUI();
-      }
         
         // Blog system event listeners
         document.querySelectorAll('.blog-category-btn').forEach(btn => {
@@ -6132,115 +6026,102 @@
 
       // Enhanced homepage features
       function enhanceHomepage() {
-        try {
-          // Add blog section button
-          const featuredBlog = document.querySelector('#featured-blog');
-          if (featuredBlog) {
-            const viewAllBtn = document.createElement('button');
-            viewAllBtn.className = 'shop-button mt-6';
-            viewAllBtn.textContent = 'View All Blog Posts';
-            viewAllBtn.onclick = showBlogModal;
-            featuredBlog.appendChild(viewAllBtn);
+        // Add blog section button
+        const featuredBlog = document.querySelector('#featured-blog');
+        if (featuredBlog) {
+          const viewAllBtn = document.createElement('button');
+          viewAllBtn.className = 'shop-button mt-6';
+          viewAllBtn.textContent = 'View All Blog Posts';
+          viewAllBtn.onclick = showBlogModal;
+          featuredBlog.appendChild(viewAllBtn);
+        }
+        
+        // Add newsletter section button
+        const newsletterSection = document.querySelector('#newsletter-signup');
+        if (newsletterSection) {
+          const newsletterBtn = document.querySelector('#newsletter-signup button');
+          if (newsletterBtn) {
+            newsletterBtn.onclick = showNewsletterModal;
           }
-          
-          // Add newsletter section button
-          const newsletterSection = document.querySelector('#newsletter-signup');
-          if (newsletterSection) {
-            const newsletterBtn = document.querySelector('#newsletter-signup button');
-            if (newsletterBtn) {
-              newsletterBtn.onclick = showNewsletterModal;
-            }
-          }
-          
-          // Add social media section
-          const socialProof = document.querySelector('#social-proof');
-          if (socialProof) {
-            const socialBtn = document.createElement('button');
-            socialBtn.className = 'shop-button mt-6';
-            socialBtn.textContent = 'Follow Us on Social Media';
-            socialBtn.onclick = showSocialModal;
-            socialProof.appendChild(socialBtn);
-          }
-                } catch (error) {
-          console.error('Error enhancing homepage:', error);
+        }
+        
+        // Add social media section
+        const socialProof = document.querySelector('#social-proof');
+        if (socialProof) {
+          const socialBtn = document.createElement('button');
+          socialBtn.className = 'shop-button mt-6';
+          socialBtn.textContent = 'Follow Us on Social Media';
+          socialBtn.onclick = showSocialModal;
+          socialProof.appendChild(socialBtn);
         }
       }
 
       // Enhanced product recommendations
       function getProductRecommendations(userId) {
-        try {
-          // Simple recommendation algorithm based on wishlist and cart
-          const userWishlist = wishlist.map(item => item.id);
-          const userCart = Object.keys(cart);
-          
-          let recommendations = localClothingItems.filter(item => 
-            !userWishlist.includes(item.id) && !userCart.includes(item.id)
-          );
-          
-          // Sort by rating and popularity
-          recommendations.sort((a, b) => {
-            const aRating = a.reviews.reduce((acc, rev) => acc + rev.rating, 0) / a.reviews.length;
-            const bRating = b.reviews.reduce((acc, rev) => acc + rev.rating, 0) / b.reviews.length;
-            return bRating - aRating;
-          });
-          
-          return recommendations.slice(0, 4);
-        } catch (error) {
-          console.error('Error getting product recommendations:', error);
-          return [];
-        }
+        // Simple recommendation algorithm based on wishlist and cart
+        const userWishlist = wishlist.map(item => item.id);
+        const userCart = Object.keys(cart);
+        
+        let recommendations = localClothingItems.filter(item => 
+          !userWishlist.includes(item.id) && !userCart.includes(item.id)
+        );
+        
+        // Sort by rating and popularity
+        recommendations.sort((a, b) => {
+          const aRating = a.reviews.reduce((acc, rev) => acc + rev.rating, 0) / a.reviews.length;
+          const bRating = b.reviews.reduce((acc, rev) => acc + rev.rating, 0) / b.reviews.length;
+          return bRating - aRating;
+        });
+        
+        return recommendations.slice(0, 4);
       }
 
       // Enhanced user experience features
       function showWelcomeTour() {
-        try {
-          const tourSteps = [
-            {
-              title: 'Welcome to Ultre! 👋',
-              content: 'Let\'s take a quick tour of our amazing features.',
-              target: '.logo'
-            },
-            {
-              title: 'Shop Our Collection 🛍️',
-              content: 'Browse our curated selection of premium clothing.',
-              target: '#shop-button'
-            },
-            {
-              title: 'Compare Products ⚖️',
-              content: 'Use our comparison tool to find the perfect items.',
-              target: '.comparison-section'
-            },
-            {
-              title: 'Track Your Orders 📦',
-              content: 'Keep track of your orders and delivery status.',
-              target: '#cart-button'
-            }
-          ];
-          
-          let currentStep = 0;
-          
-          function showStep() {
-            if (currentStep >= tourSteps.length) {
-              hideTour();
-              return;
-            }
-            
-            const step = tourSteps[currentStep];
-            const target = document.querySelector(step.target);
-            
-            if (target) {
-              showMessageBox(`${step.title}\n\n${step.content}`, 4000);
-              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            
-            currentStep++;
-            setTimeout(showStep, 4500);
+        const tourSteps = [
+          {
+            title: 'Welcome to Ultre! 👋',
+            content: 'Let\'s take a quick tour of our amazing features.',
+            target: '.logo'
+          },
+          {
+            title: 'Shop Our Collection 🛍️',
+            content: 'Browse our curated selection of premium clothing.',
+            target: '#shop-button'
+          },
+          {
+            title: 'Compare Products ⚖️',
+            content: 'Use our comparison tool to find the perfect items.',
+            target: '.comparison-section'
+          },
+          {
+            title: 'Track Your Orders 📦',
+            content: 'Keep track of your orders and delivery status.',
+            target: '#cart-button'
+          }
+        ];
+        
+        let currentStep = 0;
+        
+        function showStep() {
+          if (currentStep >= tourSteps.length) {
+            hideTour();
+            return;
           }
           
-          showStep();
-        } catch (error) {
-          console.error('Error showing welcome tour:', error);
+          const step = tourSteps[currentStep];
+          const target = document.querySelector(step.target);
+          
+          if (target) {
+            showMessageBox(`${step.title}\n\n${step.content}`, 4000);
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          
+          currentStep++;
+          setTimeout(showStep, 4500);
         }
+        
+        showStep();
       }
 
       function hideTour() {
@@ -6250,102 +6131,108 @@
 
       // Initialize enhanced homepage features
       function initializeEnhancedHomepage() {
-        try {
-          if (typeof enhanceHomepage === 'function') {
-            enhanceHomepage();
+        enhanceHomepage();
+        
+        // Show welcome tour for new users
+        if (!localStorage.getItem('tourCompleted')) {
+          setTimeout(showWelcomeTour, 2000);
+        }
+        
+        // Add product recommendations to homepage
+        const recommendations = getProductRecommendations();
+        if (recommendations.length > 0) {
+          const homeMain = document.getElementById('home-main');
+          if (homeMain) {
+            const recommendationsSection = document.createElement('section');
+            recommendationsSection.className = 'recommendations-section py-16 bg-gray-900';
+            recommendationsSection.innerHTML = `
+              <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-white text-center mb-12">Recommended for You</h2>
+                <div class="recommendations-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  ${recommendations.map(item => `
+                    <div class="recommendation-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300" onclick="showItemDetail('${item.id}')">
+                      <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
+                      <div class="p-4">
+                        <h3 class="text-lg font-semibold text-white mb-2">${item.name}</h3>
+                        <p class="text-blue-400 font-bold">$${item.price.toFixed(2)}</p>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+            homeMain.appendChild(recommendationsSection);
           }
-          
-          // Show welcome tour for new users
-          if (!localStorage.getItem('tourCompleted')) {
-            setTimeout(showWelcomeTour, 2000);
-          }
-          
-          // Add product recommendations to homepage
-          const recommendations = getProductRecommendations();
-          if (recommendations.length > 0) {
-            const homeMain = document.getElementById('home-main');
-            if (homeMain) {
-              const recommendationsSection = document.createElement('section');
-              recommendationsSection.className = 'recommendations-section py-16 bg-gray-900';
-              recommendationsSection.innerHTML = `
-                <div class="max-w-6xl mx-auto px-4">
-                  <h2 class="text-3xl font-bold text-white text-center mb-12">Recommended for You</h2>
-                  <div class="recommendations-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    ${recommendations.map(item => `
-                      <div class="recommendation-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300" onclick="showItemDetail('${item.id}')">
-                        <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-48 object-cover">
-                                                 <div class="p-4">
-                           <h3 class="text-lg font-semibold text-white mb-2">${item.name}</h3>
-                           <p class="text-blue-400 font-bold">$${item.price.toFixed(2)}</p>
-                         </div>
-                       </div>
-                     `).join('')}
-                   </div>
-                 </div>
-               `;
-               homeMain.appendChild(recommendationsSection);
-             }
-           }
-         }
-       } catch (error) {
-         console.error('Error initializing enhanced homepage:', error);
-       }
-      }
-
-      // Missing functions that are referenced but not defined
-      function loadCartFromStorage() {
-        try {
-          const savedCart = localStorage.getItem('cart');
-          if (savedCart) {
-            cart = JSON.parse(savedCart);
-          }
-        } catch (error) {
-          console.error('Error loading cart from storage:', error);
-          cart = {};
         }
       }
 
-      function loadWishlistFromStorage() {
-        try {
-          const savedWishlist = localStorage.getItem('wishlist');
-          if (savedWishlist) {
-            wishlist = JSON.parse(savedWishlist);
-          }
-        } catch (error) {
-          console.error('Error loading wishlist from storage:', error);
-          wishlist = [];
-        }
-      }
+      // Initialize all features when window loads
+      window.onload = function() {
+        // Intro text animation
+        splitAndAnimateLetters('mainTagline', 1.5);
 
-      function updateCartCount() {
-        try {
-          const cartCount = Object.keys(cart).length;
-          const cartCountElement = document.querySelector('.cart-count');
-          if (cartCountElement) {
-            cartCountElement.textContent = cartCount;
-          }
-        } catch (error) {
-          console.error('Error updating cart count:', error);
-        }
-      }
+        // Shop button transition into site
+        if (shopButton) {
+          shopButton.addEventListener('click', () => {
+            if (transitionOverlay) transitionOverlay.classList.add('active');
 
-      function updateComparisonUI() {
-        try {
-          const comparisonBtn = document.getElementById('comparison-btn');
-          if (comparisonBtn) {
-            comparisonBtn.innerHTML = `Compare (${comparisonList.length})`;
-            comparisonBtn.disabled = comparisonList.length < 2;
-          }
-        } catch (error) {
-          console.error('Error updating comparison UI:', error);
-        }
-      }
+            const handleTransitionEnd = function handler() {
+              if (transitionOverlay) transitionOverlay.removeEventListener('transitionend', handler);
+              if (introSection) introSection.classList.add('hidden-content');
+              if (mainWebsiteContentWrapper) mainWebsiteContentWrapper.classList.add('active-content');
+              if (typeof supportMode !== 'undefined') supportMode = false;
+              // Navigate directly to Shop page
+              showPage('shop-page');
+              // Apply fade-in animation to shop section
+              const shopSection = document.getElementById('shop-page');
+              if (shopSection) {
+                shopSection.classList.add('fade-in');
+                shopSection.addEventListener('animationend', () => {
+                  shopSection.classList.remove('fade-in');
+                }, { once: true });
+              }
+              if (transitionOverlay) transitionOverlay.classList.remove('active');
+            };
 
-      function toggleComparison(productId) {
-        if (comparisonList.includes(productId)) {
-          removeFromComparison(productId);
-        } else {
-          addToComparison(productId);
+            // If CSS transitionend doesn't fire (e.g., no CSS), fallback quickly
+            let fallback = setTimeout(handleTransitionEnd, 300);
+            if (transitionOverlay) {
+              transitionOverlay.addEventListener('transitionend', function wrapper(ev){
+                clearTimeout(fallback);
+                handleTransitionEnd();
+              });
+            }
+          });
         }
-        renderFilteredProducts(localClothingItems); // Refresh to update UI
-      }
+
+        // Initialize existing features
+        initializeEnhancedFeatures();
+        initializeEnhancedAuth();
+        
+        // Initialize new features
+        initializeAllFeatures();
+        initializeEnhancedHomepage();
+        
+        // Ensure we start on intro and not skip animation
+        // Do not auto-call showPage here; intro leads into home via the button.
+        
+        // Load saved data
+        loadCartFromStorage();
+        loadWishlistFromStorage();
+        
+        // Update UI
+        updateCartCount();
+        updateComparisonUI();
+        
+        // Show welcome message for first-time visitors
+        if (!localStorage.getItem('hasVisited')) {
+          setTimeout(() => {
+            showMessageBox('Welcome to Ultre! 🎉 Explore our collection and discover your perfect style.', 5000);
+            localStorage.setItem('hasVisited', 'true');
+          }, 1000);
+        }
+      };
+
+    </script>
+  </body>
+</html>
