@@ -1043,6 +1043,68 @@
             padding-bottom: 60px;
         }
       }
+
+      @keyframes slideInUpFadeIn {
+           0% { opacity: 0; transform: translateY(20px); }
+           100% { opacity: 1; transform: translateY(0); }
+       }
+
+       /* OAuth buttons */
+       .oauth-buttons {
+           display: flex;
+           flex-direction: column;
+           gap: 10px;
+           margin-top: 5px;
+       }
+       .oauth-btn {
+           width: 100%;
+           padding: 12px 25px;
+           border-radius: 8px;
+           border: 1px solid #555;
+           background-color: #3a3a3a;
+           color: #f2f2f2;
+           font-size: 1.05rem;
+           display: inline-flex;
+           align-items: center;
+           justify-content: center;
+           gap: 10px;
+           transition: background-color 0.2s ease, transform 0.05s ease;
+       }
+       .oauth-btn:active {
+           transform: translateY(1px);
+       }
+       .oauth-btn i {
+           font-size: 1.2rem;
+       }
+       .oauth-google {
+           background-color: #4285F4;
+           border-color: #2f6fe0;
+       }
+       .oauth-google:hover {
+           background-color: #357ae8;
+       }
+       .oauth-apple {
+           background-color: #0a0a0a;
+           border-color: #1a1a1a;
+       }
+       .oauth-apple:hover {
+           background-color: #141414;
+       }
+       .oauth-divider {
+           display: flex;
+           align-items: center;
+           gap: 12px;
+           color: #bdbdbd;
+           font-size: 0.9rem;
+           margin: 5px 0 5px;
+       }
+       .oauth-divider::before,
+       .oauth-divider::after {
+           content: '';
+           flex: 1;
+           height: 1px;
+           background: #444;
+       }
     </style>
   </head>
   <body>
@@ -1143,7 +1205,7 @@
       <section id="about-us-main">
         <div class="info-title">About Us</div>
         <div class="info-content" id="aboutUsContent">
-          Ultre isn’t just a brand — it’s a mindset. Rooted in simplicity, built for the bold.
+          Ultre isn't just a brand — it's a mindset. Rooted in simplicity, built for the bold.
           We believe in creating essential pieces that resonate with those who value authenticity and understated strength.
           <br><br>
           No loud flex, no trend chasing. Just timeless energy and pieces that bring the "you" out of you.
@@ -1189,6 +1251,13 @@
           <div class="info-title">Sign In</div>
           <div class="auth-form-container">
               <div id="signin-error-message" class="error-message hidden"></div>
+
+              <div class="oauth-buttons">
+                  <button id="signin-google-btn" class="oauth-btn oauth-google"><i class="fab fa-google"></i> Continue with Google</button>
+                  <button id="signin-apple-btn" class="oauth-btn oauth-apple"><i class="fab fa-apple"></i> Continue with Apple</button>
+              </div>
+              <div class="oauth-divider"><span>or</span></div>
+
               <div>
                   <label for="signin-email">Email:</label>
                   <input type="email" id="signin-email" placeholder="your@example.com" required>
@@ -1209,6 +1278,13 @@
           <div class="info-title">Sign Up</div>
           <div class="auth-form-container">
               <div id="signup-error-message" class="error-message hidden"></div>
+
+              <div class="oauth-buttons">
+                  <button id="signup-google-btn" class="oauth-btn oauth-google"><i class="fab fa-google"></i> Continue with Google</button>
+                  <button id="signup-apple-btn" class="oauth-btn oauth-apple"><i class="fab fa-apple"></i> Continue with Apple</button>
+              </div>
+              <div class="oauth-divider"><span>or</span></div>
+
               <div>
                   <label for="signup-email">Email:</label>
                   <input type="email" id="signup-email" placeholder="your@example.com" required>
@@ -1394,6 +1470,11 @@
       const signUpConfirmPasswordInput = document.getElementById('signup-confirm-password');
       const signUpBtn = document.getElementById('signup-btn');
       const signUpErrorMessage = document.getElementById('signup-error-message');
+
+      const signInGoogleBtn = document.getElementById('signin-google-btn');
+      const signInAppleBtn = document.getElementById('signin-apple-btn');
+      const signUpGoogleBtn = document.getElementById('signup-google-btn');
+      const signUpAppleBtn = document.getElementById('signup-apple-btn');
 
       const onboardingPage = document.getElementById('onboarding-main');
       const onboardingTitle = document.getElementById('onboarding-title');
@@ -1833,7 +1914,7 @@
           } else if (pageId === 'support-main') {
               typeMessage(supportQuestion, "What type of support do you need?", callback);
           } else if (pageId === 'chat-interface') {
-              displayChatMessage("Hey, I’m UltreBot — what do you need help with today?", 'bot');
+              displayChatMessage("Hey, I'm UltreBot — what do you need help with today?", 'bot');
               chatInput.focus();
           } else if (pageId === 'settings-main') {
               if (!settingsInitialized) {
@@ -2342,6 +2423,22 @@
           }, 1000);
       });
 
+      signInGoogleBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          showMessageBox('Signing in with Google (simulated)!', 3000);
+          setTimeout(() => {
+              showPage('home-main');
+          }, 1000);
+      });
+
+      signInAppleBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          showMessageBox('Signing in with Apple (simulated)!', 3000);
+          setTimeout(() => {
+              showPage('home-main');
+          }, 1000);
+      });
+
       signUpBtn.addEventListener('click', (e) => {
           e.preventDefault();
           const email = signUpEmailInput.value.trim();
@@ -2370,6 +2467,22 @@
               signUpEmailInput.value = '';
               signUpPasswordInput.value = '';
               signUpConfirmPasswordInput.value = '';
+          }, 1000);
+      });
+
+      signUpGoogleBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          showMessageBox('Account created with Google! Please tell us your name!', 3000);
+          setTimeout(() => {
+              showPage('onboarding-main');
+          }, 1000);
+      });
+
+      signUpAppleBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          showMessageBox('Account created with Apple! Please tell us your name!', 3000);
+          setTimeout(() => {
+              showPage('onboarding-main');
           }, 1000);
       });
 
