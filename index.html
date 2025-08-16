@@ -160,6 +160,11 @@
           display: none;
       }
 
+      /* Mobile: ensure hamburger icon visible on small screens */
+      @media (max-width: 768px) {
+        .hamburger-menu-icon { display: block; }
+      }
+
       .hamburger-menu-icon:hover {
           color: #d0d0d0;
       }
@@ -2737,8 +2742,16 @@
 
       <section id="support-main">
           <div class="info-title" id="supportQuestion"></div>
-          <button id="quickEasyBtn" class="support-option-button quick-easy-btn">Quick and Easy (AI)</button>
-          <button id="advancedSupportBtn" class="support-option-button advanced-support-btn">Advanced Support (Mail)</button>
+          <div class="support-actions flex flex-col sm:flex-row gap-3">
+              <button id="quickEasyBtn" type="button" class="shop-button support-action-btn quick-easy-btn" aria-label="Quick and Easy AI Support">
+                  <i class="fas fa-robot mr-2" aria-hidden="true"></i>
+                  Quick & Easy (AI)
+              </button>
+              <button id="advancedSupportBtn" type="button" class="shop-button support-action-btn advanced-support-btn" aria-label="Advanced Support via Email">
+                  <i class="fas fa-envelope mr-2" aria-hidden="true"></i>
+                  Advanced Support (Mail)
+              </button>
+          </div>
           <button id="backToMainSiteBtn" class="shop-button mt-10" onclick="(function(){var b=window.location.href.split('#')[0];try{window.location.replace(b+'#sym:homeMain');}catch(e){window.location.href=b+'#sym:homeMain';}return false; })()">Head to the Shop</button>
       </section>
 
@@ -4889,8 +4902,26 @@ function updateSettingsContent(category) {
       // Call the auth navigation initializer
       initializeAuthNavigation();
 
+      // Quick & Easy: animate from support to chat and inject system prompt
       quickEasyBtn.addEventListener('click', () => {
-          showPage('chat-interface');
+          try { if (typeof ensureMainWrapperVisible === 'function') ensureMainWrapperVisible(); } catch(e){}
+
+          // gentle UI cue on support panel
+          try {
+            if (supportMain) {
+              supportMain.classList.add('fade-out');
+            }
+          } catch(e){}
+
+          // set a system prompt for the chat revamp to consume
+          window._ultreChatSystemPrompt = "You are UltreBot, a helpful assistant for the Ultre clothing brand. Answer concisely, prioritize product, order and shipping info, and ask one clarifying question if needed.";
+
+          // small pause for the support panel fade, then open the chat UI and focus
+          setTimeout(() => {
+            try { showPage('chat-interface'); } catch(e){}
+            // remove fade class after transition so it can be reused
+            setTimeout(()=>{ try{ if(supportMain) supportMain.classList.remove('fade-out'); }catch(e){} }, 600);
+          }, 300);
       });
 
       advancedSupportBtn.addEventListener('click', () => {
@@ -4914,16 +4945,184 @@ function updateSettingsContent(category) {
           }
       });
 
-      settingsNavLinks.forEach(link => {
+      // Ensure clicking any anchor that should open settings works and binds save handlers
+      function openSettings(category = 'general') {
+          try { if (typeof ensureMainWrapperVisible === 'function') ensureMainWrapperVisible(); } catch(e){}
+          try { showPage('settings-main'); } catch(e){}
+          try { updateSettingsContent(category); } catch(e){}
+      }
+
+      // Provide a safe sanitizeTargetId fallback if it's not defined already
+      if (typeof sanitizeTargetId !== 'function') {
+          function sanitizeTargetId(raw) {
+              try {
+                  raw = String(raw || '');
+                  // take the fragment after the last '#', remove leading '#' and optional 'sym:' prefix
+                  if (raw.indexOf('#') !== -1) raw = raw.substring(raw.lastIndexOf('#'));
+                  raw = raw.replace(/^#/, '').replace(/^sym:/i, '').trim();
+                  return raw || null;
+              } catch (e) {
+                  return null;
+              }
+          }
+      }
+
+      // Global delegated handler: make sign-in, sign-up and support reachable from anywhere
+      document.addEventListener('click', function(e) {
+          const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!a) return;
+      
+          const href = (a.getAttribute('href') || '').trim();
+          if (!href) return;
+      
+          const targetId = sanitizeTargetId(href);
+          if (!targetId) return;
+      
+          // Pages we want to guarantee access to from any anchor
+          const guaranteedPages = ['sign-in-main', 'sign-up-main', 'support-main', 'chat-interface'];
+          if (guaranteedPages.indexOf(targetId) === -1) return;
+      
+          e.preventDefault();
+      
+          // Reveal main content if the intro overlay is still active
+          try { if (typeof ensureMainWrapperVisible === 'function') ensureMainWrapperVisible(); } catch (err) {}
+      
+          // Show the requested page
+          try { if (typeof showPage === 'function') showPage(targetId); } catch (err) {}
+      
+          // Update URL hash without creating a history entry
+          try { history.replaceState(null, '', '#' + targetId); } catch (err) { window.location.hash = targetId; }
+      
+          // Update nav selection to match
+          try { setActiveNavForPage(targetId); } catch (err) {}
+      
+          // Close mobile overlay and any common dropdowns so the page is visible
+          try { if (mobileNavOverlay) mobileNavOverlay.classList.remove('open'); } catch (err) {}
+          try { document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open')); } catch (err) {}
+      }, true);
+      
+      // Make nav selection behave like taskbar peers: mark matching nav links active
+      function setActiveNavForPage(pageId) {
+          try {
+              // clear nav active markers
+              document.querySelectorAll('nav ul li a, nav ul li, #mobile-nav-overlay ul li a, #mobile-nav-overlay ul li').forEach(el => {
+                  el.classList.remove('active-nav-link', 'active', 'selected');
+              });
+      
+              // Find anchors that target this page by href fragment, data-page-id, or data attributes
+              const candidates = Array.from(document.querySelectorAll(`a[href], [data-page-id], a[data-page-id]`));
+              for (let el of candidates) {
+                  try {
+                      const href = (el.getAttribute && el.getAttribute('href')) || '';
+                      const data = el.getAttribute('data-page-id') || el.dataset && el.dataset.pageId || '';
+                      const resolved = sanitizeTargetId(href || data || '');
+                      if (resolved === pageId) {
+                          // prefer the closest li (taskbar style)
+                          const li = el.closest('li') || el;
+                          li.classList.add('active-nav-link', 'active', 'selected');
+                          if (el.classList) el.classList.add('active-nav-link');
+                          break;
+                      }
+                  } catch (err) { /* ignore candidate errors */ }
+              }
+          } catch (err) { /* ignore */ }
+      }
+      
+      // Listen for successful page show events via hashchange as well and update nav
+      (function() {
+          window.addEventListener('hashchange', function() {
+              try {
+                  const target = sanitizeTargetId(window.location.hash || '');
+                  if (target) setActiveNavForPage(target);
+              } catch (err) {}
+          });
+      })();
+
+      // If page was loaded with a hash pointing to auth/support, open it and reveal the main wrapper
+      window.addEventListener('load', function() {
+          try {
+              var raw = window.location.hash || (window.location.href.match(/#(.*)$/) || [])[0] || '';
+              var target = sanitizeTargetId(raw);
+              if (target && ['sign-in-main', 'sign-up-main', 'support-main', 'chat-interface', 'settings-main'].indexOf(target) !== -1) {
+                  try { if (typeof ensureMainWrapperVisible === 'function') ensureMainWrapperVisible(); } catch (err) {}
+                  try { if (typeof showPage === 'function') showPage(target); } catch (err) {}
+              }
+          } catch (err) { /* ignore */ }
+      }, false);
+
+      // Wire settings save buttons using delegation so settings options are changeable
+      document.addEventListener('click', function(e){
+          const el = e.target;
+
+          if (el.id === 'save-general-settings') {
+              e.preventDefault();
+              const first = document.getElementById('general-first-name');
+              const last = document.getElementById('general-last-name');
+              if (first && last) {
+                  localStorage.setItem('userFirstName', first.value.trim());
+                  localStorage.setItem('userLastName', last.value.trim());
+                  showMessageBox('General settings saved');
+              }
+          }
+
+          if (el.id === 'save-accessibility-settings') {
+              e.preventDefault();
+              const highContrast = document.getElementById('high-contrast-toggle');
+              const screenReader = document.getElementById('screen-reader-toggle');
+              if (highContrast) localStorage.setItem('highContrast', highContrast.checked ? 'true' : 'false');
+              if (screenReader) localStorage.setItem('screenReader', screenReader.checked ? 'true' : 'false');
+              showMessageBox('Accessibility settings saved');
+          }
+
+          if (el.id === 'save-visual-settings') {
+              e.preventDefault();
+              const theme = document.getElementById('theme-select');
+              const animations = document.getElementById('animations-toggle');
+              if (theme) localStorage.setItem('theme', theme.value);
+              if (animations) localStorage.setItem('animationsEnabled', animations.checked ? 'true' : 'false');
+              showMessageBox('Visual settings saved');
+          }
+
+          if (el.id === 'save-notification-settings') {
+              e.preventDefault();
+              const emailNotif = document.getElementById('email-notifications-toggle');
+              const promo = document.getElementById('promotional-offers-toggle');
+              const push = document.getElementById('push-notifications-toggle');
+              if (emailNotif) localStorage.setItem('emailNotifications', emailNotif.checked ? 'true' : 'false');
+              if (promo) localStorage.setItem('promotionalOffers', promo.checked ? 'true' : 'false');
+              if (push) localStorage.setItem('pushNotifications', push.checked ? 'true' : 'false');
+              showMessageBox('Notification settings saved');
+          }
+
+          if (el.id === 'save-payment-method') {
+              e.preventDefault();
+              showMessageBox('Payment methods saved (demo)');
+          }
+
+          if (el.id === 'change-password-btn') {
+              e.preventDefault();
+              showMessageBox('Password change flow not implemented in demo');
+          }
+
+          if (el.id === 'two-factor-auth-btn') {
+              e.preventDefault();
+              showMessageBox('Two-factor auth toggled (demo)');
+          }
+      });
+
+      // Ensure settings nav links open the settings main and load the category
+      try {
+        settingsNavLinks.forEach(link => {
           link.addEventListener('click', (e) => {
               e.preventDefault();
               settingsNavLinks.forEach(navLink => navLink.classList.remove('bg-gray-700', 'text-white'));
-              e.target.classList.add('bg-gray-700', 'text-white');
+              e.currentTarget.classList.add('bg-gray-700', 'text-white');
 
-              const category = e.target.dataset.settingCategory;
-              updateSettingsContent(category);
+              const category = e.currentTarget.dataset.settingCategory || 'general';
+              openSettings(category);
           });
-      });
+        });
+      } catch(e) {}
 
       hamburgerIcon.addEventListener('click', () => {
           mobileNavOverlay.classList.add('open');
@@ -4933,12 +5132,33 @@ function updateSettingsContent(category) {
           mobileNavOverlay.classList.remove('open');
       });
 
+      // Fix mobile nav item click handling to be more forgiving and sanitize ids
       mobileNavItems.forEach(item => {
           item.addEventListener('click', function (e) {
               e.preventDefault();
-              const targetId = this.getAttribute('data-page-id');
-              showPage(targetId);
-              mobileNavOverlay.classList.remove('open');
+
+              // Determine target id from data-page-id or anchor href
+              let raw = this.getAttribute('data-page-id') || this.dataset.pageId || '';
+              if (!raw) {
+                  const a = this.querySelector('a[href]');
+                  raw = a ? (a.getAttribute('href') || '') : '';
+              }
+
+              // Sanitize raw: handle cases like 'sym:#support-main', '#support-main', or 'support-main'
+              if (raw.indexOf('#') !== -1) raw = raw.substring(raw.lastIndexOf('#'));
+              raw = String(raw).replace(/^#/, '').replace(/^sym:/i, '').trim();
+
+              if (!raw) return;
+
+              try { if (typeof ensureMainWrapperVisible === 'function') ensureMainWrapperVisible(); } catch(e){}
+
+              try {
+                  if (typeof showPage === 'function') showPage(raw);
+              } catch (err) {
+                  console.error('mobileNav showPage error', err);
+              }
+
+              try { mobileNavOverlay.classList.remove('open'); } catch(e){}
           });
       });
 
@@ -6378,8 +6598,10 @@ function updateSettingsContent(category) {
           // Robust handler implemented below
           window._shopBtnHandler = function (e) {
             e && e.preventDefault();
-            if (window._isNavigating) return; // guard against re-entry
+            // guard against re-entry across both nav flags used elsewhere
+            if (window._isNavigating || typeof isNavigating !== 'undefined' && isNavigating) return;
             window._isNavigating = true;
+            isNavigating = true;
 
             const targetId = 'shop-page';
             const baseUrl = window.location.href.split('#')[0];
@@ -6531,5 +6753,607 @@ function updateSettingsContent(category) {
         });
       });
     </script>
+
+    <script>
+    (function(){
+     
+      function initUltreChatRevamp(){
+        if (!document.body) return;
+        try {
+        
+          if (!document.getElementById('ultre-chat-styles')){
+            const s = document.createElement('style');
+            s.id = 'ultre-chat-styles';
+            s.textContent = `
+              .ultre-chat { max-width:940px; height:72vh; margin:18px auto; display:flex; flex-direction:column; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#0b0b0b,#080808); box-shadow:0 18px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+              .ultre-chat-header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(90deg, rgba(139,92,246,0.06), transparent)}
+              .ultre-chat-header .avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(90deg,#8b5cf6,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+              .ultre-chat-header .title{font-weight:800;color:#fff}
+              .ultre-chat-messages{flex:1;padding:18px;display:flex;flex-direction:column;gap:12px;overflow:auto;background:radial-gradient(ellipse at top left, rgba(255,255,255,0.01), transparent)}
+              .ultre-msg{max-width:78%;padding:12px 14px;border-radius:14px;line-height:1.45;font-size:0.98rem;box-shadow:0 8px 20px rgba(0,0,0,0.45)}
+              .ultre-msg.user{align-self:flex-end;background:linear-gradient(90deg,#3b82f6,#8b5cf6);color:#fff;border-bottom-right-radius:6px}
+              .ultre-msg.bot{align-self:flex-start;background:linear-gradient(180deg,#111827,#0f172a);color:#e5e7eb;border-bottom-left-radius:6px}
+              .ultre-chat-form{display:flex;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,0.03);align-items:center}
+              .ultre-chat-input{flex:1;padding:12px 14px;border-radius:999px;background:#070707;border:1px solid rgba(255,255,255,0.04);color:#fff;font-size:1rem;outline:none}
+              .ultre-chat-send{background:linear-gradient(90deg,#8b5cf6,#3b82f6);color:#fff;border:none;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+              .ultre-typing{display:inline-flex;gap:7px;align-items:center;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,0.02)}
+              .ultre-typing .dot{width:8px;height:8px;background:#cbd5e1;border-radius:999px;opacity:0.9;transform:translateY(0);animation:ultre-dot 1s infinite}
+              .ultre-typing .dot:nth-child(2){animation-delay:0.12s}
+              .ultre-typing .dot:nth-child(3){animation-delay:0.24s}
+              @keyframes ultre-dot{0%{transform:translateY(0);opacity:0.6}50%{transform:translateY(-6px);opacity:1}100%{transform:translateY(0);opacity:0.6}}
+              .ultre-type-cursor{border-right:2px solid rgba(255,255,255,0.6);padding-right:2px;animation:ultre-blink 900ms steps(1) infinite}
+              @keyframes ultre-blink{50%{border-color:transparent}}
+            `;
+            document.head.appendChild(s);
+          }
+
+          const chatInterface = document.getElementById('chat-interface');
+          if (!chatInterface) return;
+
+          // Build app container if not present
+          let app = chatInterface.querySelector('.ultre-chat');
+          if (!app){
+            // preserve old content in case
+            const old = chatInterface.innerHTML;
+            chatInterface.innerHTML = '';
+            app = document.createElement('div'); app.className = 'ultre-chat';
+            app.innerHTML = `
+              <div class="ultre-chat-header">
+                <div class="avatar">U</div>
+                <div class="title">Chat with Ultrebot</div>
+                <div style="margin-left:auto;color:#9ca3af;font-size:0.9rem">Support</div>
+              </div>
+              <div class="ultre-chat-messages" role="log" aria-live="polite"></div>
+              <form class="ultre-chat-form" onsubmit="return false;">
+                <input class="ultre-chat-input" placeholder="Type a message..." aria-label="Message input" />
+                <button class="ultre-chat-send" type="button">Send</button>
+              </form>
+            `;
+            const preserved = document.createElement('div'); preserved.style.display='none'; preserved.className='ultre-chat-preserve'; preserved.innerHTML = old;
+            app.appendChild(preserved);
+            chatInterface.appendChild(app);
+          }
+
+          const msgs = app.querySelector('.ultre-chat-messages');
+          const input = app.querySelector('.ultre-chat-input');
+          const sendBtn = app.querySelector('.ultre-chat-send');
+
+          function scrollBottom(){ try{ msgs.scrollTop = msgs.scrollHeight }catch(e){} }
+          function makeMsg(text, cls){ const d = document.createElement('div'); d.className = 'ultre-msg '+cls; d.textContent = text; return d }
+
+          function appendUser(text){ const el = makeMsg(text,'user'); msgs.appendChild(el); scrollBottom(); }
+          function appendTyping(){ const wrap = document.createElement('div'); wrap.className = 'ultre-msg bot ultre-typing-wrapper'; wrap.innerHTML = '<div class="ultre-typing" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>'; msgs.appendChild(wrap); scrollBottom(); return wrap }
+
+           function typeOut(el, text, speed=22, cb){
+             // Cancel any previous typing interval on this element
+             try { if (el._typeInterval) { clearInterval(el._typeInterval); el._typeInterval = null; } } catch(e){}
+             el.textContent='';
+             let i=0;
+             el._typeInterval = setInterval(()=>{
+               el.textContent = text.slice(0,i);
+               scrollBottom();
+               i++;
+               if(i>text.length){
+                 clearInterval(el._typeInterval);
+                 el._typeInterval = null;
+                 if(cb) cb();
+               }
+             }, speed);
+           }
+
+          async function fetchBotReply(userText){
+            // if existing sendChatToBot exists and returns a promise or string, use it
+            try{
+              if(typeof sendChatToBot === 'function'){
+                const res = sendChatToBot(userText);
+                if(res && typeof res.then === 'function') return await res;
+                if(typeof res === 'string') return res;
+              }
+            }catch(e){}
+            // fallback canned replies
+            const lower = (userText||'').toLowerCase();
+            if(lower.includes('hi')||lower.includes('hello')) return "Hi — I'm Ultrebot. How can I help?";
+            if(lower.includes('order')||lower.includes('shipping')) return 'You can track orders from the Orders area — would you like a link?';
+            return 'Thanks — I\'m looking into that. Here is what I found...';
+          }
+
+          async function handleSend(){ const text = (input.value||'').trim(); if(!text) return; appendUser(text); input.value=''; const typing = appendTyping(); const delay = Math.min(1800 + Math.max(0, text.length*25), 2600); setTimeout(async ()=>{ try{ const botText = await fetchBotReply(text); const final = document.createElement('div'); final.className='ultre-msg bot'; msgs.replaceChild(final, typing); typeOut(final, botText, 20); }catch(e){ try{ msgs.removeChild(typing); msgs.appendChild(makeMsg('Sorry, something went wrong', 'bot')) }catch(err){} } }, delay); }
+
+          sendBtn.addEventListener('click', (e)=>{ e.preventDefault(); handleSend(); });
+          input.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleSend(); } });
+
+          // focus input if hash is chat
+          try{ if(window.location.hash && window.location.hash.indexOf('chat-interface')!==-1){ setTimeout(()=>{ input.focus(); }, 200); } }catch(e){}
+
+          // If a system prompt was set (e.g., via Quick & Easy), play it as the bot's opening message with typing animation
+          try{
+            const sys = window._ultreChatSystemPrompt;
+            if (sys) {
+              // clear so it doesn't replay accidentally
+              try { delete window._ultreChatSystemPrompt; } catch(e){}
+              const typing = appendTyping();
+              const delay = Math.min(900 + Math.max(0, sys.length * 12), 2200);
+              setTimeout(() => {
+                try {
+                  const final = document.createElement('div');
+                  final.className = 'ultre-msg bot';
+                  msgs.replaceChild(final, typing);
+                  typeOut(final, sys, 20, () => { try { /* done */ } catch(e){} });
+                } catch(e) { try{ msgs.removeChild(typing); }catch(_){} }
+              }, delay);
+            }
+          } catch(e){}
+
+        } catch (err){ console.error('ultre chat revamp error', err); }
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initUltreChatRevamp); else initUltreChatRevamp();
+    })();
+    </script>
+
+  <script>
+(function(){
+  // Helper: safe message box fallback
+  function _msg(text, ms=3000, isError=false){
+    try { if (typeof showMessageBox === 'function') return showMessageBox(text, ms, isError); } catch(e){}
+    if (isError) console.error(text); else console.log(text);
+    // last-resort UI
+    const id = 'ultre-inline-msg';
+    let el = document.getElementById(id);
+    if (!el) { el = document.createElement('div'); el.id = id; el.style.position='fixed'; el.style.right='16px'; el.style.bottom='16px'; el.style.zIndex=99999; document.body.appendChild(el); }
+    el.textContent = text;
+    el.style.background = isError ? 'rgba(220,38,38,0.9)' : 'rgba(55,65,81,0.9)';
+    el.style.color='#fff'; el.style.padding='10px 14px'; el.style.borderRadius='8px';
+    setTimeout(()=>{ if (el) el.textContent=''; }, ms);
+  }
+
+  // SETTINGS: persist generic settings and apply simple visual changes
+  function applySettingsFromLocalStorage(){
+    try{
+      const saved = localStorage.getItem('userPreferences');
+      if (!saved) return;
+      const prefs = JSON.parse(saved);
+      Object.keys(prefs).forEach(k => {
+        const el = document.querySelector('[data-setting-key="'+k+'"]');
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!prefs[k];
+        else el.value = prefs[k];
+      });
+      // Example: quick visual application
+      if (prefs.darkMode) document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    }catch(e){ console.warn('applySettings error', e); }
+  }
+
+  // Auto-bind setting controls to persist on change
+  function bindAutoSettings(){
+    document.querySelectorAll('[data-setting-key]').forEach(el => {
+      el.addEventListener('change', function(){
+        try{
+          const key = el.getAttribute('data-setting-key');
+          const saved = JSON.parse(localStorage.getItem('userPreferences')||'{}');
+          if (el.type === 'checkbox') saved[key] = el.checked;
+          else saved[key] = el.value;
+          localStorage.setItem('userPreferences', JSON.stringify(saved));
+          applySettingsFromLocalStorage();
+          _msg('Settings saved');
+        }catch(err){ _msg('Failed to save setting',2000,true); }
+      });
+    });
+  }
+
+  // BLOG: verified-writer flow and persistent posts
+  const BLOG_USER_KEY = 'ultre_blog_writers';
+  const BLOG_POSTS_KEY = 'ultre_blog_posts';
+
+  function _loadWriters(){ try{ return JSON.parse(localStorage.getItem(BLOG_USER_KEY)||'[]'); }catch(e){return[];} }
+  function _saveWriters(list){ localStorage.setItem(BLOG_USER_KEY, JSON.stringify(list)); }
+  function _loadPosts(){ try{ return JSON.parse(localStorage.getItem(BLOG_POSTS_KEY)||'[]'); }catch(e){return[];} }
+  function _savePosts(list){ localStorage.setItem(BLOG_POSTS_KEY, JSON.stringify(list)); }
+
+  // create small UI modals for writer signup/verification and post creation
+  function _ensureBlogModals(){
+    if (document.getElementById('ultre-writer-signup')) return;
+
+    const css = document.createElement('style'); css.id='ultre-writer-styles'; css.textContent=`
+      .ultre-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:99999;background:#0b1220;color:#fff;padding:18px;border-radius:10px;min-width:320px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+      .ultre-modal h3{margin:0 0 8px 0}
+      .ultre-modal input, .ultre-modal textarea{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+      .ultre-modal .row{display:flex;gap:8px}
+      .ultre-modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+    `; document.head.appendChild(css);
+
+    const signup = document.createElement('div'); signup.id='ultre-writer-signup'; signup.className='ultre-modal'; signup.style.display='none';
+    signup.innerHTML = `
+      <h3>Writer Signup / Verify</h3>
+      <input id='writer-name' placeholder='Full name' />
+      <input id='writer-email' placeholder='Email' />
+      <div class='row'>
+        <button id='writer-send-code' class='shop-button'>Send verification code</button>
+        <button id='writer-close' class='shop-button'>Close</button>
+      </div>
+      <div id='writer-code-row' style='display:none;margin-top:8px'>
+        <input id='writer-code' placeholder='Enter code' />
+        <div class='actions'><button id='writer-verify' class='shop-button'>Verify</button></div>
+      </div>
+    `;
+    document.body.appendChild(signup);
+
+    const postModal = document.createElement('div'); postModal.id='ultre-blog-post-modal'; postModal.className='ultre-modal'; postModal.style.display='none';
+    postModal.innerHTML = `
+      <h3>Create Blog Post (verified writers only)</h3>
+      <input id='post-title' placeholder='Title' />
+      <input id='post-email' placeholder='Your verified email' />
+      <textarea id='post-content' placeholder='Write post content (HTML allowed)'></textarea>
+      <div class='actions'>
+        <button id='post-publish' class='shop-button'>Publish</button>
+        <button id='post-close' class='shop-button'>Close</button>
+      </div>
+    `;
+    document.body.appendChild(postModal);
+
+    // Wire buttons
+    document.getElementById('writer-send-code').addEventListener('click', ()=>{
+      const name = document.getElementById('writer-name').value.trim();
+      const email = document.getElementById('writer-email').value.trim().toLowerCase();
+      if (!name || !email){ _msg('Please enter name and email',3000,true); return; }
+      const code = Math.floor(100000 + Math.random()*899999).toString();
+      const writers = _loadWriters();
+      const idx = writers.findIndex(w=>w.email===email);
+      const entry = { name, email, verified:false, code, codeSentAt:Date.now() };
+      if (idx===-1) writers.push(entry); else writers[idx] = Object.assign(writers[idx], entry);
+      _saveWriters(writers);
+      // In a real system we'd email the code. Here we surface it to the UI (and console) so verification can proceed.
+      _msg('Verification code sent (for demo it is shown in console).');
+      console.info('ULTRE VERIFICATION CODE for', email, ':', code);
+      document.getElementById('writer-code-row').style.display='block';
+    });
+
+    document.getElementById('writer-verify').addEventListener('click', ()=>{
+      const email = document.getElementById('writer-email').value.trim().toLowerCase();
+      const code = document.getElementById('writer-code').value.trim();
+      const writers = _loadWriters();
+      const w = writers.find(x=>x.email===email);
+      if (!w){ _msg('No verification request found for that email',3000,true); return; }
+      // expire after 1 hour
+      if (!w.code || (Date.now()- (w.codeSentAt||0)) > 1000*60*60){ _msg('Verification code expired; request a new one',3000,true); return; }
+      if (w.code !== code){ _msg('Invalid code',3000,true); return; }
+      w.verified = true; delete w.code; delete w.codeSentAt; _saveWriters(writers);
+      _msg('Email verified! You can now publish posts.');
+      // auto-close
+      setTimeout(()=>{ document.getElementById('ultre-writer-signup').style.display='none'; document.getElementById('writer-code-row').style.display='none'; }, 800);
+    });
+
+    document.getElementById('writer-close').addEventListener('click', ()=>{ document.getElementById('ultre-writer-signup').style.display='none'; document.getElementById('writer-code-row').style.display='none'; });
+
+    document.getElementById('post-publish').addEventListener('click', ()=>{
+      const title = document.getElementById('post-title').value.trim();
+      const email = document.getElementById('post-email').value.trim().toLowerCase();
+      const content = document.getElementById('post-content').value.trim();
+      if (!title || !email || !content){ _msg('Please fill title, your verified email and content',3000,true); return; }
+      const writers = _loadWriters(); const w = writers.find(x=>x.email===email && x.verified);
+      if (!w){ _msg('Email not verified for publishing. Please verify first.',3000,true); return; }
+      const posts = _loadPosts();
+      posts.unshift({ id: 'post_'+Date.now(), title, content, author: w.name, email: w.email, verified:true, date: new Date().toISOString() });
+      _savePosts(posts);
+      _msg('Post published');
+      document.getElementById('ultre-blog-post-modal').style.display='none';
+      renderBlogPosts(currentBlogCategory || 'all');
+    });
+
+    document.getElementById('post-close').addEventListener('click', ()=>{ document.getElementById('ultre-blog-post-modal').style.display='none'; });
+  }
+
+  // Expose simple UI triggers
+  window.openWriterSignup = function(){ _ensureBlogModals(); document.getElementById('ultre-writer-signup').style.display='block'; };
+  window.openBlogPostCreator = function(){ _ensureBlogModals(); document.getElementById('ultre-blog-post-modal').style.display='block'; };
+
+  // Extend existing renderBlogPosts to include persisted posts and verified badge
+  var currentBlogCategory = 'all';
+  function renderBlogPosts(category){
+    currentBlogCategory = category || 'all';
+    const container = document.getElementById('blog-posts-container');
+    if (!container) return;
+    const persisted = _loadPosts();
+    const builtin = (window.blogPosts && Array.isArray(window.blogPosts))? window.blogPosts.slice() : [];
+    // merge, with persisted first
+    const merged = persisted.concat(builtin).filter(p=> {
+      if (category === 'all') return true;
+      return p.category === category;
+    });
+    if (merged.length===0) { container.innerHTML = '<div class="p-6 text-gray-300">No posts yet.</div>'; return; }
+    container.innerHTML = merged.map(post=>{
+      const author = post.author || 'Ultre Team';
+      const verified = post.verified ? '<span style="color:#60a5fa;margin-left:8px;font-weight:700">✔ Verified</span>' : '';
+      return `
+        <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-all duration-300" onclick="showBlogPost('${post.id}')">
+          <div style="padding:14px">
+            <h4 style="margin:0 0 6px 0">${escapeHtml(post.title)}</h4>
+            <div style="font-size:12px;color:#9ca3af">By ${escapeHtml(author)} ${verified} · ${new Date(post.date||Date.now()).toLocaleString()}</div>
+            <p style="color:#cbd5e1;margin-top:8px">${truncate(stripHtml(post.content||post.excerpt||''), 140)}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Override global small helper used earlier
+  window.renderBlogPosts = renderBlogPosts;
+
+  function stripHtml(html){ return (html||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
+  function truncate(s,len){ return s.length>len? s.slice(0,len-1)+'…': s; }
+  function escapeHtml(unsafe){ return (unsafe||'').replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+
+  // showBlogPost override to include author and verification
+  window.showBlogPost = function(postId){
+    const persisted = _loadPosts();
+    const builtin = (window.blogPosts && Array.isArray(window.blogPosts))? window.blogPosts.slice() : [];
+    const merged = persisted.concat(builtin);
+    const post = merged.find(p=>p.id===postId);
+    if (!post) return _msg('Post not found',3000,true);
+    const container = document.getElementById('blog-post-content');
+    if (!container) return _msg('Blog post container missing');
+    const author = post.author || 'Ultre Team';
+    const verifiedBadge = post.verified ? '<strong style="color:#60a5fa">✔ Verified author</strong>' : '';
+    container.innerHTML = `
+      <article class="p-6 text-gray-200">
+        <h2>${escapeHtml(post.title)}</h2>
+        <div style="font-size:13px;color:#9ca3af;margin-bottom:12px">By ${escapeHtml(author)} ${verifiedBadge} · ${new Date(post.date||Date.now()).toLocaleString()}</div>
+        <div class="blog-post-body">${post.content || ''}</div>
+      </article>
+    `;
+    document.getElementById('blog-post-modal')?.classList.add('show');
+    document.getElementById('blog-modal')?.classList.remove('show');
+  };
+
+  // CHAT: robust global sendChatToBot wrapper that reports specific errors
+  // This will be used by the in-page chat if it finds a global sendChatToBot function.
+  window.sendChatToBot = window.sendChatToBot || async function(userText){
+    // If user chose to use the OpenAI API from the client (not recommended), they must set window.OPENAI_API_KEY
+    const key = window.OPENAI_API_KEY || null;
+    const useOpenAI = !!key && window.USE_OPENAI === true;
+    if (!useOpenAI){
+      // Provide deterministic canned replies when no API is configured
+      console.debug('sendChatToBot: no API key provided, using canned fallback');
+      if (!userText) return 'Hello — how can I help?';
+      const lower = userText.toLowerCase();
+      if (lower.includes('order')||lower.includes('shipping')) return 'You can track orders from the Orders area — would you like a link?';
+      return 'Thanks — I\'m looking into that. (No external AI configured.)';
+    }
+
+    // If we get here, attempt to call OpenAI-compatible endpoint
+    try{
+      const payload = { model: 'gpt-3.5-turbo', messages:[{role:'system', content: window._ultreChatSystemPrompt||'You are UltreBot.'},{role:'user', content: userText}], temperature:0.2 };
+      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+key }, body: JSON.stringify(payload)
+      });
+      if (!res.ok){
+        if (res.status === 401 || res.status === 403) return 'AI error: Invalid or missing API key (HTTP '+res.status+'). Please check your OPENAI_API_KEY configuration.';
+        if (res.status === 429) return 'AI error: Rate limited (HTTP 429). Please try again later.';
+        const text = await res.text();
+        return 'AI error: Unexpected response from API (HTTP '+res.status+'). Response: '+text;
+      }
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content || data?.choices?.[0]?.text;
+      if (!content) return 'AI error: empty response from API.';
+      return content;
+    }catch(err){
+      // Distinguish network errors vs generic
+      if (err && (err.message && (err.message.includes('NetworkError') || err.message.includes('Failed to fetch') || err.message.includes('network')))){
+        return 'AI error: Network error — failed to reach the AI endpoint. Please check your network connection.';
+      }
+      return 'AI error: '+(err.message || String(err));
+    }
+  };
+
+  // Initialize small features on DOM ready
+  document.addEventListener('DOMContentLoaded', ()=>{
+    try{ applySettingsFromLocalStorage(); bindAutoSettings(); }catch(e){}
+    try{ _ensureBlogModals(); }catch(e){}
+    // Wire quick buttons if present
+    const openWriter = document.getElementById('open-writer-signup'); if (openWriter) openWriter.addEventListener('click', window.openWriterSignup);
+    const openPost = document.getElementById('open-post-create'); if (openPost) openPost.addEventListener('click', window.openBlogPostCreator);
+    // Re-render blog posts to include persisted items
+    try{ renderBlogPosts('all'); }catch(e){}
+  });
+})();
+</script>
+<script>
+(function(){
+  // Ensure a reusable settings modal exists and is functional
+  function ensureSettingsModal(){
+    if (document.getElementById('settings-modal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'settings-modal';
+    modal.className = 'ultre-modal';
+    modal.style.display = 'none';
+    modal.innerHTML = `
+      <div style="min-width:320px;max-width:720px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <h3 id="settingsContentTitle">Settings</h3>
+          <button id="settings-close" class="shop-button">Close</button>
+        </div>
+        <div style="display:flex;gap:12px">
+          <div style="min-width:140px">
+            <ul id="settings-cats" style="list-style:none;padding:0;margin:0">
+              <li><button class="settings-cat-btn" data-cat="general">General</button></li>
+              <li><button class="settings-cat-btn" data-cat="appearance">Appearance</button></li>
+              <li><button class="settings-cat-btn" data-cat="account">Account</button></li>
+              <li><button class="settings-cat-btn" data-cat="notifications">Notifications</button></li>
+              <li><button class="settings-cat-btn" data-cat="blog">Blog</button></li>
+            </ul>
+          </div>
+          <div style="flex:1">
+            <div id="settings-content-area"></div>
+            <div style="text-align:right;margin-top:8px">
+              <button id="settings-save" class="shop-button">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById('settings-close').addEventListener('click', ()=> modal.style.display = 'none');
+
+    document.getElementById('settings-save').addEventListener('click', ()=> {
+      // trigger change events on inputs we created so bindAutoSettings persists them
+      document.querySelectorAll('#settings-modal [data-setting-key]').forEach(el => {
+        const evt = new Event('change', { bubbles: true });
+        el.dispatchEvent(evt);
+      });
+      _msg('Settings saved');
+    });
+
+    document.querySelectorAll('.settings-cat-btn').forEach(btn => {
+      btn.addEventListener('click', ()=> updateSettingsContent(btn.getAttribute('data-cat')));
+    });
+  }
+
+  // Update settings panel content based on category and persist using existing bindAutoSettings
+  function updateSettingsContent(category){
+    ensureSettingsModal();
+    const titleEl = document.getElementById('settingsContentTitle');
+    const content = document.getElementById('settings-content-area');
+    titleEl.textContent = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ') + ' Settings';
+    const prefs = JSON.parse(localStorage.getItem('userPreferences')||'{}');
+
+    const templates = {
+      general: `
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label>First name<input data-setting-key="userFirstName" value="${prefs.userFirstName||''}" class="form-input"/></label>
+          <label>Last name<input data-setting-key="userLastName" value="${prefs.userLastName||''}" class="form-input"/></label>
+          <label>Email<input data-setting-key="userEmail" value="${prefs.userEmail||''}" class="form-input"/></label>
+        </div>
+      `,
+      appearance: `
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label><input type="checkbox" data-setting-key="darkMode" ${prefs.darkMode?'checked':''}/> Dark mode</label>
+          <label>Primary color<input type="color" data-setting-key="primaryColor" value="${prefs.primaryColor||'#2563EB'}"/></label>
+        </div>
+      `,
+      account: `
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label>Remember me<input type="checkbox" data-setting-key="rememberMe" ${prefs.rememberMe==='true'?'checked':''}/></label>
+          <label>Public profile<input type="checkbox" data-setting-key="publicProfile" ${prefs.publicProfile?'checked':''}/></label>
+        </div>
+      `,
+      notifications: `
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label><input type="checkbox" data-setting-key="notifyOrders" ${prefs.notifyOrders?'checked':''}/> Order updates</label>
+          <label><input type="checkbox" data-setting-key="notifyMarketing" ${prefs.notifyMarketing?'checked':''}/> Marketing emails</label>
+        </div>
+      `,
+      blog: `
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label><input type="checkbox" data-setting-key="allowBlogNotifications" ${prefs.allowBlogNotifications?'checked':''}/> Enable blog notifications</label>
+          <label>Default post visibility
+            <select data-setting-key="defaultPostVisibility">
+              <option value="public" ${prefs.defaultPostVisibility==='public'?'selected':''}>Public</option>
+              <option value="members" ${prefs.defaultPostVisibility==='members'?'selected':''}>Members</option>
+            </select>
+          </label>
+        </div>
+      `
+    };
+
+    content.innerHTML = templates[category] || '<div>No options for this section.</div>';
+    // Ensure our auto-binding sees the new inputs
+    try{ bindAutoSettings(); }catch(e){ console.warn('bindAutoSettings missing', e); }
+  }
+
+  // Public opener
+  window.openSettings = function(category='general'){
+    ensureSettingsModal();
+    document.getElementById('settings-modal').style.display = 'block';
+    updateSettingsContent(category);
+  };
+
+  // Fix broken images globally by swapping to site logo placeholder
+  function fixBrokenImages(){
+    document.querySelectorAll('img').forEach(img => {
+      if (img.dataset._fallback) return;
+      img.addEventListener('error', function(){
+        try{
+          if (this.dataset._fallback) return; this.dataset._fallback = '1';
+          this.src = 'logo.png';
+          this.alt = this.alt || 'image';
+        }catch(e){}
+      });
+    });
+  }
+
+  // Enhanced blog renderer that shows persisted verified posts and provides Read more buttons
+  window.renderBlogPosts = function(category){
+    const container = document.getElementById('blog-posts-container');
+    if (!container) return;
+    let persisted = [];
+    try{ persisted = JSON.parse(localStorage.getItem('ultre_blog_posts')||'[]'); }catch(e){ persisted = []; }
+    const builtin = (window.blogPosts && Array.isArray(window.blogPosts))? window.blogPosts.slice() : [];
+    const merged = persisted.concat(builtin).filter(p=>{
+      if (!category || category==='all') return true;
+      return (p.category||'').toLowerCase() === category.toLowerCase();
+    });
+
+    function stripHtml(html){ return (html||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
+    function truncate(s,len){ return s.length>len? s.slice(0,len-1)+'…': s; }
+    function escapeHtml(unsafe){ return (unsafe||'').replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+
+    if (merged.length===0){ container.innerHTML = '<div class="p-6 text-gray-300">No posts yet.</div>'; return; }
+
+    container.innerHTML = merged.map(post=>{
+      const author = post.author || 'Ultre Team';
+      const verified = post.verified ? '<span style="color:#60a5fa;margin-left:8px;font-weight:700">✔ Verified</span>' : '';
+      const img = post.image || 'logo.png';
+      const excerpt = truncate(stripHtml(post.content||post.excerpt||''), 180);
+      return `
+        <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden p-4" data-id="${post.id}">
+          <div style="display:flex;gap:12px">
+            <img src="${img}" alt="${escapeHtml(post.title)}" style="width:120px;height:80px;object-fit:cover;border-radius:6px" onerror="this.src='logo.png'"/>
+            <div style="flex:1">
+              <h4 style="margin:0 0 6px 0">${escapeHtml(post.title)}</h4>
+              <div style="font-size:12px;color:#9ca3af;margin-bottom:8px">By ${escapeHtml(author)} ${verified} · ${post.readTime||''}</div>
+              <div style="color:#cbd5e1">${escapeHtml(excerpt)}</div>
+              <div style="margin-top:8px"><button class="shop-button read-more" data-id="${post.id}">Read more</button></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // bind read more
+    container.querySelectorAll('.read-more').forEach(btn=>{
+      btn.addEventListener('click', ()=> window.showBlogPost(btn.getAttribute('data-id')));
+    });
+  };
+
+  // Enhance showBlogPost to animate modal and lock body scroll (wrap existing behavior)
+  const existingShow = window.showBlogPost || function(id){};
+  window.showBlogPost = function(postId){
+    try{ existingShow(postId); }catch(e){ /* ignore */ }
+    const modal = document.getElementById('blog-post-modal');
+    if (!modal) return;
+    modal.classList.add('show');
+    modal.style.transition = 'transform 220ms ease, opacity 220ms ease';
+    modal.style.transform = 'translateY(8px)';
+    modal.style.opacity = '0';
+    document.body.style.overflow = 'hidden';
+    setTimeout(()=>{ modal.style.transform = 'translateY(0)'; modal.style.opacity = '1'; }, 16);
+    const closeBtn = document.getElementById('blog-post-close-btn') || document.getElementById('blog-post-close') || document.getElementById('blog-close-btn');
+    if (closeBtn) closeBtn.addEventListener('click', ()=>{ document.body.style.overflow = ''; });
+  };
+
+  // Initialize small behaviors
+  document.addEventListener('DOMContentLoaded', ()=>{
+    try{ fixBrokenImages(); }catch(e){}
+    try{ ensureSettingsModal(); }catch(e){}
+    // If there is an element that should open settings, wire it
+    const settingsLaunchers = document.querySelectorAll('[data-open-settings]');
+    settingsLaunchers.forEach(el=> el.addEventListener('click', ()=> openSettings(el.getAttribute('data-settings-section')||'general')));
+  });
+
+})();
+</script>
+
   </body>
 </html>
