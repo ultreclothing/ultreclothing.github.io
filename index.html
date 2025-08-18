@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ultre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS via CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-900 text-gray-200 font-quicksand">
+  <header class="w-full bg-gray-900 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img id="site-logo" src="logo.png" alt="Ultre" class="logo w-28 h-auto">
+        <h1 class="text-xl font-bold">Ultre</h1>
+      </div>
+      <nav class="flex items-center gap-3">
+        <button id="comparison-btn" class="shop-button bg-blue-600 px-3 py-2 rounded disabled:opacity-50" disabled>Compare (0)</button>
+        <button id="open-settings-btn" class="shop-button" data-open-settings>Settings</button>
+        <button id="open-auth-btn" class="shop-button open-auth-btn">Sign in</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-website-content-wrapper" class="max-w-6xl mx-auto px-4 py-8">
+    <section id="home-main" class="active-page">
+      <h2 class="text-2xl font-semibold mb-4">Welcome to Ultre</h2>
+      <div id="featured-blog" class="mb-8"></div>
+    </section>
+
+    <section id="shop-page" class="hidden">
+      <h2 class="text-2xl font-semibold mb-4">Shop</h2>
+      <div id="shop-content">
+        <div id="items-grid" class="items-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+      </div>
+    </section>
+
+    <section id="blog-page" class="hidden">
+      <h2 class="text-2xl font-semibold mb-4">Blog</h2>
+      <div id="blog-list" class="grid gap-4"></div>
+    </section>
+
+    <section id="cart-main" class="hidden">
+      <h2 class="text-2xl font-semibold mb-4">Cart</h2>
+      <div id="cart-items"></div>
+    </section>
+  </main>
+
+  <!-- Inline post viewer (controlled by js) -->
+  <div id="inline-post-viewer" class="hidden fixed right-6 bottom-6 w-96 max-h-[70vh] overflow-auto bg-gray-900 border border-gray-800 rounded-lg p-4 z-50" aria-hidden="true">
+    <div class="flex justify-between items-center mb-3">
+      <strong>Article</strong>
+      <button id="close-inline-post" class="shop-button">Close</button>
+    </div>
+    <div id="inline-post-content"></div>
+  </div>
+
+  <!-- Comparison modal -->
+  <div id="product-comparison-modal" class="modal fixed inset-0 hidden items-center justify-center z-50" aria-hidden="true">
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 w-11/12 max-w-6xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">Product Comparison</h3>
+        <button id="comparison-close-btn" class="shop-button">Close</button>
+      </div>
+      <div id="comparison-content" class="comparison-content"></div>
+    </div>
+  </div>
+
+  <!-- Settings & Auth modals: content injected by js -->
+  <div id="settings-modal" class="modal fixed inset-0 hidden items-center justify-center z-50" aria-hidden="true"></div>
+  <div id="auth-modal" class="modal fixed inset-0 hidden items-center justify-center z-50" aria-hidden="true"></div>
+
+  <!-- Generic containers used by js -->
+  <div id="message-box" class="fixed left-4 bottom-6 z-60" aria-live="polite"></div>
+
+                <h2 class="text-3xl font-bold text-white mb-4">5 Essential Style Tips for Every Wardrobe</h2>
+                <p class="text-gray-300 mb-4">Building a timeless wardrobe starts with understanding the basics. Below we expand on five essential style principles with practical examples, small shopping rules, and quick fixes for common problems.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">1. Invest in Quality Basics</h3>
+                <p class="text-gray-300 mb-4">A well-fitted white tee, a pair of clean jeans, and a neutral jacket will earn more wear than dozens of trend pieces. Look for sturdy seams, quality fabrics, and simple finishes. Tip: inspect cuffs and collars — these show wear first.</p>
+                <p class="text-gray-300 mb-4">Example: instead of buying three cheap tees that fade quickly, buy one high-quality tee that keeps its shape. Over time it saves money and keeps your outfits looking sharp.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">2. Understand Your Body Type</h3>
+                <p class="text-gray-300 mb-4">Knowing whether you're rectangular, triangular, inverted triangle, or apple-shaped helps you choose silhouettes that flatter. For broader shoulders, balance proportions with straight-leg bottoms; if you carry weight around the middle, go for V-necklines and single-breasted jackets.</p>
+                <p class="text-gray-300 mb-4">Small rule of thumb: when in doubt, choose a silhouette that emphasizes one area — either shoulders, chest, or waist — rather than trying to slim everything at once.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">3. Master the Art of Layering</h3>
+                <p class="text-gray-300 mb-4">Layering creates depth. Start with a fitted base layer, add a mid layer with texture, and finish with a clean outer layer. Vary lengths slightly (short base, medium mid, long outer) to avoid a boxy look.</p>
+                <p class="text-gray-300 mb-4">Practical combo: white tee + lightweight knit + overshirt. The overshirt acts like a jacket and can be removed indoors — versatile for changing temperatures.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">4. Pay Attention to Fit</h3>
+                <p class="text-gray-300 mb-4">Even inexpensive clothing looks premium when it fits well. Learn a few basic tailoring fixes: shorten sleeves by 1–2 cm, taper a trouser leg slightly, or take in the side seams of a jacket. These small changes elevate your entire look.</p>
+                <p class="text-gray-300 mb-4">If you're unsure about sizing, try both sizes in-store and move around — how the garment sits when you lift your arms or sit down reveals fit issues that the mirror won't.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">5. Develop Your Personal Style</h3>
+                <p class="text-gray-300 mb-4">Style is repetition: adopt a limited color palette and a few signature pieces you rely on, then rotate carefully. Accessories — a quality belt, a minimal watch, or a cap — personalize and complete an outfit without overpowering it.</p>
+                <p class="text-gray-300 mb-4">Experimentation tip: keep a phone album of outfits you like and take notes on what you felt comfortable wearing. Build outfits around those anchor pieces.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Quick Shopping Rules</h3>
+                <ul class="text-gray-300 mb-4 list-disc pl-5">
+                  <li>Always check fabric composition — natural fibers generally age better.</li>
+                  <li>Pick neutrals for the majority of purchases; add 1–2 accent colors per season.</li>
+                  <li>Try on clothes with the shoes you plan to wear — proportions change with footwear.</li>
+                </ul>
+
+                <div class="blog-tags mt-6">
+                  <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm mr-2">Style Tips</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Wardrobe</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Shopping</span>
+                </div>
+              </div>
+            `,
+          category: 'style',
+          author: 'Ultre Team',
+          date: '2025-01-15',
+          readTime: '5 min read',
+          image: 'https://placehold.co/400x250/4a5568/FFFFFF?text=Style+Tips'
+        },
+        {
+          id: 'sustainability-1',
+          title: 'Our Commitment to Sustainable Fashion',
+          excerpt: 'Learn about Ultre\'s dedication to eco-friendly practices and sustainable materials...',
+            content: `
+              <div class="blog-post-content">
+                <img src="https://placehold.co/900x420/38a169/FFFFFF?text=Sustainability+Deep+Dive" alt="Sustainability" class="w-full h-72 object-cover rounded-lg mb-6">
+                <h2 class="text-3xl font-bold text-white mb-4">Our Commitment to Sustainable Fashion</h2>
+                <p class="text-gray-300 mb-4">At Ultre, sustainability is more than a label — it's built into decisions across design, sourcing, and operations. Below we outline practical steps we've taken and ongoing goals.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Eco-Friendly Materials</h3>
+                <p class="text-gray-300 mb-4">We prioritize organic fibers, recycled yarns, and lower-impact dyes. Choosing these materials reduces water usage and chemical runoff. We actively pilot blends that retain performance while lowering footprint.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Ethical Manufacturing</h3>
+                <p class="text-gray-300 mb-4">We partner with factories that pay living wages, maintain safe work environments, and allow worker representation. Regular audits and local partnerships ensure transparency and continuous improvement.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Reduced Waste & Circularity</h3>
+                <p class="text-gray-300 mb-4">From pattern efficiency to recycling programs for returns and scraps, we aim to minimize landfill contribution. Our next step is a take-back program that repurposes used garments into new materials.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Carbon Reduction & Logistics</h3>
+                <p class="text-gray-300 mb-4">We optimize shipping routes, consolidate orders, and are gradually shifting to renewable energy at production sites. Carbon accounting helps us measure progress and set realistic reduction targets.</p>
+
+                <div class="blog-tags mt-6">
+                  <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm mr-2">Sustainability</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Eco-Friendly</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Operations</span>
+                </div>
+              </div>
+            `,
+          category: 'sustainability',
+          author: 'Ultre Team',
+          date: '2025-01-12',
+          readTime: '4 min read',
+          image: 'https://placehold.co/400x250/38a169/FFFFFF?text=Sustainability'
+        },
+        {
+          id: 'behind-scenes-1',
+          title: 'A Day in the Life: Behind the Scenes at Ultre',
+          excerpt: 'Take a peek into our creative process and see how we bring your favorite pieces to life...',
+            content: `
+              <div class="blog-post-content">
+                <img src="https://placehold.co/900x420/805ad5/FFFFFF?text=Behind+the+Scenes+Long" alt="Behind the Scenes" class="w-full h-72 object-cover rounded-lg mb-6">
+                <h2 class="text-3xl font-bold text-white mb-4">A Day in the Life: Behind the Scenes at Ultre</h2>
+                <p class="text-gray-300 mb-4">From the first sketch to the finished product, every Ultre piece travels through multiple hands and thoughtful decisions. Here is a more detailed look at the stages that ensure consistency and quality.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Morning: Inspiration & Research</h3>
+                <p class="text-gray-300 mb-4">Our team begins with visual research — mood boards, color studies, and fabric sourcing. We track how materials perform seasonally and select palettes that remain wearable beyond trends.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Midday: Prototyping & Fitting</h3>
+                <p class="text-gray-300 mb-4">Designers create patterns and samples. Fit sessions reveal subtle adjustments — shoulder slope, sleeve length, and rise — that make the final garment more comfortable and flattering.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Afternoon: Quality Control & Production Planning</h3>
+                <p class="text-gray-300 mb-4">Before production, each sample is inspected for strength, stitching, and colorfastness. We also model logistics to reduce waste and plan production batches to keep inventory lean.</p>
+
+                <h3 class="text-xl font-semibold text-white mb-3">Evening: Creative Direction & Storytelling</h3>
+                <p class="text-gray-300 mb-4">Our creative team photographs products, writes descriptions, and plans campaigns that highlight functionality and craftsmanship rather than hype.</p>
+
+                <div class="blog-tags mt-6">
+                  <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm mr-2">Behind the Scenes</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Process</span>
+                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Craft</span>
+                </div>
+              </div>
+              `,
+            category: 'behind-scenes',
+          author: 'Ultre Team',
+          date: '2025-01-10',
+          readTime: '6 min read',
+          image: 'https://placehold.co/400x250/805ad5/FFFFFF?text=Behind+Scenes'
+        }
+      ];
+
+      // Render longer posts into the blog page list and wire interactions
+      function renderBlogList() {
+        const list = document.getElementById('blog-list');
+        if (!list) return;
+        // merge persisted posts (if any) with builtin posts
+        const persisted = (function(){ try{ return JSON.parse(localStorage.getItem('ultre_blog_posts')||'[]') }catch(e){return[];} })();
+        const merged = persisted.concat(blogPosts);
+        list.innerHTML = merged.map(post => `
+          <article class="bg-gray-800 rounded-xl p-6 shadow-lg hover:scale-[1.01] transition-transform" data-id="${post.id}">
+            <div class="flex items-start gap-4">
+              <img src="${post.image}" alt="${post.title}" class="w-40 h-28 object-cover rounded-md flex-shrink-0" onerror="this.src='logo.png'">
+              <div class="flex-1">
+                <h3 class="post-title text-2xl font-bold text-white mb-2" data-animate>${post.title}</h3>
+                <div class="text-sm text-gray-400 mb-3">By ${post.author} · ${post.date} · ${post.readTime}</div>
+                <p class="text-gray-300 mb-4">${post.excerpt}</p>
+                <div class="flex gap-3">
+                  <button class="shop-button read-full" data-id="${post.id}">Read full article</button>
+                  <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 preview-btn" data-id="${post.id}">Preview →</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+       
+          <header class="mb-6">
+            <h1 class="text-4xl font-bold text-white mb-2">${post.title || ''}</h1>
+            <div class="text-sm text-gray-400 mb-4">By ${post.author || 'Ultre Team'} · ${post.date ? new Date(post.date).toLocaleDateString() : ''} · ${post.readTime || ''}</div>
+          </header>
+        `;
+        content.innerHTML = headerHtml + (post.content || '');
+        viewer.classList.remove('hidden');
+        viewer.classList.add('fade-in');
+        // micro-animate headings inside the post
+        content.querySelectorAll('h2,h3').forEach((h, i) => {
+          h.style.transition = 'color 320ms ease, transform 320ms ease, opacity 320ms ease';
+          h.style.transform = 'translateY(8px)'; h.style.opacity = '0';
+          setTimeout(()=>{ h.style.transform='translateY(0)'; h.style.opacity='1'; }, 120 + i*100);
+        });
+        // focus and lock scroll for immersive read
+        try { content.querySelector('h1')?.focus(); } catch(e){}
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeInlinePost() {
+        const viewer = document.getElementById('inline-post-viewer');
+        if (!viewer) return;
+        viewer.classList.add('fade-out');
+        setTimeout(()=>{ viewer.classList.add('hidden'); viewer.classList.remove('fade-out','fade-in'); document.getElementById('inline-post-content').innerHTML = ''; document.body.style.overflow = ''; }, 300);
+      }
+
+      function openPostInModal(postId) {
+        // reuse existing showBlogPost which will populate the modal
+        try { showBlogPost(postId); } catch (e) { console.error(e); }
+      }
+
+      // wire contributor and open modal buttons after DOM ready
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('write-post-btn')?.addEventListener('click', () => window.openWriterSignup());
+        document.getElementById('open-blog-modal-btn')?.addEventListener('click', () => document.getElementById('blog-modal')?.classList.add('show'));
+        document.getElementById('close-inline-post')?.addEventListener('click', closeInlinePost);
+  // initial render for blog page if present
+  if (document.getElementById('blog-page')) renderBlogList();
+  // adjust blog visibility based on auth state
+  try{ toggleBlogVisibility(); }catch(e){}
+  try{ refreshProfileDropdown(); }catch(e){}
+      });
+
+      // Social media feed data
+      const socialFeed = [
+        {
+          platform: 'Instagram',
+          content: 'New collection dropping next week! 🔥 #UltreStyle #NewCollection',
+          likes: 1247,
+          comments: 89,
+          image: 'https://placehold.co/300x300/e53e3e/FFFFFF?text=IG+Post',
+          time: '2 hours ago'
+        },
+        {
+          platform: 'Twitter',
+          content: 'Sustainability isn\'t just a trend—it\'s our future. 🌱 #SustainableFashion #Ultre',
+          likes: 567,
+          comments: 23,
+          image: 'https://placehold.co/300x300/3182ce/FFFFFF?text=Twitter+Post',
+          time: '5 hours ago'
+        },
+        {
+          platform: 'YouTube',
+          content: 'New styling tutorial: How to layer like a pro! 👔 #StyleTips #UltreTutorial',
+          likes: 892,
+          comments: 156,
+          image: 'https://placehold.co/300x300/d53f8c/FFFFFF?text=YT+Post',
+          time: '1 day ago'
+        }
+      ];
+
+      // Blog system functions
+      function showBlogModal() {
+        renderBlogPosts('all');
+        document.getElementById('blog-modal').classList.add('show');
+      }
+
+      function renderBlogPosts(category) {
+        const container = document.getElementById('blog-posts-container');
+        const filteredPosts = category === 'all' ? blogPosts : blogPosts.filter(post => post.category === category);
+        
+        container.innerHTML = filteredPosts.map(post => `
+          <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300 open-blog-post-card" data-post-id="${post.id}">
+            <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+            <div class="p-6">
+              <div class="blog-meta text-sm text-gray-400 mb-2">
+                <span class="mr-3">${post.date}</span>
+                <span>${post.readTime}</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-3">${post.title}</h3>
+
+  // Public opener for modal (do not override page-level openSettings)
+  window.openSettingsModal = function(category='general'){
+    ensureSettingsModal();
+    document.getElementById('settings-modal').style.display = 'block';
+    updateSettingsModalContent(category);
+  };
+
+  // Fix broken images globally by swapping to site logo placeholder
+  function fixBrokenImages(){
+    // Only apply fallback to images likely to be site logos (filenames containing 'logo' or alt='logo')
+    document.querySelectorAll('img').forEach(img => {
+      try{
+        const src = img.getAttribute('src') || '';
+        const alt = (img.getAttribute('alt')||'').toLowerCase();
+        if (!(src.toLowerCase().indexOf('logo') !== -1 || alt === 'logo' || alt.indexOf('logo') !== -1)) return;
+        if (img.dataset._fallback) return;
+        img.addEventListener('error', function(){
+          try{
+            if (this.dataset._fallback) return; this.dataset._fallback = '1';
+            this.src = 'logo.png';
+            this.alt = this.alt || 'logo';
+          }catch(e){}
+        });
+      }catch(e){}
+    });
+  }
+
+  // Apply logo inversion filter to existing logo images immediately when theme changes
+  function applyLogoFilterToExistingImages(){
+    try{
+      const isLight = (JSON.parse(localStorage.getItem('userPreferences')||'{}')||{}).theme === 'light';
+      document.querySelectorAll('img').forEach(img => {
+        try{
+          if (!img.src) return;
+          // Prefer swapping to a dark SVG logo for crispness; fall back to CSS filter if swap fails
+          if ((img.src.indexOf('logo.png') !== -1 || img.getAttribute('alt') === 'logo') ){
+            if (isLight){
+              // if current src already points to the dark svg, just ensure filter cleared
+              if (!img.src.endsWith('logo-light.svg')){
+                img.dataset._origSrc = img.src;
+                img.src = 'logo-light.svg';
+                // if the SVG fails to load, fallback to CSS filter on original
+                img.onerror = function(){ try{ if (img.dataset._origSrc) img.src = img.dataset._origSrc; img.style.filter = 'invert(1) brightness(0.92) contrast(1.06) saturate(0.9)'; img.style.filter = 'drop-shadow(0 8px 20px rgba(0,0,0,0.36))'; }catch(e){} };
+              }
+              // ensure a black glow (drop-shadow) is applied at runtime too
+              try{ img.style.filter = 'drop-shadow(0 8px 20px rgba(0,0,0,0.36))'; }catch(e){}
+            } else {
+              // restore original if we swapped
+              if (img.dataset._origSrc) { try{ img.src = img.dataset._origSrc; delete img.dataset._origSrc; }catch(e){} }
+              img.style.filter = '';
+            }
+          }
+        }catch(e){}
+      });
+    }catch(e){ }
+  }
+
+  // Listen for settings saved to re-apply logo filters and other runtime adjustments
+  window.addEventListener('ultre:settings-saved', function(){ try{ applyLogoFilterToExistingImages(); }catch(e){} });
+
+  // Also adjust input/button appearances immediately when settings change to light mode
+  window.addEventListener('ultre:settings-saved', function(){
+    try{
+      const isLight = (JSON.parse(localStorage.getItem('userPreferences')||'{}')||{}).theme === 'light';
+      document.querySelectorAll('input[type="text"], input[type="email"], textarea, .form-input').forEach(el=>{
+        try{ if (isLight){ el.style.background='#fff'; el.style.color='#0f172a'; el.style.borderColor='#cbd5e1'; } else { el.style.background=''; el.style.color=''; el.style.borderColor=''; } }catch(e){}
+      });
+      document.querySelectorAll('.shop-button, button').forEach(b=>{ try{ if (isLight){ b.style.background='#fff'; b.style.color='#0f172a'; b.style.border='1px solid #d1d5db'; } else { b.style.background=''; b.style.color=''; b.style.border=''; } }catch(e){} });
+    }catch(e){}
+  });
+
+  // Enhanced blog renderer that shows persisted verified posts and provides Read more buttons
+  window.renderBlogPosts = function(category){
+    const container = document.getElementById('blog-posts-container');
+    if (!container) return;
+    let persisted = [];
+    try{ persisted = JSON.parse(localStorage.getItem('ultre_blog_posts')||'[]'); }catch(e){ persisted = []; }
+    const builtin = (window.blogPosts && Array.isArray(window.blogPosts))? window.blogPosts.slice() : [];
+    const merged = persisted.concat(builtin).filter(p=>{
+      if (!category || category==='all') return true;
+      return (p.category||'').toLowerCase() === category.toLowerCase();
+    });
+
+    function stripHtml(html){ return (html||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
+    function truncate(s,len){ return s.length>len? s.slice(0,len-1)+'…': s; }
+    function escapeHtml(unsafe){ return (unsafe||'').replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+
+    if (merged.length===0){ container.innerHTML = '<div class="p-6 text-gray-300">No posts yet.</div>'; return; }
+
+    container.innerHTML = merged.map(post=>{
+      const author = post.author || 'Ultre Team';
+      const verified = post.verified ? '<span style="color:#60a5fa;margin-left:8px;font-weight:700">✔ Verified</span>' : '';
+      const img = post.image || 'logo.png';
+      const excerpt = truncate(stripHtml(post.content||post.excerpt||''), 180);
+      return `
+        <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden p-4" data-id="${post.id}">
+          <div style="display:flex;gap:12px">
+            <img src="${img}" alt="${escapeHtml(post.title)}" style="width:120px;height:80px;object-fit:cover;border-radius:6px" onerror="this.src='logo.png'"/>
+            <div style="flex:1">
+              <h4 style="margin:0 0 6px 0">${escapeHtml(post.title)}</h4>
+              <div style="font-size:12px;color:#9ca3af;margin-bottom:8px">By ${escapeHtml(author)} ${verified} · ${post.readTime||''}</div>
+              <div style="color:#cbd5e1">${escapeHtml(excerpt)}</div>
+              <div style="margin-top:8px"><button class="shop-button read-more" data-id="${post.id}">Read more</button></div>
+            </div>
+          </div>
+        </div>
+  
+    </body>
+  </html>
