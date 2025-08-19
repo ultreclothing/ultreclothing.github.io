@@ -629,6 +629,195 @@ window.applySettingsFromLocalStorage = applySettingsFromLocalStorage;
   };
 })();
 
+/* Cart & Wishlist features + item detail modal renderer
+   - persist cart as array under STORAGE_KEYS.CART
+   - persist wishlist under STORAGE_KEYS.WISHLIST (already used)
+   - provide addToCart, removeFromCart, renderCart
+   - provide addToWishlist, removeFromWishlist, renderWishlist
+   - provide openItemDetail(id) that builds a 2-column modal (left: image/name/price/add-to-cart; right: description)
+*/
+(function(){
+  // normalize cart storage to an array
+  function _loadCart(){
+    let c = loadFromStorage(STORAGE_KEYS.CART, []);
+    // tolerate legacy object form
+    if (!Array.isArray(c) && c && typeof c === 'object'){
+      c = Object.keys(c).map(k => Object.assign({ id: k }, c[k]));
+    }
+    return c || [];
+  }
+  function _saveCart(arr){ saveToStorage(STORAGE_KEYS.CART, arr || []); window.cart = arr || []; }
+
+  // ensure globals
+  window.cart = window.cart || _loadCart();
+  window.wishlist = window.wishlist || loadFromStorage(STORAGE_KEYS.WISHLIST, []);
+
+  function findCartIndex(cartArr, id){ return cartArr.findIndex(x => String(x.id) === String(id)); }
+
+  window.addToCart = function(item){
+    if (!item || !item.id) return;
+    const cartArr = _loadCart();
+    const idx = findCartIndex(cartArr, item.id);
+    if (idx === -1){
+      cartArr.push(Object.assign({}, item, { quantity: item.quantity || 1 }));
+    } else {
+      cartArr[idx].quantity = (cartArr[idx].quantity || 1) + (item.quantity || 1);
+    }
+    _saveCart(cartArr);
+    renderCart();
+    try{ updateCartCountUI(); }catch(e){}
+    return cartArr;
+  };
+
+  window.removeFromCart = function(id){
+    const cartArr = _loadCart();
+    const out = cartArr.filter(x => String(x.id) !== String(id));
+    _saveCart(out);
+    renderCart();
+    try{ updateCartCountUI(); }catch(e){}
+    return out;
+  };
+
+  window.updateCartQuantity = function(id, qty){
+    const cartArr = _loadCart();
+    const idx = findCartIndex(cartArr, id);
+    if (idx === -1) return cartArr;
+    cartArr[idx].quantity = Math.max(0, parseInt(qty) || 0);
+    const out = cartArr.filter(x => x.quantity > 0);
+    _saveCart(out);
+    renderCart();
+    try{ updateCartCountUI(); }catch(e){}
+    return out;
+  };
+
+  function updateCartCountUI(){
+    const count = (_loadCart() || []).reduce((s,i)=> s + (i.quantity||0), 0);
+    // update any cart badges
+    document.querySelectorAll('[data-cart-count]').forEach(el => el.textContent = count);
+  }
+
+  window.addToWishlist = function(item){
+    if (!item || !item.id) return;
+    const wl = loadFromStorage(STORAGE_KEYS.WISHLIST, []);
+    if (wl.some(x => String(x.id) === String(item.id))) return wl;
+    wl.push(Object.assign({}, item));
+    saveToStorage(STORAGE_KEYS.WISHLIST, wl);
+    window.wishlist = wl;
+    renderWishlist();
+    return wl;
+  };
+
+  window.removeFromWishlist = function(id){
+    const wl = loadFromStorage(STORAGE_KEYS.WISHLIST, []);
+    const out = wl.filter(x => String(x.id) !== String(id));
+    saveToStorage(STORAGE_KEYS.WISHLIST, out);
+    window.wishlist = out;
+    renderWishlist();
+    return out;
+  };
+
+  function renderWishlist(){
+    // populate a simple wishlist area if present
+    const container = document.getElementById('wishlist-content');
+    const wl = loadFromStorage(STORAGE_KEYS.WISHLIST, []);
+    if (!container) return;
+    if (!wl || wl.length===0){ container.innerHTML = '<div class="text-gray-400 p-6">Your wishlist is empty.</div>'; return; }
+    container.innerHTML = wl.map(i => `
+      <div class="wishlist-item flex items-center gap-3 p-3 border-b border-gray-800">
+        <img src="${i.imageUrl||i.image||'logo.png'}" alt="${escapeHtml(i.name||'')}" class="w-14 h-14 object-cover rounded"/>
+        <div class="flex-1 text-left">
+          <div class="font-semibold">${escapeHtml(i.name||'')}</div>
+          <div class="text-sm text-gray-400">$${(i.price||0).toFixed(2)}</div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <button class="shop-button add-to-cart-from-wishlist" data-item-id="${escapeHtml(i.id)}" data-item-name="${escapeHtml(i.name||'')}" data-item-price="${i.price||0}" data-item-image="${i.imageUrl||i.image||''}">Add to cart</button>
+          <button class="text-sm text-red-400 remove-from-wishlist-btn" data-remove-id="${escapeHtml(i.id)}">Remove</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.renderCart = function(){
+    const cartArr = _loadCart();
+    const container = document.getElementById('cart-content');
+    if (!container) return;
+    if (!cartArr || cartArr.length===0){ container.innerHTML = '<div class="text-gray-400 p-6">Your cart is empty.</div>'; updateCartCountUI(); return; }
+    container.innerHTML = cartArr.map(item => `
+      <div class="cart-row flex items-center gap-4 p-3 border-b border-gray-800">
+        <img src="${item.imageUrl||item.image||'logo.png'}" alt="${escapeHtml(item.name||'')}" class="w-16 h-16 object-cover rounded"/>
+        <div class="flex-1 text-left">
+          <div class="font-semibold">${escapeHtml(item.name||'')}</div>
+          <div class="text-sm text-gray-400">$${(item.price||0).toFixed(2)}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="number" min="1" value="${item.quantity||1}" data-cart-qty="${escapeHtml(item.id)}" class="w-20 p-1 rounded bg-gray-800 text-white border border-gray-700" />
+          <button class="text-sm text-red-400 remove-from-cart" data-remove-id="${escapeHtml(item.id)}">Remove</button>
+        </div>
+      </div>
+    `).join('') + `
+      <div class="p-4 text-right">
+        <div class="font-bold">Total: $${cartArr.reduce((s,i)=> s + ((i.price||0)*(i.quantity||1)), 0).toFixed(2)}</div>
+        <div class="mt-3"><button id="checkout-btn" class="shop-button bg-blue-600">Checkout</button></div>
+      </div>
+    `;
+    // wire qty inputs and remove buttons
+    container.querySelectorAll('input[data-cart-qty]').forEach(inp => {
+      inp.addEventListener('change', function(){ const id = this.getAttribute('data-cart-qty'); const v = parseInt(this.value||0); updateCartQuantity(id, v); });
+    });
+    container.querySelectorAll('.remove-from-cart').forEach(b => { b.addEventListener('click', function(){ removeFromCart(this.dataset.removeId); }); });
+    updateCartCountUI();
+  };
+
+  // Build a nicer item detail modal when requested
+  window.openItemDetail = function(id){
+    const items = window.shopItems || window.localClothingItems || [];
+    const item = items.find(i => String(i.id) === String(id));
+    if (!item) return showMessageBox('Item not found', 2000, true);
+    const modal = document.getElementById('item-detail-modal');
+    if (!modal) return;
+    // build a two-column layout inside the modal
+    modal.classList.remove('hidden');
+    modal.innerHTML = `
+      <div class="bg-neutral-950 rounded-3xl shadow-2xl p-6 max-w-3xl w-full animate-fadeInUp border border-gray-800 relative">
+        <button id="close-item-detail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold">&times;</button>
+        <div class="item-detail-grid grid gap-6 md:grid-cols-2">
+          <div class="left-side flex flex-col items-center gap-4">
+            <img src="${item.image || item.imageUrl || 'logo.png'}" alt="${escapeHtml(item.name||'')}" class="w-40 h-40 object-cover rounded-2xl border-4 border-gray-800 shadow-lg" />
+            <h3 class="text-2xl font-extrabold text-white">${escapeHtml(item.name||'')}</h3>
+            <div class="text-2xl font-bold text-blue-400">$${(item.price||0)}</div>
+            <div class="flex gap-3 mt-2">
+              <button id="detail-add-to-cart" class="shop-button bg-blue-600 py-2 px-4">Add to cart</button>
+              <button id="detail-add-to-wishlist" class="shop-button bg-gray-700 py-2 px-4">♥ Wishlist</button>
+            </div>
+          </div>
+          <div class="right-side text-left">
+            <h4 class="text-sm text-gray-400 mb-2">Details</h4>
+            <p class="text-gray-300 leading-relaxed">${escapeHtml(item.desc || item.description || '')}</p>
+            <div class="mt-4 text-sm text-gray-400">Category: ${escapeHtml(item.category || '')}</div>
+            <div class="mt-1 text-sm text-gray-400">Material: ${escapeHtml(item.material || '')}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    // handlers
+    const closeBtn = modal.querySelector('#close-item-detail'); if (closeBtn) closeBtn.addEventListener('click', function(){ modal.classList.add('hidden'); });
+    const atc = modal.querySelector('#detail-add-to-cart'); if (atc) atc.addEventListener('click', function(){ addToCart({ id: item.id, name: item.name, price: item.price, imageUrl: item.image || item.imageUrl }); showMessageBox(item.name + ' added to cart'); });
+    const awl = modal.querySelector('#detail-add-to-wishlist'); if (awl) awl.addEventListener('click', function(){ addToWishlist({ id: item.id, name: item.name, price: item.price, imageUrl: item.image || item.imageUrl }); showMessageBox(item.name + ' added to wishlist'); });
+  };
+
+  // delegate view-detail-btn clicks (covers inline templates and migrated cards)
+  document.body.addEventListener('click', function(e){
+    const btn = e.target.closest && e.target.closest('.view-detail-btn');
+    if (btn){ const id = btn.dataset.id || btn.getAttribute('data-item-id'); if (id) return openItemDetail(id); }
+    const openItem = e.target.closest && e.target.closest('.open-item-detail-card');
+    if (openItem){ const iid = openItem.dataset.itemId || openItem.getAttribute('data-item-id'); if (iid) return openItemDetail(iid); }
+  });
+
+  // render cart/wishlist on load
+  document.addEventListener('DOMContentLoaded', function(){ renderCart(); renderWishlist(); updateCartCountUI(); });
+
+})();
+
 /* Reading progress, inline viewer, recently-viewed, micro-animations */
 (function(){
   function ensureReadingProgressBar(){ if (document.getElementById('reading-progress')) return; const bar = document.createElement('div'); bar.id='reading-progress'; bar.style.position='fixed'; bar.style.left='0'; bar.style.top='0'; bar.style.height='3px'; bar.style.width='0%'; bar.style.background='linear-gradient(90deg,#60a5fa,#8b5cf6)'; bar.style.zIndex='999999'; bar.style.transition='width 120ms linear'; document.body.appendChild(bar); }
