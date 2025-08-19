@@ -15,6 +15,31 @@ const STORAGE_KEYS = {
   CART: 'cart_items',
 };
 
+/* Microanimation helper moved from index.html */
+function animateIn(el, animation) {
+  if (!el) return;
+  el.classList.remove('animate-fadeIn', 'animate-fadeInUp', 'animate-popIn');
+  void el.offsetWidth; // trigger reflow
+  el.classList.add(animation);
+}
+
+/* Default shopItems (moved from index.html). Use imageUrl for consistency with migrated renderers. */
+window.shopItems = window.shopItems || [
+  { id: 1, name: 'Minimalist Hoodie', desc: 'A clean, soft hoodie for everyday wear.', price: 59, imageUrl: 'https://placehold.co/400x400/2b3440/ffffff?text=Hoodie' },
+  { id: 2, name: 'Eco Joggers', desc: 'Sustainable joggers made from recycled fibers.', price: 49, imageUrl: 'https://placehold.co/400x400/2b3440/ffffff?text=Joggers' },
+  { id: 3, name: 'Street Tee', desc: 'Classic fit, subtle branding, all-day comfort.', price: 29, imageUrl: 'https://placehold.co/400x400/2b3440/ffffff?text=Tee' },
+  { id: 4, name: 'Utility Cap', desc: 'Water-resistant, adjustable, and stylish.', price: 19, imageUrl: 'https://placehold.co/400x400/2b3440/ffffff?text=Cap' }
+];
+
+// Ensure localClothingItems uses the normalized imageUrl shape expected by renderFilteredProducts
+window.localClothingItems = window.localClothingItems || (window.shopItems || []).map(i => ({
+  id: i.id,
+  name: i.name,
+  price: i.price,
+  imageUrl: i.imageUrl || i.image || 'logo.png',
+  desc: i.desc || i.description || ''
+}));
+
 function setCookie(name, value, days) {
   let expires = '';
   if (typeof days === 'number') {
@@ -199,17 +224,14 @@ function renderBlogList(){
   const blogSection = document.getElementById('blog-section'); if (blogSection) blogSection.style.display = isLoggedIn ? 'block' : 'none';
 }
 
+// Delegate openPostInline to the (single) canonical implementation defined later in the file.
+// This placeholder ensures calls to `openPostInline(id)` resolve to the canonical function at runtime.
 function openPostInline(id){
-  const posts = loadFromStorage(STORAGE_KEYS.BLOG_POSTS, []);
-  const post = posts.find(p => p.id === id);
-  if (!post) return showMessageBox('Post not found',1500,true);
-  const viewer = document.getElementById('inline-post-viewer');
-  if (!viewer) return;
-  viewer.querySelector('.title').textContent = post.title;
-  viewer.querySelector('.content').innerHTML = post.content; // content assumed sanitized from author in this demo
-  viewer.classList.add('open');
-  // micro-animations for the loaded content
-  applyMicroAnimationsToArticle(viewer.querySelector('.content'));
+  if (typeof window.openPostInline === 'function' && window.openPostInline !== openPostInline) {
+    return window.openPostInline(id);
+  }
+  // If canonical implementation not yet available, queue a short retry so the click will still open when ready.
+  setTimeout(()=>{ if (typeof window.openPostInline === 'function') window.openPostInline(id); }, 120);
 }
 
 function closeInlinePost(){ const v = document.getElementById('inline-post-viewer'); if (v) v.classList.remove('open'); }
@@ -693,7 +715,10 @@ window.applySettingsFromLocalStorage = applySettingsFromLocalStorage;
   function updateCartCountUI(){
     const count = (_loadCart() || []).reduce((s,i)=> s + (i.quantity||0), 0);
     // update any cart badges
-    document.querySelectorAll('[data-cart-count]').forEach(el => el.textContent = count);
+    document.querySelectorAll('[data-cart-count]').forEach(el => {
+      el.textContent = count;
+      if (count === 0) el.style.display = 'none'; else el.style.display = '';
+    });
   }
 
   window.addToWishlist = function(item){
@@ -786,7 +811,7 @@ window.applySettingsFromLocalStorage = applySettingsFromLocalStorage;
             <h3 class="text-2xl font-extrabold text-white">${escapeHtml(item.name||'')}</h3>
             <div class="text-2xl font-bold text-blue-400">$${(item.price||0)}</div>
             <div class="flex gap-3 mt-2">
-              <button id="detail-add-to-cart" class="shop-button bg-blue-600 py-2 px-4">Add to cart</button>
+              <button id="detail-add-to-cart" class="shop-button bg-blue-600 py-2 px-4">Add To Cart</button>
               <button id="detail-add-to-wishlist" class="shop-button bg-gray-700 py-2 px-4">♥ Wishlist</button>
             </div>
           </div>
