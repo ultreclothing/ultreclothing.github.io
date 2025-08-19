@@ -149,7 +149,7 @@ nav ul li a.active-nav-link {
     display: none;
 }
 
-/* Mobile: ensure hamburger icon visible on small/phone screens */
+/* Mobile: ensure hamburger icon visible on small screens */
 @media (max-width: 768px) {
   .hamburger-menu-icon { display: block; }
 }
@@ -398,6 +398,33 @@ section:hover {
   color: #f2f2f2;
   transform: translateY(-3px);
   text-shadow: 0 0 15px rgba(242, 242, 242, 0.3);
+}
+
+/* Item detail modal split layout */
+.item-detail-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 768px) { .item-detail-grid { grid-template-columns: 1fr 1fr; } }
+.item-detail-grid .left-side { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; }
+.item-detail-grid .right-side { text-align:left; }
+
+/* Cart / Wishlist styles */
+.cart-row img, .wishlist-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+.cart-row { align-items:center; }
+.wishlist-item { align-items:center; }
+
+.shop-button { background: #2563eb; color: #fff; padding: 8px 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; }
+.shop-button:hover { opacity: 0.95; transform: translateY(-2px); }
+
+/* cart count badge helper */
+[data-cart-count] { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 999px; font-weight:700; font-size:0.85rem; }
+
+/* modal show/hide simple helpers used by app.js */
+.modal.show { display:flex; }
+.modal { display:none; }
+
+/* small responsive tweaks for cart/wishlist components */
+@media (max-width: 640px){
+  .item-detail-grid { grid-template-columns: 1fr; }
+  .cart-row img, .wishlist-item img { width:48px; height:48px; }
 }
 
 @keyframes fadeInBlock {
