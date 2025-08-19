@@ -149,7 +149,7 @@ nav ul li a.active-nav-link {
     display: none;
 }
 
-/* Mobile: ensure hamburger icon visible on small screens */
+/* Mobile: ensure hamburger icon visible on small/phone screens */
 @media (max-width: 768px) {
   .hamburger-menu-icon { display: block; }
 }
