@@ -174,6 +174,8 @@
       <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-12 w-full max-w-3xl flex flex-col items-center border border-gray-700">
         <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">Blog</h2>
         <p class="text-lg text-gray-400 mb-4 text-center animate-fadeIn">Stay tuned for the latest news, style tips, and stories from the Ultre community.</p>
+  <!-- Blog list rendered by js.renderBlogList() -->
+  <div id="blog-list" class="w-full space-y-4 mt-4"></div>
       </div>
     </section>
 
@@ -259,7 +261,7 @@
   <div id="inline-post-viewer" class="hidden fixed right-6 bottom-6 w-96 max-h-[70vh] overflow-auto bg-gray-900 border border-gray-800 rounded-lg p-4 z-50" aria-hidden="true">
     <div class="flex justify-between items-center mb-3">
       <strong>Article</strong>
-      <button id="close-inline-post" class="shop-button">Close</button>
+  <button id="inline-post-close" class="shop-button">Close</button>
     </div>
     <div id="inline-post-content"></div>
   </div>
@@ -280,7 +282,7 @@
   <div id="auth-modal" class="modal fixed inset-0 hidden items-center justify-center z-50" aria-hidden="true"></div>
 
   <!-- Generic containers used by js -->
-  <div id="message-box" class="fixed left-4 bottom-6 z-60" aria-live="polite"></div>
+  <div id="message-box" aria-live="polite"></div>
 
   <!-- Bottom Taskbar -->
   <!-- Old Bottom Navigation Bar -->
@@ -288,6 +290,7 @@
     <ul class="flex gap-6 items-center relative">
   <li><a href="#home-main" class="nav-link flex flex-col items-center"><i class="fas fa-home text-xl mb-1"></i>Home</a></li>
   <li><a href="#shop-main" class="nav-link flex flex-col items-center"><i class="fas fa-tshirt text-xl mb-1"></i>Shop</a></li>
+  <li><a href="#cart-main" class="nav-link flex flex-col items-center"><i class="fas fa-shopping-cart text-xl mb-1"></i>Cart <span data-cart-count style="display:none;margin-top:4px;font-size:0.75rem;padding:2px 6px;border-radius:999px;background:#ef4444;color:#fff;">0</span></a></li>
   <li><a href="#about-us-main" class="nav-link flex flex-col items-center"><i class="fas fa-users text-xl mb-1"></i>About Us</a></li>
   <li><a href="#blog-page" class="nav-link flex flex-col items-center"><i class="fas fa-blog text-xl mb-1"></i>Blog</a></li>
   <li><a href="#support-main" class="nav-link flex flex-col items-center"><i class="fas fa-headset text-xl mb-1"></i>Support</a></li>
@@ -298,37 +301,12 @@
   <!-- Add missing sections for nav targets if not present -->
 
 
-  <style>
-    body, html { background: #0a0d14 !important; }
-    .animate-fadeIn { animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) both; }
-    .animate-fadeInUp { animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) both; }
-    .animate-popIn { animation: popIn 0.5s cubic-bezier(.4,0,.2,1) both; }
-  .animate-shimmer { position: relative; overflow: hidden; }
-  .animate-shimmer::after { content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%); animation: shimmer 1.6s infinite; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.7);} 80% { opacity: 1; transform: scale(1.08);} 100% { opacity: 1; transform: scale(1);} }
-  @keyframes shimmer { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
-  </style>
+  <!-- animation utilities moved to css/styles.css -->
 
   <!-- Link to external JavaScript -->
   <script src="js/app.js"></script>
   <script>
-    // Microanimation helpers
-    function animateIn(el, animation) {
-      if (!el) return;
-      el.classList.remove('animate-fadeIn', 'animate-fadeInUp', 'animate-popIn');
-      void el.offsetWidth; // trigger reflow
-      el.classList.add(animation);
-    }
-
-    // Shop items data (placeholder images)
-    const shopItems = [
-      { id: 1, name: 'Minimalist Hoodie', desc: 'A clean, soft hoodie for everyday wear.', price: 59, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Hoodie' },
-      { id: 2, name: 'Eco Joggers', desc: 'Sustainable joggers made from recycled fibers.', price: 49, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Joggers' },
-      { id: 3, name: 'Street Tee', desc: 'Classic fit, subtle branding, all-day comfort.', price: 29, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Tee' },
-      { id: 4, name: 'Utility Cap', desc: 'Water-resistant, adjustable, and stylish.', price: 19, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Cap' }
-    ];
+  // microanimation helpers and shopItems moved to js/app.js and css/styles.css
 
     document.addEventListener('DOMContentLoaded', function() {
       // Hide intro and show home section on scroll or button click
