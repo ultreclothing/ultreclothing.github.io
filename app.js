@@ -1,3 +1,9 @@
+/* Consolidated app.js - concatenated inline script blocks in original order.
+   This file preserves initialization guards (DOMContentLoaded/window.onload) where present.
+   Note: Keep this file loaded with `defer` in index.html to preserve DOM availability semantics.
+*/
+
+// Minimal globals and storage helpers
 const STORAGE_KEYS = {
   PREFS: 'ultre_user_preferences_v2',
   USERS: 'ultre_users',
@@ -768,5 +774,3 @@ function migrateLegacyPreferences(){
 
   document.addEventListener('DOMContentLoaded', ()=>{ try{ fixBrokenImages(); ensureSettingsModal(); const settingsLaunchers = document.querySelectorAll('[data-open-settings]'); settingsLaunchers.forEach(el=> el.addEventListener('click', ()=> openSettings(el.getAttribute('data-settings-section')||'general'))); }catch(e){} });
 })();
-
-// End of migrated inline scripts
