@@ -6,45 +6,252 @@
   <title>Ultre</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <!-- Tailwind CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
-</head>
-<body class="bg-gray-900 text-gray-200 font-quicksand">
-  <header class="w-full bg-gray-900 border-b border-gray-800">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img id="site-logo" src="logo.png" alt="Ultre" class="logo w-28 h-auto">
-        <h1 class="text-xl font-bold">Ultre</h1>
+  </head>
+  <body class="bg-neutral-950 text-gray-200 font-quicksand">
+  <header class="w-full bg-neutral-950 border-b border-gray-800 shadow-md flex justify-end items-center px-6 py-3">
+    <div class="flex items-center gap-3 profile-menu-container relative group">
+      <img src="https://ui-avatars.com/api/?name=U&background=444444&color=fff&rounded=true&size=64" alt="Profile" class="profile-icon w-10 h-10 rounded-full cursor-pointer border-2 border-gray-700 group-hover:border-blue-500 transition-all duration-200" />
+      <div class="profile-dropdown absolute right-0 top-12 bg-gray-900 border border-gray-800 rounded-lg shadow-lg py-2 px-4 min-w-[140px] hidden group-hover:flex flex-col z-50">
+        <button id="open-auth-btn" class="dropdown-item open-auth-btn w-full text-left">Sign in</button>
+        <button id="open-signup-btn" class="dropdown-item open-signup-btn w-full text-left">Sign up</button>
       </div>
-      <nav class="flex items-center gap-3">
-        <button id="comparison-btn" class="shop-button bg-blue-600 px-3 py-2 rounded disabled:opacity-50" disabled>Compare (0)</button>
-        <button id="open-settings-btn" class="shop-button" data-open-settings>Settings</button>
-        <button id="open-auth-btn" class="shop-button open-auth-btn">Sign in</button>
-      </nav>
     </div>
   </header>
+  <!-- Compact Intro Section -->
+  <section id="intro-section" class="flex flex-col items-center justify-center w-full py-12 bg-neutral-950">
+    <img src="logo.png" alt="Ultre Logo" class="w-20 h-20 mb-4 rounded-xl shadow-lg">
+  <h1 class="text-4xl md:text-6xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">Welcome to Ultre</h1>
+  <p class="text-lg md:text-2xl text-gray-300 mb-4 text-center animate-fadeInUp">Discover minimalist streetwear, sustainable fabrics, and more.</p>
+  <button id="scroll-down-btn" class="scroll-hint text-base md:text-lg px-4 py-2 rounded-full bg-black/40 text-white hover:bg-neutral-700 transition-all duration-300 mt-2 shadow-lg animate-fadeIn">Scroll to explore ↓</button>
+  </section>
 
-  <main id="main-website-content-wrapper" class="max-w-6xl mx-auto px-4 py-8">
-    <section id="home-main" class="active-page">
-      <h2 class="text-2xl font-semibold mb-4">Welcome to Ultre</h2>
-      <div id="featured-blog" class="mb-8"></div>
+  <!-- Intro Section (full viewport, sticky, hero) -->
+
+
+  <main id="main-website-content-wrapper" class="flex-1 max-w-6xl mx-auto px-4 py-8 w-full">
+
+    <!-- Home Section -->
+    <section id="home-main" class="active-page flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="max-w-3xl w-full text-center">
+        <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white animate-popIn">Discover Ultre</h2>
+        <p class="text-lg text-gray-400 mb-6 animate-fadeIn">Your destination for premium, sustainable streetwear. Shop the latest drops, read our blog, and connect with the Ultre community.</p>
+        <div class="flex flex-wrap justify-center gap-6 mt-8 animate-fadeIn">
+          <div class="bg-neutral-900 rounded-2xl shadow-xl p-6 w-64 flex flex-col items-center hover:scale-105 transition-transform">
+            <span class="fa-solid fa-tshirt text-3xl text-blue-400 mb-2"></span>
+            <h3 class="font-bold text-xl mb-1">Shop</h3>
+            <p class="text-gray-400 text-sm">Browse our curated collection of minimalist essentials.</p>
+          </div>
+          <div class="bg-neutral-900 rounded-2xl shadow-xl p-6 w-64 flex flex-col items-center hover:scale-105 transition-transform">
+            <span class="fa-solid fa-users text-3xl text-green-400 mb-2"></span>
+            <h3 class="font-bold text-xl mb-1">About Us</h3>
+            <p class="text-gray-400 text-sm">Learn about our mission, values, and team.</p>
+          </div>
+          <div class="bg-neutral-900 rounded-2xl shadow-xl p-6 w-64 flex flex-col items-center hover:scale-105 transition-transform">
+            <span class="fa-solid fa-blog text-3xl text-yellow-400 mb-2"></span>
+            <h3 class="font-bold text-xl mb-1">Blog</h3>
+            <p class="text-gray-400 text-sm">Read the latest news, style tips, and stories from Ultre.</p>
+          </div>
+        </div>
+        <!-- Brand rating and recommended blogs -->
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          <div class="bg-neutral-900 rounded-2xl p-6 shadow-lg flex flex-col items-start animate-popIn">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="text-3xl text-yellow-400"><i class="fas fa-star"></i></div>
+              <div>
+                <div class="text-xl font-bold">4.8 <span class="text-gray-400 text-sm">/ 5</span></div>
+                <div class="text-sm text-gray-400">Rated by 152 customers</div>
+              </div>
+            </div>
+            <p class="text-gray-300">Customers love our fit and sustainable materials. See reviews and trending picks.</p>
+          </div>
+          <div class="bg-neutral-900 rounded-2xl p-6 shadow-lg animate-fadeInUp">
+            <h4 class="text-lg font-bold mb-3">Recommended Reads</h4>
+            <ul id="recommended-blogs" class="space-y-3 text-gray-300">
+              <li class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-md bg-gray-800 flex items-center justify-center animate-shimmer"><i class="fas fa-pen-nib text-blue-400"></i></div>
+                <div>
+                  <div class="font-semibold">How to build a capsule wardrobe</div>
+                  <div class="text-sm text-gray-400">5 min read • 2 days ago</div>
+                </div>
+              </li>
+              <li class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-md bg-gray-800 flex items-center justify-center animate-shimmer"><i class="fas fa-seedling text-green-400"></i></div>
+                <div>
+                  <div class="font-semibold">Sustainable fabrics we love</div>
+                  <div class="text-sm text-gray-400">7 min read • 1 week ago</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <!-- Shop Section -->
+  <section id="shop-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <h2 class="text-4xl font-extrabold mb-6 tracking-tight text-white animate-popIn">Shop</h2>
+      <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-6xl animate-fadeIn"></div>
     </section>
 
-    <section id="shop-page" class="hidden">
-      <h2 class="text-2xl font-semibold mb-4">Shop</h2>
-      <div id="shop-content">
-        <div id="items-grid" class="items-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+    <!-- Item Detail Modal -->
+    <div id="item-detail-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+      <div class="bg-neutral-950 rounded-3xl shadow-2xl p-10 max-w-xl w-full animate-fadeInUp border border-gray-800 relative flex flex-col items-center">
+        <button id="close-item-detail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold">&times;</button>
+        <img id="detail-image" src="" alt="" class="w-44 h-44 object-cover rounded-2xl mb-4 mx-auto animate-popIn border-4 border-gray-800 shadow-lg">
+        <h3 id="detail-title" class="text-3xl font-extrabold mb-2 text-center text-white animate-popIn"></h3>
+        <p id="detail-desc" class="text-lg text-gray-300 mb-4 text-center animate-fadeInUp"></p>
+        <div class="text-2xl font-bold text-blue-400 text-center animate-fadeIn"><span id="detail-price"></span></div>
+      </div>
+    </div>
+
+    <!-- Sign In/Sign Up Pages -->
+
+    <!-- Sign In Page -->
+    <section id="sign-in-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md flex flex-col items-center border border-gray-800 transform hover:-translate-y-1 transition-transform">
+        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mb-3 animate-popIn">
+          <i class="fas fa-user-circle text-3xl text-blue-400"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold mb-2 tracking-tight text-white animate-popIn">Sign In</h2>
+        <p class="text-sm text-gray-400 mb-4">Welcome back — sign in to access your account and orders.</p>
+        <form id="sign-in-form" class="flex flex-col gap-4 w-full animate-fadeIn">
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-envelope"></i></span>
+            <input type="email" id="signInEmail" name="email" class="pl-10 p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Email" required>
+          </div>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-lock"></i></span>
+            <input type="password" id="signInPassword" name="password" class="pl-10 p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Password" required>
+          </div>
+          <button type="submit" class="shop-button w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all">Sign In</button>
+        </form>
+        <p class="text-gray-400 mt-4 text-sm">Don't have an account? <a href="#" id="to-sign-up" class="text-blue-400 underline">Sign Up</a></p>
       </div>
     </section>
 
-    <section id="blog-page" class="hidden">
-      <h2 class="text-2xl font-semibold mb-4">Blog</h2>
-      <div id="blog-list" class="grid gap-4"></div>
+    <!-- Sign Up Page -->
+    <section id="sign-up-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md flex flex-col items-center border border-gray-800 transform hover:-translate-y-1 transition-transform">
+        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mb-3 animate-popIn">
+          <i class="fas fa-user-plus text-3xl text-green-400"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold mb-2 tracking-tight text-white animate-popIn">Sign Up</h2>
+        <p class="text-sm text-gray-400 mb-4">Create your Ultre account to save favorites and track orders.</p>
+        <form id="sign-up-form" class="flex flex-col gap-4 w-full animate-fadeIn">
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-user"></i></span>
+            <input type="text" id="signUpName" name="name" class="pl-10 p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Name" required>
+          </div>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-envelope"></i></span>
+            <input type="email" id="signUpEmail" name="email" class="pl-10 p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Email" required>
+          </div>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-lock"></i></span>
+            <input type="password" id="signUpPassword" name="password" class="pl-10 p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Password" required>
+          </div>
+          <button type="submit" class="shop-button w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all">Sign Up</button>
+        </form>
+        <p class="text-gray-400 mt-4 text-sm">Already have an account? <a href="#" id="to-sign-in" class="text-blue-400 underline">Sign In</a></p>
+      </div>
     </section>
 
-    <section id="cart-main" class="hidden">
-      <h2 class="text-2xl font-semibold mb-4">Cart</h2>
-      <div id="cart-items"></div>
+
+
+    <!-- About Us Section -->
+    <section id="about-us-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-12 w-full max-w-3xl flex flex-col items-center border border-gray-700">
+        <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">About Us</h2>
+        <p class="text-lg text-gray-400 mb-4 text-center animate-fadeIn">We are Ultre, passionate about minimalist streetwear and sustainability. Our mission is to blend style, comfort, and responsibility in every piece we offer.</p>
+      </div>
+    </section>
+    <!-- Blog Section -->
+    <section id="blog-page" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-12 w-full max-w-3xl flex flex-col items-center border border-gray-700">
+        <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">Blog</h2>
+        <p class="text-lg text-gray-400 mb-4 text-center animate-fadeIn">Stay tuned for the latest news, style tips, and stories from the Ultre community.</p>
+      </div>
+    </section>
+
+    <!-- Support Section -->
+    <section id="support-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-gradient-to-br from-neutral-900 to-gray-800 rounded-3xl shadow-2xl p-12 w-full max-w-2xl flex flex-col items-center border border-gray-700">
+        <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">Support</h2>
+        <p class="text-lg text-gray-400 mb-4 text-center animate-fadeIn">Need help? Contact our support team at <a href="mailto:support@ultre.com" class="text-blue-400 underline">support@ultre.com</a>.</p>
+      </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-neutral-900 rounded-3xl shadow-2xl p-12 w-full max-w-2xl flex flex-col items-center border border-gray-800">
+        <h2 class="text-4xl font-extrabold mb-2 tracking-tight text-white drop-shadow animate-popIn">Cart</h2>
+        <div id="cart-content" class="w-full animate-fadeIn"></div>
+      </div>
+    </section>
+
+    <!-- Settings Section (Categorized) -->
+  <section id="settings-main" class="hidden flex flex-col items-center justify-center min-h-[60vh] px-4 py-12 animate-fadeInUp">
+      <div class="bg-neutral-950 rounded-3xl shadow-2xl p-12 w-full max-w-2xl flex flex-col items-center border border-gray-800">
+        <h2 class="text-4xl font-extrabold mb-6 tracking-tight text-white drop-shadow animate-popIn">Settings</h2>
+        <form id="settings-form" class="flex flex-col gap-8 w-full mt-4">
+          <div class="mb-4">
+            <h3 class="text-lg font-bold text-gray-200 mb-2">General</h3>
+            <div class="flex flex-col gap-4">
+              <div>
+                <label class="block text-gray-300 mb-1" for="displayName">Display Name</label>
+                <input type="text" id="displayName" name="displayName" class="p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="Your name">
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1" for="email">Email</label>
+                <input type="email" id="email" name="email" class="p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full" placeholder="you@email.com">
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <h3 class="text-lg font-bold text-gray-200 mb-2">Accessibility</h3>
+            <div class="flex flex-col gap-4">
+              <div>
+                <label class="block text-gray-300 mb-1" for="fontSize">Font Size</label>
+                <select id="fontSize" name="fontSize" class="p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full">
+                  <option value="normal">Normal</option>
+                  <option value="large">Large</option>
+                  <option value="xlarge">Extra Large</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1" for="highContrast">High Contrast Mode</label>
+                <input type="checkbox" id="highContrast" name="highContrast" class="mr-2 align-middle">
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <h3 class="text-lg font-bold text-gray-200 mb-2">Visual</h3>
+            <div class="flex flex-col gap-4">
+              <div>
+                <label class="block text-gray-300 mb-1" for="theme">Theme</label>
+                <select id="theme" name="theme" class="p-3 rounded-xl bg-gray-800 text-white border border-gray-700 w-full">
+                  <option value="dark">Dark</option>
+                  <option value="light">Light</option>
+                  <option value="system">System</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1" for="accent">Accent Color</label>
+                <input type="color" id="accent" name="accent" class="w-12 h-12 p-1 rounded-full border-2 border-gray-700 bg-gray-800">
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1" for="avatar">Profile Picture</label>
+                <input type="file" id="avatar" name="avatar" accept="image/*" class="block w-full text-gray-300" />
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="shop-button w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all">Save Settings</button>
+        </form>
+      </div>
     </section>
   </main>
 
@@ -75,231 +282,234 @@
   <!-- Generic containers used by js -->
   <div id="message-box" class="fixed left-4 bottom-6 z-60" aria-live="polite"></div>
 
-                <h2 class="text-3xl font-bold text-white mb-4">5 Essential Style Tips for Every Wardrobe</h2>
-                <p class="text-gray-300 mb-4">Building a timeless wardrobe starts with understanding the basics. Below we expand on five essential style principles with practical examples, small shopping rules, and quick fixes for common problems.</p>
+  <!-- Bottom Taskbar -->
+  <!-- Old Bottom Navigation Bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md py-3 px-2 flex justify-center items-center">
+    <ul class="flex gap-6 items-center relative">
+  <li><a href="#home-main" class="nav-link flex flex-col items-center"><i class="fas fa-home text-xl mb-1"></i>Home</a></li>
+  <li><a href="#shop-main" class="nav-link flex flex-col items-center"><i class="fas fa-tshirt text-xl mb-1"></i>Shop</a></li>
+  <li><a href="#about-us-main" class="nav-link flex flex-col items-center"><i class="fas fa-users text-xl mb-1"></i>About Us</a></li>
+  <li><a href="#blog-page" class="nav-link flex flex-col items-center"><i class="fas fa-blog text-xl mb-1"></i>Blog</a></li>
+  <li><a href="#support-main" class="nav-link flex flex-col items-center"><i class="fas fa-headset text-xl mb-1"></i>Support</a></li>
+  <li><a href="#settings-main" class="nav-link flex flex-col items-center"><i class="fas fa-cog text-xl mb-1"></i>Settings</a></li>
+    </ul>
+  <span id="nav-indicator" class="absolute transition-all duration-300 ease-in-out w-4 h-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full shadow-lg border-4 border-black/80 opacity-95" style="bottom: 8px; left: 0;"></span>
+  </nav>
+  <!-- Add missing sections for nav targets if not present -->
 
-                <h3 class="text-xl font-semibold text-white mb-3">1. Invest in Quality Basics</h3>
-                <p class="text-gray-300 mb-4">A well-fitted white tee, a pair of clean jeans, and a neutral jacket will earn more wear than dozens of trend pieces. Look for sturdy seams, quality fabrics, and simple finishes. Tip: inspect cuffs and collars — these show wear first.</p>
-                <p class="text-gray-300 mb-4">Example: instead of buying three cheap tees that fade quickly, buy one high-quality tee that keeps its shape. Over time it saves money and keeps your outfits looking sharp.</p>
 
-                <h3 class="text-xl font-semibold text-white mb-3">2. Understand Your Body Type</h3>
-                <p class="text-gray-300 mb-4">Knowing whether you're rectangular, triangular, inverted triangle, or apple-shaped helps you choose silhouettes that flatter. For broader shoulders, balance proportions with straight-leg bottoms; if you carry weight around the middle, go for V-necklines and single-breasted jackets.</p>
-                <p class="text-gray-300 mb-4">Small rule of thumb: when in doubt, choose a silhouette that emphasizes one area — either shoulders, chest, or waist — rather than trying to slim everything at once.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">3. Master the Art of Layering</h3>
-                <p class="text-gray-300 mb-4">Layering creates depth. Start with a fitted base layer, add a mid layer with texture, and finish with a clean outer layer. Vary lengths slightly (short base, medium mid, long outer) to avoid a boxy look.</p>
-                <p class="text-gray-300 mb-4">Practical combo: white tee + lightweight knit + overshirt. The overshirt acts like a jacket and can be removed indoors — versatile for changing temperatures.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">4. Pay Attention to Fit</h3>
-                <p class="text-gray-300 mb-4">Even inexpensive clothing looks premium when it fits well. Learn a few basic tailoring fixes: shorten sleeves by 1–2 cm, taper a trouser leg slightly, or take in the side seams of a jacket. These small changes elevate your entire look.</p>
-                <p class="text-gray-300 mb-4">If you're unsure about sizing, try both sizes in-store and move around — how the garment sits when you lift your arms or sit down reveals fit issues that the mirror won't.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">5. Develop Your Personal Style</h3>
-                <p class="text-gray-300 mb-4">Style is repetition: adopt a limited color palette and a few signature pieces you rely on, then rotate carefully. Accessories — a quality belt, a minimal watch, or a cap — personalize and complete an outfit without overpowering it.</p>
-                <p class="text-gray-300 mb-4">Experimentation tip: keep a phone album of outfits you like and take notes on what you felt comfortable wearing. Build outfits around those anchor pieces.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">Quick Shopping Rules</h3>
-                <ul class="text-gray-300 mb-4 list-disc pl-5">
-                  <li>Always check fabric composition — natural fibers generally age better.</li>
-                  <li>Pick neutrals for the majority of purchases; add 1–2 accent colors per season.</li>
-                  <li>Try on clothes with the shoes you plan to wear — proportions change with footwear.</li>
-                </ul>
-
-                <div class="blog-tags mt-6">
-                  <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm mr-2">Style Tips</span>
-                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm mr-2">Wardrobe</span>
-                  <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Shopping</span>
-                </div>
-              </div>
-            `,
-          category: 'style',
-          author: 'Ultre Team',
-          date: '2025-01-15',
-          readTime: '5 min read',
-          image: 'https://placehold.co/400x250/4a5568/FFFFFF?text=Style+Tips'
-        },
-        {
-          id: 'sustainability-1',
-          title: 'Our Commitment to Sustainable Fashion',
-          excerpt: 'Learn about Ultre\'s dedication to eco-friendly practices and sustainable materials...',
-            content: `
-              <div class="blog-post-content">
-                <img src="https://placehold.co/900x420/38a169/FFFFFF?text=Sustainability+Deep+Dive" alt="Sustainability" class="w-full h-72 object-cover rounded-lg mb-6">
-                <h2 class="text-3xl font-bold text-white mb-4">Our Commitment to Sustainable Fashion</h2>
-                <p class="text-gray-300 mb-4">At Ultre, sustainability is more than a label — it's built into decisions across design, sourcing, and operations. Below we outline practical steps we've taken and ongoing goals.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">Eco-Friendly Materials</h3>
-                <p class="text-gray-300 mb-4">We prioritize organic fibers, recycled yarns, and lower-impact dyes. Choosing these materials reduces water usage and chemical runoff. We actively pilot blends that retain performance while lowering footprint.</p>
-
-                <h3 class="text-xl font-semibold text-white mb-3">Ethical Manufacturing</h3>
-                <p class="text-gray-300 mb-4">We partner with factories that pay living wages, maintain safe work environments, and allow worker representation. Regular audits and local partnerships ensure transparency and continuous improvement.</p>
+  <style>
+    body, html { background: #0a0d14 !important; }
+    .animate-fadeIn { animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) both; }
+    .animate-fadeInUp { animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) both; }
+    .animate-popIn { animation: popIn 0.5s cubic-bezier(.4,0,.2,1) both; }
+  .animate-shimmer { position: relative; overflow: hidden; }
+  .animate-shimmer::after { content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%); animation: shimmer 1.6s infinite; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.7);} 80% { opacity: 1; transform: scale(1.08);} 100% { opacity: 1; transform: scale(1);} }
+  @keyframes shimmer { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
+  </style>
 
   <!-- Link to external JavaScript -->
   <script src="js/app.js"></script>
+  <script>
+    // Microanimation helpers
+    function animateIn(el, animation) {
+      if (!el) return;
+      el.classList.remove('animate-fadeIn', 'animate-fadeInUp', 'animate-popIn');
+      void el.offsetWidth; // trigger reflow
+      el.classList.add(animation);
+    }
 
-</body>
-        document.getElementById('close-inline-post')?.addEventListener('click', closeInlinePost);
-  // initial render for blog page if present
-  if (document.getElementById('blog-page')) renderBlogList();
-  // adjust blog visibility based on auth state
-  try{ toggleBlogVisibility(); }catch(e){}
-  try{ refreshProfileDropdown(); }catch(e){}
+    // Shop items data (placeholder images)
+    const shopItems = [
+      { id: 1, name: 'Minimalist Hoodie', desc: 'A clean, soft hoodie for everyday wear.', price: 59, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Hoodie' },
+      { id: 2, name: 'Eco Joggers', desc: 'Sustainable joggers made from recycled fibers.', price: 49, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Joggers' },
+      { id: 3, name: 'Street Tee', desc: 'Classic fit, subtle branding, all-day comfort.', price: 29, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Tee' },
+      { id: 4, name: 'Utility Cap', desc: 'Water-resistant, adjustable, and stylish.', price: 19, image: 'https://placehold.co/400x400/2b3440/ffffff?text=Cap' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hide intro and show home section on scroll or button click
+      var btn = document.getElementById('scroll-down-btn');
+      var intro = document.getElementById('intro-section');
+      var home = document.getElementById('home-main');
+      function hideIntro() {
+        if (intro) intro.style.display = 'none';
+        if (home) home.classList.add('active-page');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          hideIntro();
+        });
+      }
+      // Also hide intro on manual scroll
+      var scrolled = false;
+      window.addEventListener('scroll', function() {
+        if (!scrolled && window.scrollY > 40) {
+          hideIntro();
+          scrolled = true;
+        }
       });
 
-      // Social media feed data
-      const socialFeed = [
-        {
-          platform: 'Instagram',
-          content: 'New collection dropping next week! 🔥 #UltreStyle #NewCollection',
-          likes: 1247,
-          comments: 89,
-          image: 'https://placehold.co/300x300/e53e3e/FFFFFF?text=IG+Post',
-          time: '2 hours ago'
-        },
-        {
-          platform: 'Twitter',
-          content: 'Sustainability isn\'t just a trend—it\'s our future. 🌱 #SustainableFashion #Ultre',
-          likes: 567,
-          comments: 23,
-          image: 'https://placehold.co/300x300/3182ce/FFFFFF?text=Twitter+Post',
-          time: '5 hours ago'
-        },
-        {
-          platform: 'YouTube',
-          content: 'New styling tutorial: How to layer like a pro! 👔 #StyleTips #UltreTutorial',
-          likes: 892,
-          comments: 156,
-          image: 'https://placehold.co/300x300/d53f8c/FFFFFF?text=YT+Post',
-          time: '1 day ago'
-        }
+      // SPA-like navigation for bottom nav
+      var navLinks = document.querySelectorAll('#bottom-nav .nav-link');
+      var sections = [
+        'home-main',
+        'shop-main',
+        'about-us-main',
+        'blog-page',
+        'support-main',
+        'settings-main',
+        'cart-main',
+        'sign-in-main',
+        'sign-up-main'
       ];
+      function showSection(id) {
+        sections.forEach(function(sec) {
+          var el = document.getElementById(sec);
+          if (el) el.classList.add('hidden');
+        });
+        var target = document.getElementById(id);
+        if (target) target.classList.remove('hidden');
+        // Remove active-page from all, add to target
+        document.querySelectorAll('main > section').forEach(function(s) { s.classList.remove('active-page'); });
+        if (target) target.classList.add('active-page');
+        // Move nav indicator to active link
+        var indicator = document.getElementById('nav-indicator');
+        var activeLink = document.querySelector('#bottom-nav .nav-link.active-nav-link');
+        if (activeLink) activeLink.classList.remove('active-nav-link');
+        var newLink = document.querySelector('#bottom-nav .nav-link[href="#'+id+'"]');
+        if (newLink && indicator) {
+          newLink.classList.add('active-nav-link');
+          var rect = newLink.getBoundingClientRect();
+          var parentRect = newLink.parentElement.parentElement.getBoundingClientRect();
+          indicator.style.left = (rect.left - parentRect.left + rect.width/2 - indicator.offsetWidth/2) + 'px';
+          indicator.style.opacity = 1;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var id = link.getAttribute('href').replace('#','');
+          hideIntro();
+          showSection(id);
+        });
+      });
+      // Set initial nav indicator
+      setTimeout(function() {
+        var activeLink = document.querySelector('#bottom-nav .nav-link[href="#home-main"]');
+        var indicator = document.getElementById('nav-indicator');
+        if (activeLink && indicator) {
+          activeLink.classList.add('active-nav-link');
+          var rect = activeLink.getBoundingClientRect();
+          var parentRect = activeLink.parentElement.parentElement.getBoundingClientRect();
+          indicator.style.left = (rect.left - parentRect.left + rect.width/2 - indicator.offsetWidth/2) + 'px';
+          indicator.style.opacity = 1;
+        }
+      }, 200);
 
-      // Blog system functions
-      function showBlogModal() {
-        renderBlogPosts('all');
-        document.getElementById('blog-modal').classList.add('show');
+      // Profile dropdown menu: open sign in/up pages
+      document.querySelectorAll('.open-auth-btn, .open-signin').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showSection('sign-in-main');
+        });
+      });
+      document.querySelectorAll('.open-signup-btn, .open-signup').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showSection('sign-up-main');
+        });
+      });
+
+      // Shop items rendering
+      var itemsGrid = document.getElementById('items-grid');
+      if (itemsGrid) {
+        itemsGrid.innerHTML = '';
+        shopItems.forEach(function(item, idx) {
+          var card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300 animate-fadeInUp';
+          card.style.animationDelay = (0.1 * idx) + 's';
+          card.innerHTML = `
+              <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded mb-3 animate-popIn">
+            <h3 class="text-lg font-bold mb-1 animate-fadeIn">${item.name}</h3>
+            <div class="text-blue-400 font-semibold mb-2 animate-fadeIn">$${item.price}</div>
+            <button class="shop-button view-detail-btn mt-2" data-id="${item.id}">View Details</button>
+          `;
+          // Microanimation
+          animateIn(card, 'animate-fadeInUp');
+          itemsGrid.appendChild(card);
+        });
       }
 
-      function renderBlogPosts(category) {
-        const container = document.getElementById('blog-posts-container');
-        const filteredPosts = category === 'all' ? blogPosts : blogPosts.filter(post => post.category === category);
-        
-        container.innerHTML = filteredPosts.map(post => `
-          <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:transform hover:scale-105 transition-all duration-300 open-blog-post-card" data-post-id="${post.id}">
-            <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
-            <div class="p-6">
-              <div class="blog-meta text-sm text-gray-400 mb-2">
-                <span class="mr-3">${post.date}</span>
-                <span>${post.readTime}</span>
+        // Ensure recommended blogs list is populated (simple fallback)
+        var rec = document.getElementById('recommended-blogs');
+        if (rec && rec.children.length === 0) {
+          rec.innerHTML = `
+            <li class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-md bg-gray-800 flex items-center justify-center animate-shimmer"><i class="fas fa-pen-nib text-blue-400"></i></div>
+              <div>
+                <div class="font-semibold">How to build a capsule wardrobe</div>
+                <div class="text-sm text-gray-400">5 min read • 2 days ago</div>
               </div>
-              <h3 class="text-xl font-bold text-white mb-3">${post.title}</h3>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-md bg-gray-800 flex items-center justify-center animate-shimmer"><i class="fas fa-seedling text-green-400"></i></div>
+              <div>
+                <div class="font-semibold">Sustainable fabrics we love</div>
+                <div class="text-sm text-gray-400">7 min read • 1 week ago</div>
+              </div>
+            </li>
+          `;
+        }
 
-  // Public opener for modal (do not override page-level openSettings)
-  window.openSettingsModal = function(category='general'){
-    ensureSettingsModal();
-    document.getElementById('settings-modal').style.display = 'block';
-    updateSettingsModalContent(category);
-  };
-
-  // Fix broken images globally by swapping to site logo placeholder
-  function fixBrokenImages(){
-    // Only apply fallback to images likely to be site logos (filenames containing 'logo' or alt='logo')
-    document.querySelectorAll('img').forEach(img => {
-      try{
-        const src = img.getAttribute('src') || '';
-        const alt = (img.getAttribute('alt')||'').toLowerCase();
-        if (!(src.toLowerCase().indexOf('logo') !== -1 || alt === 'logo' || alt.indexOf('logo') !== -1)) return;
-        if (img.dataset._fallback) return;
-        img.addEventListener('error', function(){
-          try{
-            if (this.dataset._fallback) return; this.dataset._fallback = '1';
-            this.src = 'logo.png';
-            this.alt = this.alt || 'logo';
-          }catch(e){}
-        });
-      }catch(e){}
-    });
-  }
-
-  // Apply logo inversion filter to existing logo images immediately when theme changes
-  function applyLogoFilterToExistingImages(){
-    try{
-      const isLight = (JSON.parse(localStorage.getItem('userPreferences')||'{}')||{}).theme === 'light';
-      document.querySelectorAll('img').forEach(img => {
-        try{
-          if (!img.src) return;
-          // Prefer swapping to a dark SVG logo for crispness; fall back to CSS filter if swap fails
-          if ((img.src.indexOf('logo.png') !== -1 || img.getAttribute('alt') === 'logo') ){
-            if (isLight){
-              // if current src already points to the dark svg, just ensure filter cleared
-              if (!img.src.endsWith('logo-light.svg')){
-                img.dataset._origSrc = img.src;
-                img.src = 'logo-light.svg';
-                // if the SVG fails to load, fallback to CSS filter on original
-                img.onerror = function(){ try{ if (img.dataset._origSrc) img.src = img.dataset._origSrc; img.style.filter = 'invert(1) brightness(0.92) contrast(1.06) saturate(0.9)'; img.style.filter = 'drop-shadow(0 8px 20px rgba(0,0,0,0.36))'; }catch(e){} };
-              }
-              // ensure a black glow (drop-shadow) is applied at runtime too
-              try{ img.style.filter = 'drop-shadow(0 8px 20px rgba(0,0,0,0.36))'; }catch(e){}
-            } else {
-              // restore original if we swapped
-              if (img.dataset._origSrc) { try{ img.src = img.dataset._origSrc; delete img.dataset._origSrc; }catch(e){} }
-              img.style.filter = '';
-            }
-          }
-        }catch(e){}
+      // Item detail modal logic
+      document.body.addEventListener('click', function(e) {
+        var btn = e.target.closest('.view-detail-btn');
+        if (btn) {
+          var id = parseInt(btn.dataset.id);
+          var item = shopItems.find(i => i.id === id);
+          if (!item) return;
+          var modal = document.getElementById('item-detail-modal');
+          if (!modal) return;
+          document.getElementById('detail-image').src = item.image;
+          document.getElementById('detail-title').textContent = item.name;
+          document.getElementById('detail-desc').textContent = item.desc;
+          document.getElementById('detail-price').textContent = '$' + item.price;
+          modal.classList.remove('hidden');
+          animateIn(modal.querySelector('.bg-gray-900'), 'animate-fadeInUp');
+        }
+        if (e.target.id === 'close-item-detail') {
+          var modal = document.getElementById('item-detail-modal');
+          if (modal) modal.classList.add('hidden');
+        }
       });
-    }catch(e){ }
-  }
 
-  // Listen for settings saved to re-apply logo filters and other runtime adjustments
-  window.addEventListener('ultre:settings-saved', function(){ try{ applyLogoFilterToExistingImages(); }catch(e){} });
+      // Determine which section to show based on the URL hash, default to 'home-main'
+      var hash = window.location.hash;
+      if (hash && document.getElementById(hash.substring(1))) {
+        showSection(hash.substring(1));
+      } else {
+        showSection('home-main');
+      }
 
-  // Also adjust input/button appearances immediately when settings change to light mode
-  window.addEventListener('ultre:settings-saved', function(){
-    try{
-      const isLight = (JSON.parse(localStorage.getItem('userPreferences')||'{}')||{}).theme === 'light';
-      document.querySelectorAll('input[type="text"], input[type="email"], textarea, .form-input').forEach(el=>{
-        try{ if (isLight){ el.style.background='#fff'; el.style.color='#0f172a'; el.style.borderColor='#cbd5e1'; } else { el.style.background=''; el.style.color=''; el.style.borderColor=''; } }catch(e){}
-      });
-      document.querySelectorAll('.shop-button, button').forEach(b=>{ try{ if (isLight){ b.style.background='#fff'; b.style.color='#0f172a'; b.style.border='1px solid #d1d5db'; } else { b.style.background=''; b.style.color=''; b.style.border=''; } }catch(e){} });
-    }catch(e){}
-  });
-
-  // Enhanced blog renderer that shows persisted verified posts and provides Read more buttons
-  window.renderBlogPosts = function(category){
-    const container = document.getElementById('blog-posts-container');
-    if (!container) return;
-    let persisted = [];
-    try{ persisted = JSON.parse(localStorage.getItem('ultre_blog_posts')||'[]'); }catch(e){ persisted = []; }
-    const builtin = (window.blogPosts && Array.isArray(window.blogPosts))? window.blogPosts.slice() : [];
-    const merged = persisted.concat(builtin).filter(p=>{
-      if (!category || category==='all') return true;
-      return (p.category||'').toLowerCase() === category.toLowerCase();
     });
-
-    function stripHtml(html){ return (html||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
-    function truncate(s,len){ return s.length>len? s.slice(0,len-1)+'…': s; }
-    function escapeHtml(unsafe){ return (unsafe||'').replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
-
-    if (merged.length===0){ container.innerHTML = '<div class="p-6 text-gray-300">No posts yet.</div>'; return; }
-
-    container.innerHTML = merged.map(post=>{
-      const author = post.author || 'Ultre Team';
-      const verified = post.verified ? '<span style="color:#60a5fa;margin-left:8px;font-weight:700">✔ Verified</span>' : '';
-      const img = post.image || 'logo.png';
-      const excerpt = truncate(stripHtml(post.content||post.excerpt||''), 180);
-      return `
-        <div class="blog-post-card bg-gray-800 rounded-lg overflow-hidden p-4" data-id="${post.id}">
-          <div style="display:flex;gap:12px">
-            <img src="${img}" alt="${escapeHtml(post.title)}" style="width:120px;height:80px;object-fit:cover;border-radius:6px" onerror="this.src='logo.png'"/>
-            <div style="flex:1">
-              <h4 style="margin:0 0 6px 0">${escapeHtml(post.title)}</h4>
-              <div style="font-size:12px;color:#9ca3af;margin-bottom:8px">By ${escapeHtml(author)} ${verified} · ${post.readTime||''}</div>
-              <div style="color:#cbd5e1">${escapeHtml(excerpt)}</div>
-              <div style="margin-top:8px"><button class="shop-button read-more" data-id="${post.id}">Read more</button></div>
-            </div>
-          </div>
-        </div>
+  </script>
+  <style>
+    .animate-fadeIn { animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) both; }
+    .animate-fadeInUp { animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) both; }
+    .animate-popIn { animation: popIn 0.5s cubic-bezier(.4,0,.2,1) both; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.7);} 80% { opacity: 1; transform: scale(1.08);} 100% { opacity: 1; transform: scale(1);} }
+  </style>
+</body>
+</html>
   
     </body>
   </html>
